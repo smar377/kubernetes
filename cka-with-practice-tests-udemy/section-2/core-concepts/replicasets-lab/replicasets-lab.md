@@ -1,4 +1,4 @@
-### 1. Check the number of Pods (and the image used to deployed) existing on the system
+### 1. Check the number of Pods (and the image used to deployed) running on the system
 
 ```bash
 $ kubectl get pods -o wide
@@ -16,13 +16,20 @@ $ kubectl describe pod <POD_NAME>
 $ kubectl delete pod <POD_NAME>
 ```
 
-### 4. Check the number of ReplicaSets that exist on the system
+### 4. Check the number of ReplicaSets running on the system
 
 ```bash
 $ kubectl get replicaset -o wide
 ```
 
-### 5. Deploy a ReplicaSet from a YAML file
+
+### 5. Check the details of a ReplicaSet deployment
+
+```bash
+$ kubectl describe replicaset <REPLICA_SET_NAME>
+```
+
+### 6. Deploy a ReplicaSet from a YAML file
 
 ```bash
 # 1st Way
@@ -32,13 +39,13 @@ $ kubectl create -f <REPLICA_SET_DEFINITION.yml>
 $ kubectl apply -f <REPLICA_SET_DEFINITION.yml>
 ```
 
-### 6. Delete a ReplicaSet
+### 7. Delete a ReplicaSet
 
 ```bash
 $ kubectl delete replicaset <REPLICA_SET_NAME>
 ```
 
-### 7. Modify the contents of a ReplicaSet definition file and re-run
+### 8. Modify the contents of a ReplicaSet definition file and re-run
 
 ```bash
 # 1st Way -- Edit the ReplicaSet definition as per instruction, save and then delete previous Pods so new ones can created with new characteristics
@@ -58,7 +65,7 @@ $ kubectl delete replicaset <REPLICA_SET_NAME>
 $ kubectl create -f <NEW_REPLICA_SET_DEFINITION.yml>
 ```
 
-### 8. Scale the ReplicaSet
+### 9. Scale the ReplicaSet
 
 ```bash
 # 1st Way -- Edit the ReplicaSet YAML definition file and increase/decrease the number of "replicas" key
