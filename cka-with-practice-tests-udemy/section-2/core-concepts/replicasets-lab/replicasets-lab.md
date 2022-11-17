@@ -80,5 +80,5 @@ $ kubectl get replicaset
 
 ```bash
 # 2nd Way -- Scale via command-line using the "scale" argument directly, without editing any YAML definition file 
-$ kubectl scale --replicas=<NUMBER> replicaset <REPLICA_SET_NAME>
+$ kubectl scale replicaset <REPLICA_SET_NAME> --replicas=<NUMBER>
 ```
