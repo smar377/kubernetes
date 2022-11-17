@@ -33,10 +33,10 @@ $ kubectl describe replicaset <REPLICA_SET_NAME>
 
 ```bash
 # 1st Way
-$ kubectl create -f <REPLICA_SET_DEFINITION.yml>
+$ kubectl create -f <REPLICA_SET_DEFINITION.yaml>
 
 # 2nd Way
-$ kubectl apply -f <REPLICA_SET_DEFINITION.yml>
+$ kubectl apply -f <REPLICA_SET_DEFINITION.yaml>
 ```
 
 ### 7. Delete a ReplicaSet
@@ -58,11 +58,11 @@ $ kubectl delete pod <POD_NAME>
 ```bash
 # 2nd Way -- Edit the ReplicaSet definition, copy and create new YAML file for it.
 $ kubectl edit replicaset <REPLICA_SET_NAME>
-$ vi <NEW_REPLICA_SET_DEFINITION.yml>
+$ vi <NEW_REPLICA_SET_DEFINITION.yaml>
 
 # Delete the existing ReplicaSet and re-create it, sourcing from the YAML file
 $ kubectl delete replicaset <REPLICA_SET_NAME>
-$ kubectl create -f <NEW_REPLICA_SET_DEFINITION.yml>
+$ kubectl create -f <NEW_REPLICA_SET_DEFINITION.yaml>
 ```
 
 ### 9. Scale the ReplicaSet
