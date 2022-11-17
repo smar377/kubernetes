@@ -56,6 +56,3 @@ $ vi <NEW_REPLICA_SET_DEFINITION.yml>
 # Delete the existing ReplicaSet and re-create it, sourcing from the YAML file
 $ kubectl delete replicaset <REPLICA_SET_NAME>
 $ kubectl create -f <NEW_REPLICA_SET_DEFINITION.yml>
-
-# 2nd 
-```
