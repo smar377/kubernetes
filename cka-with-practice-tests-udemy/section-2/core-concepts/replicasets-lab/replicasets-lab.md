@@ -20,7 +20,7 @@ $ kubectl delete pod <POD_NAME>
 
 ```bash
 $ kubectl get replicaset -o wide
-OR
+
 # Shorter version
 $ kubectl get rs -o wide
 ```
