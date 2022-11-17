@@ -1,8 +1,8 @@
-# [Kubernetes | Wiki](https://en.wikipedia.org/wiki/Kubernetes)
+# Kubernetes
 
 ## Definition
 
-Kubernetes is an open-source container orchestration system for automating software deployment, scaling, and management. Google originally designed Kubernetes, but the Cloud Native Computing Foundation now maintains the project.
+Kubernetes is an open-source container orchestration system for automating software deployment, scaling, and management. Google originally designed Kubernetes, but the Cloud Native Computing Foundation now maintains the project [Kubernetes | Wiki](https://en.wikipedia.org/wiki/Kubernetes).
 
 ## History
 
