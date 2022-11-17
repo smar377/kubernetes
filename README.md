@@ -2,11 +2,9 @@
 
 *Disclaimer:* This repo was created in order to keep track of all my personal notes while studying and experimenting with Kubernetes. This includes my journey throughout various online Kubernetes courses and the labs they come with them.   
 
-## Definition
+## Definition & History
 
-Kubernetes is an open-source container orchestration system for automating software deployment, scaling, and management. Google originally designed Kubernetes, but the Cloud Native Computing Foundation now maintains the project [(Kubernetes | Wiki)](https://en.wikipedia.org/wiki/Kubernetes).
-
-## History
+[Kubernetes](https://en.wikipedia.org/wiki/Kubernetes) is an open-source container orchestration system for automating software deployment, scaling, and management. Google originally designed Kubernetes, but the Cloud Native Computing Foundation now maintains the project.
 
 Kubernetes (κυβερνήτης, Greek for "helmsman," "pilot," or "governor", and the etymological root of cybernetics) was announced by Google in mid-2014. The project was created by Joe Beda, Brendan Burns, and Craig McLuckie, who were soon joined by other Google engineers, including Brian Grant and Tim Hockin.
 
