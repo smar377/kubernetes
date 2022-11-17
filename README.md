@@ -1,6 +1,6 @@
 # Kubernetes
 
-_*Disclaimer:*_ This repo was created in order to keep track of all my personal notes while studying and experimenting with Kubernetes. This includes my journey throughout various online Kubernetes courses and the labs they come with them.   
+*Disclaimer:* This repo was created in order to keep track of all my personal notes while studying and experimenting with Kubernetes. This includes my journey throughout various online Kubernetes courses and the labs they come with them.   
 
 ## Definition
 
