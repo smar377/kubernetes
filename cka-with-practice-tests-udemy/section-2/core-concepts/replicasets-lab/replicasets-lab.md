@@ -41,11 +41,21 @@ $ kubectl delete replicaset <REPLICA_SET_NAME>
 ### 7. Modify the contents of a ReplicaSet definition file and re-run
 
 ```bash
-# 1st Way -- Edit the file as per instruction, save and then delete previous Pods so new ones can created with new characteristics
+# 1st Way -- Edit the ReplicaSet definition as per instruction, save and then delete previous Pods so new ones can created with new characteristics
 $ kubectl edit replicaset <REPLICA_SET_NAME>
 
-# 2nd Way --
-$ 
+# For ALL Pods in ReplicaSet
+$ kubectl delete pod <POD_NAME>
+
+##################################################
+
+# 2nd Way -- Edit the ReplicaSet definition, copy and create new YAML file for it.
+$ kubectl edit replicaset <REPLICA_SET_NAME>
+$ vi <NEW_REPLICA_SET_DEFINITION.yml>
+
+# Delete the existing ReplicaSet and re-create it, sourcing from the YAML file
+$ kubectl delete replicaset <REPLICA_SET_NAME>
+$ kubectl create -f <NEW_REPLICA_SET_DEFINITION.yml>
 
 # 2nd 
 ```
