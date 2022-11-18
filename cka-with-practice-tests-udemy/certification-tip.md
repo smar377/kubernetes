@@ -1,3 +1,5 @@
+## POD
+
 ### 1. Create an NGINX Pod
 
 ```bash
@@ -10,34 +12,44 @@ $ kubectl run nginx --image=nginx
 $ kubectl run nginx --image=nginx --dry-run=client -o yaml
 ```
 
-### 3. Create a deployment
+## DEPLOYMENT
+
+### 1. Create a deployment
 
 ```bash
 $ kubectl create deployment --image=nginx nginx
 ```
 
-### 4. Generate Deployment YAML file (-o yaml). Don't create it (--dry-run)
+### 2. Generate Deployment YAML file (-o yaml). Don't create it (--dry-run)
 
 ```bash
 $ kubectl create deployment --image=nginx nginx --dry-run=client -o yaml
 ```
 
-### 5. Generate Deployment YAML file (-o yaml). Don't create it (--dry-run) with 4 Replicas (--replicas=4)
+### 3. Generate Deployment with 4 Replicas
 
 ```bash
-$ kubectl create deployment --image=nginx nginx --dry-run=client -o yaml > nginx-deployment.yaml
+$ kubectl create deployment nginx --image=nginx --replicas=4
 ```
 
-### 6. Save it to a file, make necessary changes to the file (for example, adding more replicas) and then create the deployment
+You can also scale a Deployment using the kubectl `scale` command:
 
 ```bash
-$ kubectl create -f nginx-deployment.yaml
+$ kubectl scale deployment nginx --replicas=4
 ```
 
-*OR*
-
-### 7. In k8s version 1.19+, we can specify the "--replicas" option to create a Deployment with 4 replicas
+### 4. Another way to do this is to save the YAML definition to a file and modify
 
 ```bash
-$ kubectl create deployment --image=nginx nginx --replicas=4 --dry-run=client -o yaml > nginx-deployment.yaml
+$ kubectl create deployment nginx --image=nginx --dry-run=client -o yaml > nginx-deployment.yaml
+```
+
+You can then update the YAML file with the replicas or any other field before creating the deployment.
+
+## SERVICE
+
+### 1. Create a Service named `redis-service` of type ClusterIP to expose pod redis on port 6379
+
+```bash
+$ kubectl expose pod redis --port=6379 --name redis-service --dry-run=client -o yaml
 ```
