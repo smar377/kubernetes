@@ -83,5 +83,5 @@ This will not use the pods labels as selectors.
 Both the above commands have their own challenges. While one of it cannot accept a selector the other cannot accept a node port. I would recommend going with the `kubectl expose` command. If you need to specify a node port, generate a definition file using the same command and manually input the nodeport before creating the service.
 
 *References:*
-- (https://kubernetes.io/docs/reference/generated/kubectl/kubectl-commands)
-- (https://kubernetes.io/docs/reference/kubectl/conventions/)
+- [kubectl-commands](https://kubernetes.io/docs/reference/generated/kubectl/kubectl-commands)
+- [kubectl-usage-conventions](https://kubernetes.io/docs/reference/kubectl/conventions/)
