@@ -4,7 +4,9 @@ In this lab, you will get hands-on practice with creating Kubernetes objects **i
 
 ### 1. Deploy a Pod named `nginx-pod` using the `nginx:alpine` image (only imperative commands are allowed)
 
-`$ kubectl run nginx-pod --image=nginx:alpine`
+```bash
+$ kubectl run nginx-pod --image=nginx:alpine`
+```
 
 ### 2. Deploy a `redis` Pod using the  `redis:alpine` image with the labels set to `tier=db`
 
@@ -40,19 +42,27 @@ spec:
 
 Then run the command:
 
-`$ kubectl create -f redis-pod.yaml` to create the pod from the definition file`
+```bash
+$ kubectl create -f redis-pod.yaml` to create the pod from the definition file`
+```
 
 ### 3. Create a Service `redis-service` to expose the redis application within the cluster on `port 6379` (only imperative commands are allowed)
 
-`$ kubectl expose pod redis --port=6379 --name redis-service`
+```bash
+$ kubectl expose pod redis --port=6379 --name redis-service`
+```
 
 ### 4. Create a Deployment named `webapp` using the image `kodekloud/webapp-color` with 3 replicas (only imperative commands are allowed)
 
-`$ kubectl create deployment webapp --image=kodekloud/webapp-color --replicas=3`
+```bash
+$ kubectl create deployment webapp --image=kodekloud/webapp-color --replicas=3`
+```
 
 ### 5. Create a new Pod called `custom-nginx` using the `nginx` image and expose it on container `port 8080`
 
-`$ kubectl run custom-nginx --image=nginx --port=8080`
+```bash
+$ kubectl run custom-nginx --image=nginx --port=8080`
+```
 
 ### 6. Create a new Namespace called `dev-ns` (only imperative commands are allowed)
 
@@ -64,7 +74,7 @@ $ kubectl create namespace dev-ns
 $ kubectl create ns dev-ns
 ```
 
-### 7. Create a new Deployment called `redis-deploy` in the `dev-ns` Namespace with the `redis` image with 2 replicas (pnly imperative commands are allowed)
+### 7. Create a new Deployment called `redis-deploy` in the `dev-ns` Namespace with the `redis` image with 2 replicas (only imperative commands are allowed)
 
 ```bash
 # 1st Way -- Imperative command
@@ -81,5 +91,5 @@ $ kubectl get deploy -n dev-ns
 ### 8. Create a Pod called `httpd` using the image `httpd:alpine` in the `default` Namespace. Next, create a service of type `ClusterIP` by the same name (httpd). The target port for the service should be 80 (try to do this with as few steps as possible)
 
 ```bash
-$ kubectl run httpd --image=httpd:alpine --port=80 --expose
+$ kubectl run httpd --image=httpd:alpine --port=80 --expose=true
 ```
