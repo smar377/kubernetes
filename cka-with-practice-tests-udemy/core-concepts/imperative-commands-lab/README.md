@@ -165,3 +165,7 @@ status:
 All three are compared to identify what changes have been made to the live object.
 
 For instance, if we change the `image` value in **local** file from `nginx:1.18` to `nginx:1.19`, this value is compared with the value in the **live** configuration, and if there is a difference the live configuration is updated to the new value. After any change, the **last applied configuration** JSON format will be updated as well.
+
+What has just been discussed is also available in more detail in one of the Kubernetes documentation pages. Specifically, here:
+
+- [Kubernetes Documentation -- Declarative Management of Kubernetes Objects Using Configuration Files](https://kubernetes.io/docs/tasks/manage-kubernetes-objects/declarative-config/)
