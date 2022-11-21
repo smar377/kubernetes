@@ -93,3 +93,75 @@ $ kubectl get deploy -n dev-ns
 ```bash
 $ kubectl run httpd --image=httpd:alpine --port=80 --expose=true
 ```
+
+### Last but not least
+
+In Kubernetes there is 3 "places" that get connected when creating / updating / deleting object configuration via YAML definition files.
+
+1. There is the **local YAML definition file** that we feed the `kubectl apply -f` command with, in order to create the desired Kubernetes object. For example:
+
+```yaml
+apiVersion: v1
+kind: Pod
+
+metadata:
+  name: myapp-pod
+  labels:
+    app: myapp
+    type: front-end-service
+spec:
+  containers:
+  - name: nginx-container
+    image: nginx:1.18
+```
+
+2. We have the actual, **live configuration of Kubernetes object** when created (same configuration as stated in YAML definition file, but with additional fields to store status of the object):
+
+```yaml
+apiVersion: v1
+kind: Pod
+
+metadata:
+  name: myapp-pod
+  labels:
+    app: myapp
+    type: front-end-service
+spec:
+  containers:
+  - name: nginx-container
+    image: nginx:1.18
+
+status:
+  conditions:
+  - lastProbeTime: null
+    status: "True"
+    type: Initialized
+```
+
+3. And also we got the so called **last applied configuration**, which is the last saved configuration state of the Kubernetes object in JSON format:
+
+```json
+{
+  "apiVersion": "v1",
+  "kind": "Pod",
+  "metadata": {
+    "name": "myapp-pod",
+    "labels": {
+      "app": "myapp",
+      "type": "front-end-service"
+    }
+  },
+  "spec": {
+    "containers": [
+      {
+        "name": "nginx-container",
+        "image": "nginx:1.18"
+      }
+    ]
+  }
+}
+```
+
+All three are compared to identify what changes have been made to the live object.
+
+For instance, if we change the `image` value in **local** file from `nginx:1.18` to `nginx:1.19`, this value is compared with the value in the **live** configuration, and if there is a difference the live configuration is updated to the new value. After any change, the **last applied configuration** JSON format will be updated as well.
