@@ -38,10 +38,16 @@ $ kubectl describe nodes controlplane | grep Taint
 
 ### 5. Set Node Affinity to the Deployment to place the Pods on `node01` only
 
-*Please check the `blue-deployment-definition.yaml` file for more information*
+*Please check the `blue-deploy-definition.yaml` file for more information*
 
 ### 6. Create a new Deployment named `red` with the `nginx` image and 2 replicas, and ensure it gets placed on the `controlplane` node only. Use the label key `node-role.kubernetes.io/control-plane` which is already set on the `controlplane` node
 
-```bash
+*Please check the `blue-deploy-definition.yaml` file for more information*
 
----
+```bash
+# Run the red Deployment
+$ kubectl create -f red-deploy-definition.yaml
+
+# Check on which node the Pods of red Deployment are running on
+$ kubectl get pods -o wide
+```
