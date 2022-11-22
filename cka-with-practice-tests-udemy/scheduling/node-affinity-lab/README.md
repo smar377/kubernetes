@@ -51,3 +51,15 @@ $ kubectl create -f red-deploy-definition.yaml
 # Check on which node the Pods of red Deployment are running on
 $ kubectl get pods -o wide
 ```
+
+Alternatively we can:
+
+```bash
+# Create a Deployment with dry-run and toss it to a YAML file
+$ kubectl create deployment red --image=nginx --replicas=2 --dry-run=client -o yaml > red-deply-definition.yaml
+
+# Edit the YAML file and within the spec section add the affinity fields
+# and then
+# last but not lease, create the Deployment by issuing
+$ kubectl create -f red-deploy-definition.yaml
+```
