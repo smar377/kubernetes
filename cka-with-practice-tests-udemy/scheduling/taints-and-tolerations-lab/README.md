@@ -31,7 +31,7 @@ $ kubectl create -f mosquito-definition.yaml
 $ kubectl get pods -o wide
 ```
 
-### 6. Create another Pod named `bee` with the `nginx` image, which has a toleration set to the taint `mortein`
+### 6. Create another Pod named `bee` with the `nginx` image, which has a Toleration set to the taint `mortein`
 
 ```bash
 $ cat bee-definition.yaml
@@ -61,7 +61,7 @@ $ kubectl create -f bee-definition.yaml
 $ kubectl describe pod bee | grep -A2 Tolerations
 ```
 
-### 7. Notice the `bee` Pod was scheduled on node `node01` despite the taint
+### 7. Notice the `bee` Pod was scheduled on node `node01` despite the Taint
 
 ```bash
 $ kubectl get pods bee -o wide
@@ -73,7 +73,7 @@ $ kubectl get pods bee -o wide
 $ kubectl describe nodes controlplane | grep Taint
 ```
 
-### 9. Remove the taint on `controlplane`, which currently has the taint effect of `NoSchedule`
+### 9. Remove the Taint on `controlplane`, which currently has the Taint effect of `NoSchedule`
 
 ```bash
 $ kubectl taint nodes controlplane node-role.kubernetes.io/control-plane:NoSchedule-
