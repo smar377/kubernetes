@@ -1,105 +1,49 @@
-### 1. How many nodes exist on the system? Including the `controlplane` node
+### 1. How many Labels exist on node `node01`?
 
 ```bash
-$ kubectl get nodes --no-headers | wc -l
+$ kubectl describe nodes node01
 ```
 
-### 2. Do any taints exist on `node01` node?
+### 2. Apply a label color=blue to node `node01`
 
 ```bash
-$ kubectl describe node node01 | grep Taint
+# Apply label
+$ kubectl label nodes node01 color=blue
+
+# Check labels on node01
+$ kubectl describe nodes node01 | grep -A5 Label
 ```
 
-### 3. Create a Taint on `node01` with key of `spray`, value of `mortein` and effect of `NoSchedule`
+### 3. Create a new Deployment named `blue` with the `nginx` image and 3 replicas
 
 ```bash
-$ kubectl taint node node01 spray=mortein:NoSchedule
-$ kubectl describe node node01 | grep Taint
+# Create Deployment
+$ kubectl create deployment blue --image=nginx --replicas=3
+
+# Check the status of the newly created Deployment
+$ kubectl get deploy -o wide
 ```
 
-### 4. Create a new Pod with the `nginx` image and Pod name as `mosquito`
+### 4. Which nodes can the Pods for the `blue` Deployment be placed on? Make sure to check Taints on both nodes
+
+*Answer:* Both nodes have **NO** taints set on them, so both of them can facilitate Pods pf the `blue` Deployment.
 
 ```bash
-# 1st Way
-$ cat mosquito-definition.yaml
----
-apiVersion: v1
-kind: Pod
-metadata:
-  name: mosquito
-spec:
-  containers:
-  - image: nginx
-    name: mosquito
+# Check the Taints on controlplane node
+$ kubectl describe nodes controlplane | grep Taint
 
-$ kubectl create -f mosquito-definition.yaml
+# Check the Taints on node01 node
+$ kubectl describe nodes controlplane | grep Taint
 ```
 
-```bash
-# 2nd Way
-$ kubectl run mosquito --image=nginx
-```
-
-### 5. What is the status of the Pod?
-
-*Answer:* Pending state because Pod `mosquito` cannot tolerate taint `mortein`
+### 5. Set Node Affinity to the Deployment to place the Pods on `node01` only
 
 ```bash
-$ kubectl get pods -o wide
+$ 
 ```
 
 ### 6. Create another Pod named `bee` with the `nginx` image, which has a Toleration set to the taint `mortein`
 
 ```bash
-$ cat bee-definition.yaml
+
 ---
-apiVersion: v1
-kind: Pod
-metadata:
-  name: bee
-spec:
-  containers:
-  - image: nginx
-    name: bee
-  tolerations:
-  - key: spray
-    value: mortein
-    effect: NoSchedule
-    operator: Equal
-```
-
-```bash
-# Create the new Pod
-$ kubectl create -f bee-definition.yaml
-```
-
-```bash
-# Check Pod toleration description
-$ kubectl describe pod bee | grep -A2 Tolerations
-```
-
-### 7. Notice the `bee` Pod was scheduled on node `node01` despite the Taint
-
-```bash
-$ kubectl get pods bee -o wide
-```
-
-### 8. Do you see any taints on `controlplane` node?
-
-```bash
-$ kubectl describe nodes controlplane | grep Taint
-```
-
-### 9. Remove the Taint on `controlplane`, which currently has the Taint effect of `NoSchedule`
-
-```bash
-$ kubectl taint nodes controlplane node-role.kubernetes.io/control-plane:NoSchedule-
-```
-
-### 10. What is the state of the Pod `mosquito` now and on which node is it running on?
-
-```bash
-$ kubectl get pods mosquito -o wide
-NAME       READY   STATUS    RESTARTS   AGE     IP           NODE           NOMINATED NODE   READINESS GATES
-mosquito   1/1     Running   0          6m20s   10.244.0.4   controlplane   <none>           <none>
-```
