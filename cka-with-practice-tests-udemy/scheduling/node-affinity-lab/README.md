@@ -38,11 +38,9 @@ $ kubectl describe nodes controlplane | grep Taint
 
 ### 5. Set Node Affinity to the Deployment to place the Pods on `node01` only
 
-```bash
-$ 
-```
+*Please check the `blue-deployment-definition.yaml` file for more information*
 
-### 6. Create another Pod named `bee` with the `nginx` image, which has a Toleration set to the taint `mortein`
+### 6. Create a new Deployment named `red` with the `nginx` image and 2 replicas, and ensure it gets placed on the `controlplane` node only. Use the label key `node-role.kubernetes.io/control-plane` which is already set on the `controlplane` node
 
 ```bash
 
