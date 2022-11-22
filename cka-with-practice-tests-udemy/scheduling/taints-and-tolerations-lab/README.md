@@ -76,5 +76,13 @@ $ kubectl describe nodes controlplane | grep Taint
 ### 9. Remove the taint on `controlplane`, which currently has the taint effect of `NoSchedule`
 
 ```bash
+$ kubectl taint nodes controlplane node-role.kubernetes.io/control-plane:NoSchedule-
+```
 
+### 10. What is the state of the Pod `mosquito` now and on which node is it running on?
+
+```bash
+$ kubectl get pods mosquito -o wide
+NAME       READY   STATUS    RESTARTS   AGE     IP           NODE           NOMINATED NODE   READINESS GATES
+mosquito   1/1     Running   0          6m20s   10.244.0.4   controlplane   <none>           <none>
 ```
