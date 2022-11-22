@@ -4,10 +4,11 @@ kind: Pod
 metadata:
   name: bee
 spec:
-  tolerations:
-  - key: "morest"
-    operator: "Equal"
-    value: "NoSchedule"
   containers:
   - image: nginx
-    name: mosquito
+    name: bee
+  tolerations:
+  - key: spray
+    value: mortein
+    effect: NoSchedule
+    operator: Equal
