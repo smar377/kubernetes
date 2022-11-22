@@ -47,7 +47,3 @@ $ kubectl get pods elephant -o yaml > elephant-pod.yaml
 # Then delete the existing one first and recreate a new one from the YAML file
 $ kubectl replace -f elephant-pod.yaml --force
 ```
-
-
-### 6. 
-
