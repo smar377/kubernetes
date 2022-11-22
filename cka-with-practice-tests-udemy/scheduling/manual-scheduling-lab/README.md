@@ -4,13 +4,13 @@
 $ kubectl get nodes
 ```
 
-### 2. A pod definition file `nginx.yaml` is given. Create a pod using the file
+### 2. A Pod definition file `nginx.yaml` is given. Create a Pod using the file
 
 ```bash
 $ kubectl create -f nginx.yaml
 ```
 
-### 3. What is the status of the created POD?
+### 3. What is the status of the created Pod?
 
 ```bash
 $ kubectl get pods nginx -o wide
@@ -18,7 +18,7 @@ NAME    READY   STATUS    RESTARTS   AGE   IP       NODE     NOMINATED NODE   RE
 nginx   0/1     Pending   0          54s   <none>   <none>   <none>           <none>
 ```
 
-### 4. Why is the POD in a pending state? Inspect the environment for various kubernetes control plane components
+### 4. Why is the Pop in a pending state? Inspect the environment for various kubernetes control plane components
 
 **Answer:** No scheduler present!
 
@@ -61,7 +61,7 @@ Additionally, we can check if there is a `scheduler` container running on the Ku
 $ kubectl get pods -n kube-system
 ```
 
-### 5. Manually schedule the pod on `node01`. Delete and recreate the POD if necessary.
+### 5. Manually schedule the Pod on `node01`. Delete and recreate the Pod if necessary.
 
 ```bash
 # Delete the pod
@@ -107,7 +107,7 @@ Last, we can live watch the state of the Pod by issuing:
 $ kubectl get pods --watch
 ```
 
-### 6. Now schedule the same pod on the `controlplane` node. Delete and recreate the POD if necessary.
+### 6. Now schedule the same Pod on the `controlplane` node. Delete and recreate the Pod if necessary.
 
 *Note*: We will use directly the second method we learned above, meaning the `replace` command.
 
