@@ -1,65 +1,49 @@
-### 1. How many Labels exist on node `node01`?
+### 1. A Pod called `rabbit` is deployed. Identify the CPU requirements set on the Pod in the current (default) namespace
 
 ```bash
-$ kubectl describe nodes node01
+$ kubectl describe pod rabbit
 ```
 
-### 2. Apply a label `color=blue` to node `node01`
+### 2. Delete the `rabbit` Pod. Once deleted, wait for the pod to fully terminate
 
 ```bash
-# Apply label
-$ kubectl label nodes node01 color=blue
+# Delete the Pod
+$ kubectl delete pod rabbit
 
-# Check labels on node01
-$ kubectl describe nodes node01 | grep -A5 Label
+# Check running Pods and make sure it's terminated
+$ kubectl get pods --watch
 ```
 
-### 3. Create a new Deployment named `blue` with the `nginx` image and 3 replicas
+### 3. Another Pod called `elephant` has been deployed in the default namespace. It fails to get to a running state. Inspect this Pod and identify the reason why it is not running
 
 ```bash
-# Create Deployment
-$ kubectl create deployment blue --image=nginx --replicas=3
-
-# Check the status of the newly created Deployment
-$ kubectl get deploy -o wide
+$ kubectl describe pod elephant  | grep -A5 State:
 ```
 
-### 4. Which nodes can the Pods for the `blue` Deployment be placed on? Make sure to check Taints on both nodes
-
-*Answer:* Both nodes have **NO** taints set on them, so both of them can facilitate Pods pf the `blue` Deployment.
+It's changing the status frequently so make use of the `watch` command to get the output every two seconds:
 
 ```bash
-# Check the Taints on controlplane node
-$ kubectl describe nodes controlplane | grep Taint
-
-# Check the Taints on node01 node
-$ kubectl describe nodes controlplane | grep Taint
+$ watch kubectl get pods
 ```
 
-### 5. Set Node Affinity to the Deployment to place the Pods on `node01` only
+*Note:* - Make use of the `CTRL + C` key to exit from the process.
 
-*Please check the `blue-deploy-definition.yaml` file for more information*
+### 4. The status `OOMKilled` indicates that it is failing because the Pod ran out of memory. Identify the memory limit set on the Pod
 
-### 6. Create a new Deployment named `red` with the `nginx` image and 2 replicas, and ensure it gets placed on the `controlplane` node only. Use the label key `node-role.kubernetes.io/control-plane` which is already set on the `controlplane` node
-
-*Please check the `blue-deploy-definition.yaml` file for more information*
+*Answer:* `Memory: 10Mi`
 
 ```bash
-# Run the red Deployment
-$ kubectl create -f red-deploy-definition.yaml
-
-# Check on which node the Pods of red Deployment are running on
-$ kubectl get pods -o wide
+$ kubectl describe pod elephant
 ```
 
-Alternatively we can:
+### 5. The `elephant` Pod runs a process that consume `15Mi` of memory. Increase the limit of the `elephant` Pod to `20Mi`. Delete and recreate the Pod if required. Do not modify anything other than the required fields.
 
 ```bash
-# Create a Deployment with dry-run and toss it to a YAML file
-$ kubectl create deployment red --image=nginx --replicas=2 --dry-run=client -o yaml > red-deply-definition.yaml
+# Create the file elephant-pod.yaml by the following command and edit the file such as memory limit is set to 20Mi as follows
+$ kubectl get pods elephant -o yaml > elephant-pod.yaml
+```
 
-# Edit the YAML file and within the spec section add the affinity fields
-# and then
-# last but not lease, create the Deployment by issuing
-$ kubectl create -f red-deploy-definition.yaml
+```bash
+# Then delete the existing one first and recreate a new one from the YAML file
+$ kubectl replace -f elephant-pod.yaml --force
 ```
