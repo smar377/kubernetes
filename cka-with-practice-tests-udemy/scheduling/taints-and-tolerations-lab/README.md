@@ -20,7 +20,24 @@ $ kubectl describe node node01 | grep Taint
 ### 4. Create a new Pod with the `nginx` image and Pod name as `mosquito`
 
 ```bash
+# 1st Way
+$ cat mosquito-definition.yaml
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: mosquito
+spec:
+  containers:
+  - image: nginx
+    name: mosquito
+
 $ kubectl create -f mosquito-definition.yaml
+```
+
+```bash
+# 2nd Way
+$ kubectl run mosquito --image=nginx
 ```
 
 ### 5. What is the status of the Pod?
