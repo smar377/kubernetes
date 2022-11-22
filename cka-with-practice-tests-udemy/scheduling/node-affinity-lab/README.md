@@ -4,7 +4,7 @@
 $ kubectl describe nodes node01
 ```
 
-### 2. Apply a label color=blue to node `node01`
+### 2. Apply a label `color=blue` to node `node01`
 
 ```bash
 # Apply label
