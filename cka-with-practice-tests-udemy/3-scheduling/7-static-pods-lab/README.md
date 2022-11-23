@@ -1,37 +1,66 @@
-### 1. How many DaemonSets are created in the cluster in all namespaces? (check all namespaces)
+### 1. How many static pods exist in this cluster in all namespaces?
+
+Run the command:
 
 ```bash
-# 1st Way
-$ kubectl get daemonsets --all-namespaces
-
-# 2nd Way - Short version
-$ kubectl get ds --all-namespaces
+$ kubectl get pods --all-namespaces
 ```
 
-### 2. On how many nodes are the Pods scheduled by the DaemonSet `kube-proxy`?
+and look for those with `-controlplane` appended in their name.
+
+### 2. What is the path of the directory holding the static Pod definition files?
+
+First idenity the kubelet config file:
 
 ```bash
-$ kubectl describe daemonset kube-proxy --namespace=kube-system
+$ ps -aux | grep /usr/bin/kubelet
 ```
 
-### 3. What is the image used by the Pod deployed by the `kube-flannel-ds` DaemonSet?
+From the output we can see that the kubelet config file used is `/var/lib/kubelet/config.yaml`. Next, lookup the value assigned for `staticPodPath`:
 
 ```bash
-$ kubectl describe daemonset kube-flannel-ds --namespace=kube-system
+$ grep -i staticpod /var/lib/kubelet/config.yaml
 ```
 
-### 4. Deploy a DaemonSet for FluentD Logging (use given specifications)
+As you can see, the path configured is the `/etc/kubernetes/manifests` directory.
 
-An easy way to create a DaemonSet is to first generate a YAML file for a Deployment with the command: 
+### 3. Create a static Pod named `static-busybox` that uses the `busybox` image and the command `sleep 1000`
 
 ```bash
-$ kubectl create deployment elasticsearch --image=k8s.gcr.io/fluentd-elasticsearch:1.20 -n kube-system --dry-run=client -o yaml > fluentd.yaml
+$ kubectl run --restart=Never --image=busybox static-busybox --dry-run=client -o yaml --command -- sleep 1000 > /etc/kubernetes/manifests/static-busybox.yam
 ```
- 
-Next, remove the replicas, strategy and status fields from the YAML file using a text editor. Also, change the kind from Deployment to DaemonSet.
 
-Finally, create the Daemonset by running:
+### 4. We just created a new static Pod named `static-greenbox`. Find it and delete it. This question is a bit tricky, but if you use the knowledge you gained in the previous questions in this lab, you should be able to find the answer to it.
+
+First, let's identify the node in which the Pod called `static-greenbox` is created. To do this, run:
 
 ```bash
-$ kubectl create -f fluentd.yaml
+$ kubectl get pods static-greenbox-node01 -o wide
 ```
+
+From the result of this command, we can see that the pod is running on `node01`.
+Next, SSH to `node01` and identify the path configured for static pods in this node.
+
+**Important:** The path does NOT need to be `/etc/kubernetes/manifests`. Make sure to check the path configured in the kubelet configuration file.
+
+```bash
+# SSH to node01
+$ ssh node01
+
+# Check the path configured in the kubelet configuration file
+$ ps -ef | grep /var/bin/kubelet/config.yaml
+
+$ grep -i staticpod /var/lib/kubelet/config.yaml
+staticPodPath: /etc/just-to-mess-with-you
+```
+
+Here the staticPodPath is `/etc/just-to-mess-with-you`.
+
+Navigate to this directory and delete the YAML file:
+
+```bash
+$ cd /etc/just-to-mess-with-you/
+$ las -lah
+$ rm -rf greenbox.yaml
+```
+
