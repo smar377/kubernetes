@@ -70,9 +70,9 @@ $ kubectl describe pod ubuntu-sleeper-3 | grep -i -A2 command
 
 Assume the image was created from the `Dockerfile` in this directory.
 
-The `ENTRYPOINT` in the `Dockerfile2` is overridden by the command in the Pod definition file, so the command that will be run is just
+The `ENTRYPOINT` in the `Dockerfile2` is overridden by the command in the Pod definition file, so the command that will be run is just:
 
-- `--color green`
+*Answer:* `--color green`
 
 ### 9. Inspect the two files under directory `webapp-color-3`. What command is run at container startup?
 
@@ -80,7 +80,7 @@ Assume the image was created from the `Dockerfile` in this directory.
 
 The `ENTRYPOINT` and `CMD` in the `Dockerfile2` is overridden by the `command` and `args` in the Pod definition file, so the command that will be run is:
 
-- `python app.py --color pink`
+*Answer:* `python app.py --color pink`
 
 ### 10. Create a Pod with the given specifications 
 
