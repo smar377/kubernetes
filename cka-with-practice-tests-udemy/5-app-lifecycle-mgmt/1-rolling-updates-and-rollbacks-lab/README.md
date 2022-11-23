@@ -129,10 +129,14 @@ $ kubectl apply -f frontend-deploy-recreate-definition.yaml
 Do **NOT** delete and re-create the deployment. Only set the new image name for the existing deployment.
 
 ```bash
+# 1st Way - By editing the Deployment YAML definition file and modifying the image to `kodekloud/webapp-color:v3`
 $ kubectl edit deployment frontend
 ```
 
-and modify the image to `kodekloud/webapp-color:v2`. Next, save and exit. The Pods should be recreated with the new image.
+```bash
+# 2nd Way - By setting the image from command line
+$ kubectl set image deploy frontend simple-webapp=kodekloud/webapp-color:v3
+```
 
 Let's check now both the Deployment and the Pods:
 
