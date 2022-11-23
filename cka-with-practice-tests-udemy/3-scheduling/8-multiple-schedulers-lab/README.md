@@ -43,6 +43,24 @@ $ kubectl get configmaps --all-namespaces | grep my-scheduler-config
 
 Use the manifest file provided at `/root/my-scheduler.yaml`. Use the same image as used by the default kubernetes scheduler.
 
+Edit specified file and change `image` field to `k8s.gcr.io/kube-scheduler:v1.24.0`
+
+Then all we need to do is to deploy it by running:
+
 ```bash
-$ 
+$ kubectl create -f my-scheduler.yaml
+```
+
+Last, check is the deployment was successful:
+
+```bash
+$ kubectl get pods --all-namespaces | grep my-scheduler
+```
+
+### 6. A Pod definition file is given. Use it to create a POD with the new custom scheduler (file located at `/root/nginx-pod.yaml`)
+
+
+
+```bash
+
 ```
