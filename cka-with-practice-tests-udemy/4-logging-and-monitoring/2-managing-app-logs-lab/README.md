@@ -1,8 +1,14 @@
-### 1. What is the name of the Pod that deploys the default kubernetes scheduler in this environment?
+### 1. Identify the user access issues (`USER5` in the example)
+
+Let us inspect the logs of the Pod:
 
 ```bash
-$ kubectl get pods --all-namespaces -o wide
+$ kubectl logs -f webapp-1
 ```
+
+After checking the logs we see multiple events related to `USER5` indicating that:
+
+`USER5 Failed to Login as the account is locked due to MANY FAILED ATTEMPTS.`
 
 ### 2. What is the image used to deploy the Kubernetes scheduler? Inspect the kubernetes scheduler Pod and identify the image
 
