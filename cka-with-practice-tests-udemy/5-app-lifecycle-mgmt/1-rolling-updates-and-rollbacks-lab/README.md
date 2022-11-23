@@ -61,10 +61,14 @@ $ kubectl describe deploy frontend | grep -i strategy
 Do **NOT** delete and re-create the deployment. Only set the new image name for the existing deployment.
 
 ```bash
+# 1st Way - By editing the Deployment YAML definition file and modifying the image to `kodekloud/webapp-color:v2`
 $ kubectl edit deployment frontend
 ```
 
-and modify the image to `kodekloud/webapp-color:v2`. Next, save and exit. The Pods should be recreated with the new image.
+```bash
+# 2nd Way - By setting the image from command line
+$ kubectl set image deploy frontend simple-webapp=kodekloud/webapp-color:v2
+```
 
 Let's check now both the Deployment and the Pods:
 
@@ -74,15 +78,15 @@ $ kubectl get pods,deploy -o wide
 
 ### 7. Run the script `curl-test.sh` again
 
-Notice the requests now hit both the old and newer versions. However none of them fail
+Notice the requests now hit both the old and newer versions. However **NONE** of them fail.
 
 ```bash
 $ ./curl-test.sh 
-Hello, Application Version: v2 ; Color: green OK
+Hello, Application Version: v2 ; Color: blue OK
 
 Hello, Application Version: v2 ; Color: green OK
 
-Hello, Application Version: v2 ; Color: green OK
+Hello, Application Version: v2 ; Color: blue OK
 
 Hello, Application Version: v2 ; Color: green OK
 
@@ -91,58 +95,32 @@ Hello, Application Version: v2 ; Color: green OK
 Hello, Application Version: v2 ; Color: green OK
 ```
 
-### 9. 
+### 9. Up to how many Pods can be down for upgrade at a time? 
 
-*Answer:* 
+Considering the current strategy settings and number of Pods set to `4` the answer is: **1**
+
+*Attention:* Check the `RollingUpdateStrategy` field when issuing the command:
 
 ```bash
-$ 
+$ kubectl describe deploy frontend | grep -i rolling
+RollingUpdateStrategy: 25% max unavailable, 25% max surge
 ```
+
+So, 25% of total number of Pods = 4 => *1 Pod can be down for upgrade at a time!*
 
 ### 10. Change the Deployment strategy to `Recreate`
 
 Delete and re-create the Deployment if necessary. Only update the strategy type for the existing Deployment.
 
 ```bash
+# 1st Way
 $ kubectl edit deployment frontend
 ```
 
 and modify the required field. Make sure to delete the properties of `rollingUpdate` as well, set at `strategy.rollingUpdate`.
 
-This method will return an error as we are NOT allowed to edit in this way the Deployment YAML file.
-
-In comparison, what we do is to create a new Deployment definition YAML file:
-
-```yaml
----
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: frontend
-  namespace: default
-spec:
-  replicas: 4
-  selector:
-    matchLabels:
-      name: webapp
-  strategy:
-    type: Recreate
-  template:
-    metadata:
-      labels:
-        name: webapp
-    spec:
-      containers:
-      - image: kodekloud/webapp-color:v2
-        name: simple-webapp
-        ports:
-        - containerPort: 8080
-          protocol: TCP
-```
-
-and we deploy it like this:
-
 ```bash
+# 2nd Way - Create a new Deployment YAML definition file and apply it after first deleting the old Deployment
 $ kubectl apply -f frontend-deploy-recreate-definition.yaml
 ```
 
