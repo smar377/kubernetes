@@ -1,4 +1,4 @@
-### 1. We have deployed a few Pods running workloads. Inspect them. Wait for the Pods to be ready before proceeding to the next question
+### 1. Inspect a few Pods running workloads
 
 ```bash
 # 1st Way
@@ -8,13 +8,15 @@ $ kubectl get pods --all-namespaces -o wide
 $ kubectl get pods -A -o wide
 ```
 
-### 2. Let us deploy `metrics-server` to monitor the Pods and Nodes. Pull the git repository for the deployment files
+### 2. Deploy `metrics-server` to monitor the Pods and Nodes 
+
+In order to do that, we need to pull the git repository for the deployment files:
 
 ```bash
 $ git clone https://github.com/kodekloudhub/kubernetes-metrics-server.git
 ```
 
-### 3. Deploy the `metrics-server` by creating all the components downloaded 
+### 3. Deploy `metrics-server` by creating all the components downloaded 
 
 Run the following command from within the downloaded repository:
 
