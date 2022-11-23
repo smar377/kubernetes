@@ -15,7 +15,7 @@ We can check that by issuing the command for instance:
 $ kubectl get pod kube-apiserver-controlplane --namespace=kube-system -o yaml
 ```
 
-and check the `kind` field. If that, as we call it **owner reference** is set to `Node`, then it means this is a *static Pod*. 
+and check the `kind` field. If that, as we call it, **owner reference** is set to `Node`, then it means this is a *static Pod*. 
 
 ### 2. What is the path of the directory holding the static Pod definition files?
 
