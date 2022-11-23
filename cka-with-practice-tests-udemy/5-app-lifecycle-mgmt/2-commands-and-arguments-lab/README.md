@@ -1,30 +1,20 @@
-### 1. We have deployed a simple web application. Inspect the Pods and the Services
+### 1. How many Pods exist on the system? In the current (default) namespace
 
 ```bash
-$ kubectl get pods -o wide
-$ kubectl get service -o wide
+$ kubectl get pods -n default -o wide
 ```
 
-### 2. Run the script named `curl-test.sh` to send multiple requests to test the web application (take note of the output)
+### 2. What is the command used to run the Pod `ubuntu-sleeper`?
 
 ```bash
-$ ./curl-test.sh 
-Hello, Application Version: v1 ; Color: blue OK
-
-Hello, Application Version: v1 ; Color: blue OK
-
-Hello, Application Version: v1 ; Color: blue OK
-
-Hello, Application Version: v1 ; Color: blue OK
-
-Hello, Application Version: v1 ; Color: blue OK
-
-Hello, Application Version: v1 ; Color: blue OK
-
-[output repeats -- ommited]
+$ kubectl describe pod ubuntu-sleeper | grep -i -A2 command
 ```
 
-### 3. Inspect the Deployment and identify the number of Pods deployed by it
+### 3. Create a Pod with the `ubuntu` image to run a container to `sleep` for `5000` seconds
+
+We will modify the file `ubuntu-sleeper-2.yaml`.
+
+*Note:* Only make the necessary changes. Do not modify the name.
 
 ```bash
 $ kubectl get deploy -o wide
