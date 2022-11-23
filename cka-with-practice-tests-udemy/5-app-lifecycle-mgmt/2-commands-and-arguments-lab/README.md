@@ -70,78 +70,13 @@ $ kubectl describe pod ubuntu-sleeper-3 | grep -i -A2 command
 
 Assume the image was created from the `Dockerfile` in this directory.
 
-*Answer:*
- - `python app.py --color red`
- - 
+The `ENTRYPOINT` in the `Dockerfile` is overridden by the command in the Pod definition file, so the command that will be run is just
 
-### 9. Up to how many Pods can be down for upgrade at a time? 
+- `--color green`
+
+### 9. Inspect the two files under directory `webapp-color-3`. What command is run at container startup?
+
+Assume the image was created from the Dockerfile in this directory 
 
 Considering the current strategy settings and number of Pods set to `4` the answer is: **1**
 
-*Attention:* Check the `RollingUpdateStrategy` field when issuing the command:
-
-```bash
-$ kubectl describe deploy frontend | grep -i rolling
-RollingUpdateStrategy: 25% max unavailable, 25% max surge
-```
-
-So, 25% of total number of Pods = 4 => *1 Pod can be down for upgrade at a time!*
-
-### 10. Change the Deployment strategy to `Recreate`
-
-Delete and re-create the Deployment if necessary. Only update the strategy type for the existing Deployment.
-
-```bash
-# 1st Way
-$ kubectl edit deployment frontend
-```
-
-and modify the required field. Make sure to delete the properties of `rollingUpdate` as well, set at `strategy.rollingUpdate`.
-
-```bash
-# 2nd Way - Create a new Deployment YAML definition file and apply it after first deleting the old Deployment
-$ kubectl apply -f frontend-deploy-recreate-definition.yaml
-```
-
-### 8. Upgrade the application by setting the image on the deployment to `kodekloud/webapp-color:v3`
-
-Do **NOT** delete and re-create the deployment. Only set the new image name for the existing deployment.
-
-```bash
-# 1st Way - By editing the Deployment YAML definition file and modifying the image to `kodekloud/webapp-color:v3`
-$ kubectl edit deployment frontend
-```
-
-```bash
-# 2nd Way - By setting the image from command line
-$ kubectl set image deploy frontend simple-webapp=kodekloud/webapp-color:v3
-```
-
-Let's check now both the Deployment and the Pods:
-
-```bash
-$ kubectl get pods,deploy -o wide
-```
-
-### 9. Run the script `curl-test.sh again` 
-
-Notice the failures. Wait for the new application to be ready. Notice that the requests now do not hit both the versions
-
-```bash
-./curl-test.sh 
-Failed
-
-Failed
-
-Hello, Application Version: v3 ; Color: red OK
-
-Failed
-
-Hello, Application Version: v3 ; Color: red OK
-
-Hello, Application Version: v3 ; Color: red OK
-
-Hello, Application Version: v3 ; Color: red OK
-
-Hello, Application Version: v3 ; Color: red OK
-```
