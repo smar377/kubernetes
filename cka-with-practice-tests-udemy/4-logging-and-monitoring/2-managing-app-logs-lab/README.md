@@ -14,8 +14,10 @@ After checking the logs we see multiple events related to `USER5` indicating tha
 
 Let us inspect the logs of the newly created Pod (`webapp-2`):
 
+**Important"** We must specify the container we want to check the logs for as the newly created Pod contains *two* containers (`simple-webapp` and `db` respectively)
+
 ```bash
-$ kubectl logs -f webapp-2
+$ kubectl logs webapp-2 simple-webapp 
 ```
 
 After checking the logs we see multiple events related to `USER30` indicating that:
