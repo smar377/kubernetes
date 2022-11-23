@@ -60,7 +60,7 @@ $ kubectl describe pod ubuntu-sleeper-3 | grep -i -A2 command
 
 ### 6. Inspect the file `Dockerfile` given at `/root/webapp-color` directory. What command is run at container startup?
 
-*Answer:* Strategy type is `RollingUpdate`
+*Answer:* 
 
 ```bash
 $ kubectl describe deploy frontend | grep -i strategy
