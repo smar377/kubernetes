@@ -1,39 +1,35 @@
-### 1. A Pod called `rabbit` is deployed. Identify the CPU requirements set on the Pod in the current (default) namespace
+### 1. How many DaemonSets are created in the cluster in all namespaces? (Check all namespaces)
 
 ```bash
-$ kubectl describe pod rabbit
+$ kubectl get daemonsets --all-namespaces
 ```
 
-### 2. Delete the `rabbit` Pod. Once deleted, wait for the pod to fully terminate
+### 2. On how many nodes are the Pods scheduled by the DaemonSet `kube-proxy`?
 
 ```bash
-# Delete the Pod
-$ kubectl delete pod rabbit
-
-# Check running Pods and make sure it's terminated
-$ kubectl get pods --watch
+$ kubectl describe daemonset kube-proxy --namespace=kube-system
 ```
 
-### 3. Another Pod called `elephant` has been deployed in the default namespace. It fails to get to a running state. Inspect this Pod and identify the reason why it is not running
+### 3. What is the image used by the Pod deployed by the `kube-flannel-ds` DaemonSet?
 
 ```bash
-$ kubectl describe pod elephant  | grep -A5 State:
+$ kubectl describe daemonset kube-flannel-ds --namespace=kube-system
 ```
 
-It's changing the status frequently so make use of the `watch` command to get the output every two seconds:
+### 4. Deploy a DaemonSet for FluentD Logging. Use the given specifications
+
+An easy way to create a DaemonSet is to first generate a YAML file for a Deployment with the command: 
 
 ```bash
-$ watch kubectl get pods
+$ kubectl create deployment elasticsearch --image=k8s.gcr.io/fluentd-elasticsearch:1.20 -n kube-system --dry-run=client -o yaml > fluentd.yaml
 ```
+ 
+Next, remove the replicas, strategy and status fields from the YAML file using a text editor. Also, change the kind from Deployment to DaemonSet.
 
-*Note:* - Make use of the `CTRL + C` key to exit from the process.
-
-### 4. The status `OOMKilled` indicates that it is failing because the Pod ran out of memory. Identify the memory limit set on the Pod
-
-*Answer:* `Memory: 10Mi`
+Finally, create the Daemonset by running:
 
 ```bash
-$ kubectl describe pod elephant
+$ kubectl create -f fluentd.yaml
 ```
 
 ### 5. The `elephant` Pod runs a process that consume `15Mi` of memory. Increase the limit of the `elephant` Pod to `20Mi`. Delete and recreate the Pod if required. Do not modify anything other than the required fields.
