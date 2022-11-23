@@ -63,6 +63,7 @@ Do **NOT** delete and re-create the deployment. Only set the new image name for 
 ```bash
 $ kubectl edit deployment frontend
 ```
+
 and modify the image to `kodekloud/webapp-color:v2`. Next, save and exit. The Pods should be recreated with the new image.
 
 Let's check now both the Deployment and the Pods:
@@ -145,10 +146,41 @@ and we deploy it like this:
 $ kubectl apply -f frontend-deploy-recreate-definition.yaml
 ```
 
-### 8. 
+### 8. Upgrade the application by setting the image on the deployment to `kodekloud/webapp-color:v3`
 
-*Answer:* 
+Do **NOT** delete and re-create the deployment. Only set the new image name for the existing deployment.
 
 ```bash
-$ 
+$ kubectl edit deployment frontend
+```
+
+and modify the image to `kodekloud/webapp-color:v2`. Next, save and exit. The Pods should be recreated with the new image.
+
+Let's check now both the Deployment and the Pods:
+
+```bash
+$ kubectl get pods,deploy -o wide
+```
+
+### 9. Run the script `curl-test.sh again` 
+
+Notice the failures. Wait for the new application to be ready. Notice that the requests now do not hit both the versions
+
+```bash
+./curl-test.sh 
+Failed
+
+Failed
+
+Hello, Application Version: v3 ; Color: red OK
+
+Failed
+
+Hello, Application Version: v3 ; Color: red OK
+
+Hello, Application Version: v3 ; Color: red OK
+
+Hello, Application Version: v3 ; Color: red OK
+
+Hello, Application Version: v3 ; Color: red OK
 ```
