@@ -21,19 +21,27 @@ Checkout the following Kubernetes objects:
 Run the commands:
 
 ```bash
-$ kubectl get serviceaccount -n kube-system
+# 1st Way
+$ kubectl get serviceaccount my-scheduler -n kube-system
+
+# 2nd Way - Short version
+$ kubectl get sa -n my-scheduler kube-system
+
 $ kubectl get clusterrolebinding
 ```
 
 *Note:* Don't worry if you are not familiar with these resources. We will cover it later on.
 
-### 4. Let's create a configmap that the new scheduler will employ using the concept of `ConfigMap` as a volume
+### 4. Let's create a `ConfigMap` that the new scheduler will employ using the concept of `ConfigMap` as a volume
 
 We have already given a configMap definition file called `my-scheduler-configmap.yaml` at `/root/` path that will create a configmap with name `my-scheduler-config` using the content of file `/root/my-scheduler-config.yaml`.
 
 ```bash
-# Create the ConfigMap object
+# 1st Way - Create the ConfigMap object
 $ kubectl create -f /root/my-scheduler-configmap.yaml
+
+# 2nd Way - Create the ConfigMap object
+$ kubectl create configmap my-scheduler-config --from-file=/root/my-scheduler-config.yaml -n kube-system
 
 # Check if creation was successfull
 $ kubectl get configmaps --all-namespaces | grep my-scheduler-config
@@ -57,10 +65,31 @@ Last, check is the deployment was successful:
 $ kubectl get pods --all-namespaces | grep my-scheduler
 ```
 
-### 6. A Pod definition file is given. Use it to create a POD with the new custom scheduler (file located at `/root/nginx-pod.yaml`)
+### 6. A Pod definition file is given. Use it to create a Pod with the new custom scheduler (file located at `/root/nginx-pod.yaml`)
 
+Edit the `nginx-pod.yaml` file like this:
 
+```yaml
+---
+apiVersion: v1 
+kind: Pod 
+metadata:
+  name: nginx 
+spec:
+  schedulerName: my-scheduler
+  containers:
+  - image: nginx
+    name: nginx
+```
+
+and create the Pod by issuing the following command:
 
 ```bash
+$ kubectl create -f nginx-pod.yaml
+```
 
+Then, we can check the status of the Pod by running:
+
+```bash
+$ kubectl get pods -A | grep nginx
 ```
