@@ -17,9 +17,7 @@ We will modify the file `ubuntu-sleeper-2.yaml`.
 *Note:* Only make the necessary changes. Do not modify the name.
 
 ```bash
-$ kubectl get deploy -o wide
-$ kubectl get pods -o wide
-$ kubectl get all -o wide
+$ 
 ```
 
 ### 4. What container image is used to deploy the applications?
