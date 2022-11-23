@@ -60,39 +60,19 @@ $ kubectl describe pod ubuntu-sleeper-3 | grep -i -A2 command
 
 ### 6. Inspect the file `Dockerfile` given at `/root/webapp-color` directory. What command is run at container startup?
 
-*Answer:* 
+*Answer:* `python app.py`
 
-```bash
-$ kubectl describe deploy frontend | grep -i strategy
-```
+### 7. Inspect the file `Dockerfile2` given at `/root/webapp-color` directory. What command is run at container startup?
 
-### 7. 
+*Answer:* `python app.py --color red`
 
-Do **NOT** delete and re-create the deployment. Only set the new image name for the existing deployment.
+### 8. Inspect the two files under directory `webapp-color-2`. What command is run at container startup?
 
-```bash
-# 1st Way - By editing the Deployment YAML definition file and modifying the image to `kodekloud/webapp-color:v2`
-$ kubectl edit deployment frontend
-```
+Assume the image was created from the `Dockerfile` in this directory.
 
-```bash
-# 2nd Way - By setting the image from command line
-$ kubectl set image deploy frontend simple-webapp=kodekloud/webapp-color:v2
-```
-
-Let's check now both the Deployment and the Pods:
-
-```bash
-$ kubectl get pods,deploy -o wide
-```
-
-### 8. 
-
-Notice the requests now hit both the old and newer versions. However **NONE** of them fail.
-
-```bash
-$ 
-```
+*Answer:*
+ - `python app.py --color red`
+ - 
 
 ### 9. Up to how many Pods can be down for upgrade at a time? 
 
