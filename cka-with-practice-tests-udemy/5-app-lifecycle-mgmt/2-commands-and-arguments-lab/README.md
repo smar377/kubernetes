@@ -70,13 +70,28 @@ $ kubectl describe pod ubuntu-sleeper-3 | grep -i -A2 command
 
 Assume the image was created from the `Dockerfile` in this directory.
 
-The `ENTRYPOINT` in the `Dockerfile` is overridden by the command in the Pod definition file, so the command that will be run is just
+The `ENTRYPOINT` in the `Dockerfile2` is overridden by the command in the Pod definition file, so the command that will be run is just
 
 - `--color green`
 
 ### 9. Inspect the two files under directory `webapp-color-3`. What command is run at container startup?
 
-Assume the image was created from the Dockerfile in this directory 
+Assume the image was created from the `Dockerfile` in this directory.
 
-Considering the current strategy settings and number of Pods set to `4` the answer is: **1**
+The `ENTRYPOINT` and `CMD` in the `Dockerfile2` is overridden by the `command` and `args` in the Pod definition file, so the command that will be run is:
 
+- `python app.py --color pink`
+
+### 10. Create a Pod with the given specifications 
+
+By default it displays a blue background. Set the given command line arguments to change it to green.
+
+First we create the YAML Pod definition file `webapp-green-pod.yaml` and add all specifications as instructed.
+
+Then we save and deploy the Pod by issuing:
+
+```bash
+$ kubectl create -f webapp-green-pod.yaml
+$ kubectl get pods webapp-green -o wide
+$ kubectl describe pod webapp-green | grep -i -A2 args
+```
