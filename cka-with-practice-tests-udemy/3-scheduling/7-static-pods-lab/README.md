@@ -1,4 +1,4 @@
-### 1. How many static pods exist in this cluster in all namespaces?
+### 1. How many static Pods exist in this cluster in all namespaces?
 
 Run the command:
 
@@ -7,6 +7,15 @@ $ kubectl get pods --all-namespaces
 ```
 
 and look for those with `-controlplane` appended in their name.
+
+Another way to check if a Pod is static, is to check the owner of the Pod.
+We can check that by issuing the command for instance:
+
+```bash
+$ kubectl get pod kube-apiserver-controlplane --namespace=kube-system -o yaml
+```
+
+and check the `kind` field. If that, as we call it **owner reference** is set to `Node`, then it means this is a *static Pod*. 
 
 ### 2. What is the path of the directory holding the static Pod definition files?
 
