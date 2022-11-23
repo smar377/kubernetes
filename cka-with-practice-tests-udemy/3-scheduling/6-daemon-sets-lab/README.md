@@ -1,7 +1,11 @@
 ### 1. How many DaemonSets are created in the cluster in all namespaces? (Check all namespaces)
 
 ```bash
+# 1st Way
 $ kubectl get daemonsets --all-namespaces
+
+# 2nd Way - Short version
+$ kubectl get ds --all-namespaces
 ```
 
 ### 2. On how many nodes are the Pods scheduled by the DaemonSet `kube-proxy`?
@@ -30,16 +34,4 @@ Finally, create the Daemonset by running:
 
 ```bash
 $ kubectl create -f fluentd.yaml
-```
-
-### 5. The `elephant` Pod runs a process that consume `15Mi` of memory. Increase the limit of the `elephant` Pod to `20Mi`. Delete and recreate the Pod if required. Do not modify anything other than the required fields.
-
-```bash
-# Create the file elephant-pod.yaml by the following command and edit the file such as memory limit is set to 20Mi as follows
-$ kubectl get pods elephant -o yaml > elephant-pod.yaml
-```
-
-```bash
-# Then delete the existing one first and recreate a new one from the YAML file
-$ kubectl replace -f elephant-pod.yaml --force
 ```
