@@ -1,4 +1,4 @@
-### 1. How many DaemonSets are created in the cluster in all namespaces? (Check all namespaces)
+### 1. How many DaemonSets are created in the cluster in all namespaces? (check all namespaces)
 
 ```bash
 # 1st Way
@@ -20,7 +20,7 @@ $ kubectl describe daemonset kube-proxy --namespace=kube-system
 $ kubectl describe daemonset kube-flannel-ds --namespace=kube-system
 ```
 
-### 4. Deploy a DaemonSet for FluentD Logging. Use the given specifications
+### 4. Deploy a DaemonSet for FluentD Logging (use given specifications)
 
 An easy way to create a DaemonSet is to first generate a YAML file for a Deployment with the command: 
 
