@@ -82,6 +82,7 @@ We need to edit the Pod, save the file and recreate it.
 # STEP 1 - Check cause of the error
 $ kubectl get pod orange -n default -o wide
 $ kubectl describe pod orange -n default | grep -i -A9 init-myservice | grep -i -A3 command
+$ kubectl logs orange -c init-myservice
 
 # STEP 2 - Get the Pod definition file 
 $ kubectl get pod orange -o yaml > orange-pod.yaml
