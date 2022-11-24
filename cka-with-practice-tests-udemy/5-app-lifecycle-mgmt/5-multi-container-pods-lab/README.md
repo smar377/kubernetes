@@ -116,7 +116,7 @@ $ kubectl create -f multi-container-pod-sidecar.yaml
 $ kubectl get pods -n elastic-stack
 ```
 
-### 9. Inspect the Kibana UI again 
+### 9. Inspect the Kibana UI
 
 You should now see logs appearing in the `Discover` section. You might have to wait for a couple of minutes for the logs to populate. You might have to create an index pattern to list the logs.
 
