@@ -90,4 +90,7 @@ $ kubectl get pod orange -o yaml > orange-pod.yaml
 
 # STEP 4 - Recreate the Pod by issuing the replace command
 $ kubectl replace --force -f orange-pod.yaml
+
+# STEP 5 - Check again the state of the Pod
+$ kubectl describe pod orange -n default
 ```
