@@ -35,7 +35,7 @@ You may follow any one of the methods discussed in lecture to create the secret.
 # 1st Way - Create secret directly from the command line
 $ kubectl create secret generic db-secret --from-literal=DB_Host=sql01 --from-literal=DB_User=root --from-literal=DB_Password=password123
 
-# Check the newly created secrets 
+# Check the newly created secret 
 $ kubectl get secrets db-secret
 $ kubectl describe secrets db-secret
 ```
