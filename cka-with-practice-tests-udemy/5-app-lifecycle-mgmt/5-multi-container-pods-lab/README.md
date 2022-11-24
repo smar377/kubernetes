@@ -123,3 +123,11 @@ $ kubectl get pods -n elastic-stack
 You should now see logs appearing in the `Discover` section. You might have to wait for a couple of minutes for the logs to populate. You might have to create an index pattern to list the logs.
 
 If not sure check this video: [Kubernetes CKAD - Kibana Dashboard](https://bit.ly/2EXYdHf)
+
+## *NOTE* - Multi-container Pods Design Patterns
+
+There are 3 common patterns, when it comes to designing multi-container Pods. The first and what we just saw with the logging service example is known as a **side car** pattern. The others are the **adapter** and the **ambassador** pattern.
+
+But these fall under the CKAD curriculum and are not required for the CKA exam.
+
+But these fall under the CKAD curriculum and are not required for the CKA exam. So we will be discuss these in more detail in the CKAD course.
