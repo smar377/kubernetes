@@ -1,91 +1,84 @@
-### 1. How many Pods exist on the system? In the current (default) namespace
+### 1. How many Secrets exist on the system? In the current (default) namespace
 
 ```bash
-$ kubectl get pods -n default -o wide
+$ kubectl get secrets -n default -o wide
 ```
 
-### 2. What is the environment variable name set on the container in the pod?
+### 2. How many secrets are defined in the `dashboard-token` secret?
 
-*Answer:* `APP_COLOR`
+*Answer:* There are three secrets - `ca.crt`, `namespace`, and `token`
 
 ```bash
-$ kubectl describe pod webapp-color | grep -i -A1 environment
+$ kubectl describe secrets dashboard-token
 ```
 
-### 3. What is the value set on the environment variable `APP_COLOR` on the container in the pod?
+### 3. What is the type of the `dashboard-token` secret?
 
-*Answer:* `pink`
+*Answer:* `kubernetes.io/service-account-token`
 
 ```bash
-$ kubectl describe pod webapp-color | grep -i -A1 environment
+$ kubectl describe secrets dashboard-token | grep -i type
 ```
 
-### 4. Update the environment variable on the Pop to display a green background
+### 4. Which of the following is not a secret data defined in `dashboard-token` secret?
 
-*Note:* Delete and recreate the Pod. Only make the necessary changes. Do not modify the name of the Pod.
+*Answer:* `Type` 
 
-```bash
-# 1st Way - Dry-run to export the Pod definition to a YAML file
-$ kubectl run webapp-color --image=kodekloud/webapp-color --labels='name=webapp-color' --env='APP_COLOR=green' --dry-run=client -o yaml > webapp-green-pod-env.yaml
+### 5. We are going to deploy an application with the below architecture
 
-# Delete existing Pod
-$ kubectl delete pod webapp-color
+We have already deployed the required Pods and Services. Check out the Pods and Services created. Check out the web application using the Webapp MySQL link above your terminal, next to the Quiz Portal Link.
 
-# Create new webapp-color Pod from YAML file
-$ kubectl create -f webapp-green-pod-env.yaml
-```
+The reason the application is failed is because we have not created the secrets yet. Create a new `secret` named `db-secret` with the data given below.
+You may follow any one of the methods discussed in lecture to create the secret.
 
 ```bash
-# 2nd Way - Create new Pod after first deleting the old one directly from command line
-$ kubectl run webapp-color --image=kodekloud/webapp-color --labels='name=webapp-color' --env='APP_COLOR=green'
-```
+# 1st Way - Create secret directly from the command line
+$ kubectl create secret generic db-secret --from-literal=DB_Host=sql01 --from-literal=DB_User=root --from-literal=DB_Password=password123
 
-### 5. How many `ConfigMaps` exist in the default namespace?
-
-```bash
-# 1st Way
-$ kubectl get configmaps -n default -o wide
-
-# 2nd Way - Short version
-$ kubectl get cm -n default -o wide
-```
-
-### 6. Identify the database host from the `ConfigMap` `db-config`
-
-*Answer:* `SQL01.example.com`
-
-```bash
-$ kubectl describe configmaps db-config 
-```
-
-### 7. Create a new `ConfigMap` for the `webapp-color` Pop (use the spec given)
-
-```bash
-# 1st Way - Use dry-run mode to export to a YAML file
-$ kubectl create configmap webapp-config-map --from-literal=APP_COLOR=darkblue --dry-run=client -o yaml > webapp-config-map.yaml
-
-# Create the ConfigMap
-$ kubectl create -f webapp-config-map.yaml
-
-# Check if deployment was successful
-$ kubectl get configmaps -n default -o wide
+# Check the newly created secrets 
+$ kubectl get secrets db-secret
+$ kubectl describe secrets db-secret
 ```
 
 ```bash
-# 2nd Way - Deploy the ConfigMap directly from the command line
-$ kubectl create configmap webapp-config-map --from-literal=APP_COLOR=darkblue
+# 2nd Way - Using dry-run and exporting in a YAML definition file
+$ kubectl create secret generic db-secret --from-literal=DB_Host=sql01 --from-literal=DB_User=root --from-literal=DB_Password=password123 --dry-run=client -o yaml > db-secret-definition.yaml
+
+# Create the new secret and check
+$ kubectl create -f db-secret-definition.yaml
+$ kubectl get secrets db-secret
+$ kubectl describe secrets db-secret
 ```
 
-### 8. Update the environment variable on the Pod to use the newly created `ConfigMap`
+### 6. Configure `webapp-pod` to load environment variables from the newly created secret
 
-*Note:* Delete and recreate the Pod. Only make the necessary changes. Do not modify the name of the Pod.
-
-I have created a new YAML Pod definition file named `webapp-green-pod-env-from.yaml` and have added as extension the `envFrom` section.
-
-Then delete the old Pod, create the new and check the web page:
+Delete and recreate the pod if required.
 
 ```bash
-$ kubectl delete pod webapp-color
-$ kubectl create -f webapp-green-pod-env-from.yaml
-$ kubectl describe pod webapp-color | grep -i -A1 environment
+# 1st Way - Edit the Pod and use replace command to force recreation of the Pod (edit is forbidden but we can use the /tmp/file to create the new Pod
+
+$ kubectl edit pod webapp-pod 
+error: pods "webapp-pod" is invalid
+A copy of your changes has been stored to "/tmp/kubectl-edit-56600331.yaml"
+error: Edit cancelled, no valid changes were saved.
+
+$ kubectl replace --force -f /tmp/kubectl-edit-56600331.yaml 
+pod "webapp-pod" deleted
+pod/webapp-pod replaced
+```
+
+### 7. 
+
+```bash
+```
+
+```bash
+```
+
+### 8. 
+
+*Note:* 
+
+
+```bash
 ```
