@@ -115,3 +115,9 @@ $ kubectl create -f multi-container-pod-sidecar.yaml
 # STEP 4 - Check is the deployment was successful
 $ kubectl get pods -n elastic-stack
 ```
+
+### 9. Inspect the Kibana UI again 
+
+You should now see logs appearing in the `Discover` section. You might have to wait for a couple of minutes for the logs to populate. You might have to create an index pattern to list the logs.
+
+If not sure check this video: [Kubernetes CKAD - Kibana Dashboard](https://bit.ly/2EXYdHf)
