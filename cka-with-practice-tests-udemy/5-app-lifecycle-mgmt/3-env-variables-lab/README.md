@@ -4,106 +4,88 @@
 $ kubectl get pods -n default -o wide
 ```
 
-### 2. What is the command used to run the Pod `ubuntu-sleeper`?
+### 2. What is the environment variable name set on the container in the pod?
+
+*Answer:* `APP_COLOR`
 
 ```bash
-$ kubectl describe pod ubuntu-sleeper | grep -i -A2 command
+$ kubectl describe pod webapp-color | grep -i -A1 environment
 ```
 
-### 3. Create a Pod with the `ubuntu` image to run a container to `sleep` for `5000` seconds
+### 3. What is the value set on the environment variable `APP_COLOR` on the container in the pod?
 
-We will modify the file `ubuntu-sleeper-2.yaml`.
-
-*Note:* Only make the necessary changes. Do not modify the name.
-
-We need to add a list with the command and the argument under container `name:ubuntu` Pod section, under `spec:`
-Then we create the Pod by issuing:
+*Answer:* `pink`
 
 ```bash
-$ kubectl create -f ubuntu-sleeper-2.yaml 
+$ kubectl describe pod webapp-color | grep -i -A1 environment
 ```
 
-and check by running the following commands:
+### 4. Update the environment variable on the Pop to display a green background
+
+*Note:* Delete and recreate the Pod. Only make the necessary changes. Do not modify the name of the Pod.
 
 ```bash
-$ kubectl get pods -n default -o wide
-$ kubectl describe pod ubuntu-sleeper-2 | grep -i -A2 command
+# 1st Way - Dry-run to export the Pod definition to a YAML file
+$ kubectl run webapp-color --image=kodekloud/webapp-color --labels='name=webapp-color' --env='APP_COLOR=green' --dry-run=client -o yaml > webapp-green-pod-env.yaml
+
+# Delete existing Pod
+$ kubectl delete pod webapp-color
+
+# Create new webapp-color Pod from YAML file
+$ kubectl create -f webapp-green-pod-env.yaml
 ```
 
-### 4. Create a Pod using the file named `ubuntu-sleeper-3.yaml`
-
-There is something wrong with it. Try to fix it!
-
-*Note:* Only make the necessary changes. Do not modify the name
-
-*Answer:* Modify `1200` under command key to `"1200"'.
-
 ```bash
-# Run and check the Pod deployment as follows
-$ kubectl create -f ubuntu-sleeper-3.yaml
-$ kubectl describe pod ubuntu-sleeper-3 | grep -i -A2 command
-$ kubectl get pods -n default -o wide
+# 2nd Way - Create new Pod after first deleting the old one directly from command line
+$ kubectl run webapp-color --image=kodekloud/webapp-color --labels='name=webapp-color' --env='APP_COLOR=green'
 ```
 
-### 5. Update Pod `ubuntu-sleeper-3` to sleep for 2000 seconds
-
-*Note:* Only make the necessary changes. Do not modify the name of the pod. Delete and recreate the pod if necessary.
-
-We first edit the file `ubuntu-sleeper-3.yaml` and change the sleep value from `"1200"` to `"2000"`.
-Then we save, delete the old Pod and create the new one:
+### 5. How many `ConfigMaps` exist in the default namespace?
 
 ```bash
-$ kubectl create -f ubuntu-sleeper-3.yaml
-$ kubectl get pods -n default -o wide
-$ kubectl describe pod ubuntu-sleeper-3 | grep -i -A2 command
+# 1st Way
+$ kubectl get configmaps -n default -o wide
+
+# 2nd Way - Short version
+$ kubectl get cm -n default -o wide
 ```
 
-### 6. Inspect the file `Dockerfile` given at `/root/webapp-color` directory. What command is run at container startup?
+### 6. Identify the database host from the `ConfigMap` `db-config`
 
-*Answer:* `python app.py`
-
-### 7. Inspect the file `Dockerfile2` given at `/root/webapp-color` directory. What command is run at container startup?
-
-*Answer:* `python app.py --color red`
-
-### 8. Inspect the two files under directory `webapp-color-2`. What command is run at container startup?
-
-Assume the image was created from the `Dockerfile` in this directory.
-
-The `ENTRYPOINT` in the `Dockerfile2` is overridden by the command in the Pod definition file, so the command that will be run is just:
-
-*Answer:* `--color green`
-
-### 9. Inspect the two files under directory `webapp-color-3`. What command is run at container startup?
-
-Assume the image was created from the `Dockerfile` in this directory.
-
-The `ENTRYPOINT` and `CMD` in the `Dockerfile2` is overridden by the `command` and `args` in the Pod definition file, so the command that will be run is:
-
-*Answer:* `python app.py --color pink`
-
-### 10. Create a Pod with the given specifications 
-
-By default it displays a blue background. Set the given command line arguments to change it to green.
-
-First we create the YAML Pod definition file `webapp-green-pod.yaml` and add all specifications as instructed.
-
-Then we save and deploy the Pod by issuing:
+*Answer:* `SQL01.example.com`
 
 ```bash
-$ kubectl create -f webapp-green-pod.yaml
-$ kubectl get pods webapp-green -o wide
-$ kubectl describe pod webapp-green | grep -i -A2 args
+$ kubectl describe configmaps db-config 
 ```
 
-Alternativelty we could create first a manifest YAML file and then add the `args` section:
+### 7. Create a new `ConfigMap` for the `webapp-color` Pop (use the spec given)
 
 ```bash
-$ kubectl run webapp-green --image=kodekloud/webapp-green --dry-run=client -o yaml
+# 1st Way - Use dry-run mode to export to a YAML file
+$ kubectl create configmap webapp-config-map --from-literal=APP_COLOR=darkblue --dry-run=client -o yaml > webapp-config-map.yaml
+
+# Create the ConfigMap
+$ kubectl create -f webapp-config-map.yaml
+
+# Check if deployment was successful
+$ kubectl get configmaps -n default -o wide
 ```
 
-Or we could also add the `args` directly in the `kubeclt run` command in CLI like this:
+```bash
+# 2nd Way - Deploy the ConfigMap directly from the command line
+$ kubectl create configmap webapp-config-map --from-literal=APP_COLOR=darkblue
+```
+
+### 8. Update the environment variable on the Pod to use the newly created `ConfigMap`
+
+*Note:* Delete and recreate the Pod. Only make the necessary changes. Do not modify the name of the Pod.
+
+I have created a new YAML Pod definition file named `webapp-green-pod-env-from.yaml` and have added as extension the `envFrom` section.
+
+Then delete the old Pod, create the new and check the web page:
 
 ```bash
-$ kubectl run webapp-green --image=kodekloud/webapp-green -- --color green
+$ kubectl delete pod webapp-color
+$ kubectl create -f webapp-green-pod-env-from.yaml
+$ kubectl describe pod webapp-color | grep -i -A1 environment
 ```
