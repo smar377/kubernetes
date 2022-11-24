@@ -95,3 +95,15 @@ $ kubectl create -f webapp-green-pod.yaml
 $ kubectl get pods webapp-green -o wide
 $ kubectl describe pod webapp-green | grep -i -A2 args
 ```
+
+Alternativelty we could create first a manifest YAML file and then add the `args` section:
+
+```bash
+$ kubectl run webapp-green --image=kodekloud/webapp-green --dry-run=client -o yaml
+```
+
+Or we could also add the `args` directly in the `kubeclt run` command in CLI like this:
+
+```bash
+$ kubectl run webapp-green --image=kodekloud/webapp-green -- --color green
+```
