@@ -10,9 +10,9 @@ spec:
   containers:
   - image: busybox
     name: lemon
+    command: [ "sleep", "1000" ]
   - image: redis
     name: gold
-    command: [ "sleep", "1000" ]
     resources: {}
   dnsPolicy: ClusterFirst
   restartPolicy: Always
