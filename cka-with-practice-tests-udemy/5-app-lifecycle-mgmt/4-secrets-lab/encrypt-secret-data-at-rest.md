@@ -77,3 +77,65 @@ $ vi /etc/kubernetes/manifests/kube-apiserver.yaml
 Add parameter under commands in containers section:
 
 - `- --encryption-provider-config=/etc/kubernetes/enc/encryption.yaml`
+
+Also, under `volumeMounts` (inside the Pod), add:
+
+```bash
+[output omitted]
+- name: enc
+  mountPath: /etc/kubernetes/enc
+  readonly: true
+[output omitted]
+```
+
+Last under `volumes` specify the location:
+
+```bash
+[output omitted]
+- name: enc
+  hostPath:
+    path: /etc/kubernetes/enc
+    type: DirectoryOrCreate
+[output omitted]
+```
+
+### 8. Check if `kube-apiserver=controlplane` Pod is again available
+
+```bash
+$ crictl pods
+$ kubectl get pods
+```
+
+### 9. Check if encryption parameter is now enabled
+
+```bash
+$ ps -aux | grep kube-api | grep "encryption-provider-config"
+```
+
+### 10. Create another secret
+
+```bash
+$ kubectl create secret generic my-secret-2 --from-literal=key2=topsecret
+$ kubectl get secret my-secret -o yaml
+$ kubectl describe secret my-secret
+```
+
+### 11. Check once more if data (for `my-secret-2`) in `etcd` is encrypted
+
+```bash
+$ ETCDCTL_API=3 etcdctl \
+   --cacert=/etc/kubernetes/pki/etcd/ca.crt   \
+   --cert=/etc/kubernetes/pki/etcd/server.crt \
+   --key=/etc/kubernetes/pki/etcd/server.key  \
+   get /registry/secrets/default/my-secret-2 | hexdump -C
+```
+
+### 12. Ensure all Secrets are encrypted
+
+Since Secrets are encrypted on write, performing an update on a Secret will encrypt that content.
+
+```bash
+$ kubectl get secrets --all-namespaces -o json | kubectl replace -f -
+```
+
+The command above reads all Secrets and then updates them to apply server side encryption.
