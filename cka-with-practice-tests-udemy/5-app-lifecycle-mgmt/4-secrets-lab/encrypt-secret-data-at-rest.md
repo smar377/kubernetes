@@ -38,7 +38,7 @@ $ ps -aux | grep kube-api | grep "encryption-provider-config"
 $ cat /etc/kubernetes/manifest/kube-apiserver.yaml 
 ```
 
-### 5. Configuring the encryption at rest file (encryption.yaml)
+### 5. Configuring the encryption at rest file (`encryption.yaml`)
 
 ```bash
 # First generate a 32-byte random key and base64 encode it:
@@ -55,12 +55,25 @@ resources:
       - aescbc:
           keys:
             - name: key1
-              secret: <BASE 64 ENCODED SECRET>
+              secret: 5b/9GcjSV2qG7Qsw3q75xQWNirUlM/YLcHuSy5ClTuM=
       - identity: {}
 ```
 
-### 6. 
+### 6. Create encryption path and move `encryption.yaml` there
 
 ```bash
-
+$ mkdir /etc/kubernetes/enc
+$ mv encryption.yaml /etc/kubernetes/enc
 ```
+
+
+### 7. Edit the `kub-apiserver/yaml` manifest file
+
+```bash
+# Edit the kube-apiserver.yaml manifest file
+$ vi /etc/kubernetes/manifests/kube-apiserver.yaml
+```
+
+Add parameter under commands in containers section:
+
+- `- --encryption-provider-config=/etc/kubernetes/enc/encryption.yaml`
