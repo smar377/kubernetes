@@ -85,8 +85,10 @@ envFrom:
 # Delete Pod and recreate it
 $ kubectl delete pod webapp-pod
 $ kubectl create -f webapp-pod-env-from-secret.yaml
+OR
+$ kubectl replace --force -f webapp-pod-env-from-secret.yaml
 
 # Check if creation was successful
-$ kubectl get secrets -n default -o wide
+$ kubectl get pods -n default -o wide
 $ kubectl get secrets db-secret -o yaml
 ```
