@@ -62,14 +62,10 @@ There shouldn't be any logs for now. We will configure a `sidecar` container for
 
 *Note:* It can take a couple of minutes for the Kibana UI to be ready after the Kibana Pod is ready.
 
-First let's inspect the Kibana logs by running:
+Inspect the Kibana logs by running:
 
 ```bash
 $ kubectl -n elastic-stack logs kibana
-```
-
-```bash
-
 ```
 
 ### 6. Inspect the `app` Pod and identify the number of containers in it
