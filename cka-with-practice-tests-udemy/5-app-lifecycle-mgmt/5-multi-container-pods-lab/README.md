@@ -95,6 +95,12 @@ $ kubectl -n elastic-stack exec -it app -- cat /log/app.log
 
 *Answer:* `USER5 Failed to Login as the account is locked due to MANY FAILED ATTEMPTS.`
 
+Another way to check the logs for this is to run below command:
+
+```bash
+$ kubectl logs app -n elastick-stack
+```
+
 ### 8. Edit the pod to add a sidecar container to send logs to Elastic Search. Mount the log volume to the sidecar container
 
 Only add a new container. Do not modify anything else. Use the spec provided below.
