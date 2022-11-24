@@ -97,7 +97,7 @@ Another way to check the logs for this is to run below command:
 $ kubectl logs app -n elastick-stack
 ```
 
-### 8. Edit the Pod to add a sidecar container to send logs to Elastic Search. Mount the log volume to the `sidecar` container
+### 8. Edit the Pod to add a `sidecar` container to send logs to Elastic Search. Mount the log volume to the `sidecar` container
 
 Only add a new container. Do not modify anything else. Use the spec provided below.
 
