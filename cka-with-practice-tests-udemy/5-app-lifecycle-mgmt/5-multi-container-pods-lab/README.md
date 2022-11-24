@@ -48,24 +48,70 @@ Lasst but not least wqe recreate the Pod `lemon` by issuing:
 $ kubectl replace --force -f multi-container-pod-2-containers.yaml
 ```
 
-### 4. 
+### 4. We have deployed an application logging stack in the `elastic-stack namespace`
 
-*Answer:* `Type` 
-
-### 5. 
+Please inspect it. Before proceeding with the next set of questions, please wait for all the pods in the `elastic-stack` namespace to be ready. This can take a few minutes. Let us check this by running:
 
 ```bash
+$ kubectl get all -n elastic-stack -o wide
+```
 
+### 5. Once the Pod is in a ready state, inspect the Kibana UI using the link above your terminal
+
+There shouldn't be any logs for now. We will configure a `sidecar` container for the application to send logs to Elastic Search.
+
+*Note:* It can take a couple of minutes for the Kibana UI to be ready after the Kibana Pod is ready.
+
+First let's inspect the Kibana logs by running:
+
+```bash
+$ kubectl -n elastic-stack logs kibana
 ```
 
 ```bash
 
 ```
 
-### 6. Configure `webapp-pod` to load environment variables from the newly created secret
+### 6. Inspect the `app` Pod and identify the number of containers in it
 
-Delete and recreate the pod if required.
+It is deployed in the elastic-stack namespace.
+
+*Answer:* The `app` Pod contains only **1** container named `app` with `image=kodekloud/event-simulator`
 
 ```bash
+$ kubectl get pod app -n elastic-stack -o wide
+$ kubectl describe pod app -n elastic-stack
+```
 
+### 7. The application outputs logs to the file `/log/app.log`
+
+View the logs and try to identify the user having issues with `Login`. Inspect the log file inside the Pod.
+
+For this, we need to `exec` in to the container and inspect the logs stored in `/log/app.log` path:
+
+```bash
+$ kubectl -n elastic-stack exec -it app -- cat /log/app.log
+```
+
+*Answer:* `USER5 Failed to Login as the account is locked due to MANY FAILED ATTEMPTS.`
+
+### 8. Edit the pod to add a sidecar container to send logs to Elastic Search. Mount the log volume to the sidecar container
+
+Only add a new container. Do not modify anything else. Use the spec provided below.
+
+*Note:* State persistence concepts are discussed in detail later in this course. For now please make use of the below documentation link for updating the concerning pod:
+
+- [Communicate Between Containers in the Same Pod Using a Shared Volume](https://kubernetes.io/docs/tasks/access-application-cluster/communicate-containers-same-pod-shared-volume/)
+
+```bash
+# STEP 1 - Create new YAML definition file
+
+# STEEP 2 - Delete the old Pod
+$ kubectl delete pod app -n elastic-stack
+
+# STEP 3 - Create new Pod
+$ kubectl create -f multi-container-pod-sidecar.yaml
+
+# STEP 4 - Check is the deployment was successful
+$ kubectl get pods -n elastic-stack
 ```
