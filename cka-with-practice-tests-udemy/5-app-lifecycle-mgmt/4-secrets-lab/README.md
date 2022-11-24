@@ -65,20 +65,28 @@ error: Edit cancelled, no valid changes were saved.
 $ kubectl replace --force -f /tmp/kubectl-edit-56600331.yaml 
 pod "webapp-pod" deleted
 pod/webapp-pod replaced
+
+# Check if creation was successful
+$ kubectl get secrets -n default -o wide
+$ kubectl get secrets db-secret -o yaml
 ```
 
-### 7. 
-
 ```bash
-```
+# 2nd Way - Create a YAML Pod definition file without the secret reference using the --dry-run=client flag
+$ kubectl run webapp-pod --image=kodekloud/simple-webapp-mysql --labels='name=webapp-pod' --dry-run=client -o yaml > webapp-pod-env-from-secret.yaml
 
-```bash
-```
+# Edit the YAML file and add the secret reference field
+[output ommited]
+envFrom:
+      - secretRef:
+          name: db-secret
+[output ommited]
 
-### 8. 
+# Delete Pod and recreate it
+$ kubectl delete pod webapp-pod
+$ kubectl create -f webapp-pod-env-from-secret.yaml
 
-*Note:* 
-
-
-```bash
+# Check if creation was successful
+$ kubectl get secrets -n default -o wide
+$ kubectl get secrets db-secret -o yaml
 ```
