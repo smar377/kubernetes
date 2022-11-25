@@ -107,16 +107,3 @@ $ kubectl cordon node01
 ```
 
 This will ensure that no new Pods are scheduled on this node and the existing Pods will **NOT** be affected by this operation.
-
-### 14.
-
-```bash
-
-```
-
-
-### 15.
-
-```bash
-
-```
