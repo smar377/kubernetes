@@ -41,6 +41,7 @@ $ kubectl get pods -n default -o wide
 ### 6. The maintenance tasks have been completed. Configure the node `node01` to be schedulable again
 
 ```bash
+$ kubectl get nodes -o wide
 $ kubectl uncordon node01
 ```
 
