@@ -97,7 +97,7 @@ $ kubectl drain node01 --force --ignore-daemonsets
 $ kubectl get pods -o wide 
 ```
 
-### 13. App `hr-app is a critical one and we do not want it to be removed 
+### 13. App `hr-app` is a critical one and we do not want it to be removed 
 
 We do **NOT** want to schedule any more Pods on `node01`. Mark `node01` as unschedulable so that no new Pods are scheduled on this node. Make sure that `hr-app` is not affected.
 
