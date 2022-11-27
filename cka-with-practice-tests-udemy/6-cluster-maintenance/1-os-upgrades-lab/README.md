@@ -101,7 +101,7 @@ $ kubectl get pods -o wide
 
 We do **NOT** want to schedule any more Pods on `node01`. Mark `node01` as unschedulable so that no new Pods are scheduled on this node. Make sure that `hr-app` is not affected.
 
-*Answer:* Do **NOT** drain `node01, instead use the command:
+*Answer:* Do **NOT** drain `node01`, instead use the command:
 
 ```bash
 $ kubectl cordon node01
