@@ -117,8 +117,8 @@ apt-mark hold kubelet kubectl
 
 ```bash
 # STEP 5
-$ systemctl daemon-reload
-$ systemctl restart kubelet
+$ sudo systemctl daemon-reload
+$ sudo systemctl restart kubelet
 ```
 
 ### 11. Mark the `controlplane` node as `Schedulable` again
@@ -171,8 +171,8 @@ apt-mark hold kubelet kubectl
 
 ```bash
 # STEP 5
-$ systemctl daemon-reload
-$ systemctl restart kubelet
+$ sudo systemctl daemon-reload
+$ sudo systemctl restart kubelet
 ```
 
 ### 14. Remove the restriction and mark the `worker` node as `Schedulable` again
