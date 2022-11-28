@@ -10,7 +10,7 @@ $ kubectl describe pod kube-apiserver-controlplane -n kube-system | grep '\--tls
 $ cat /etc/kubernetes/manifests/kube-apiserver.yaml | grep '\--tls-cert-file'
 ```
 
-### 2. Identify the certificate file used to authenticate `kube-apiserver` as a client to `ETCD` Server
+### 2. Identify the certificate file used to authenticate `kube-apiserver` as a client to ETCD Server
 
 *Answer:* `/etc/kubernetes/pki/apiserver-etcd-client.crt`
 
