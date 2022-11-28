@@ -125,17 +125,24 @@ You are asked to investigate and fix the issue. Once you fix the issue wait for 
 Update the YAML file with the correct certificate path and wait for the ETCD pod to be recreated. Wait for the `kube-apiserver` to get to a `Ready` state.
 
 ```bash
+$ docker ps -a | grep kube-apiserver
+$ docker logs <kube-apiserver-container-ID>
+$ docker ps -a | grep etcd
+$ docker logs <etcd-container-ID>
 $ ls -lah /etc/kubernetes/pki/etcd/server* | grep .crt
 $ vi /etc/kubernetes/manifests/etcd.yaml
 ```
 
-### 13. The `kube-api` server stopped again! Check it out. Inspect the `kube-api` server logs and identify the root cause and fix the issue
+### 13. The `kube-apiserver` stopped again! Check it out. Inspect the `kube-apiserver` logs and identify the root cause and fix the issue
 
-*Hint:* Run `crictl ps -a` command to identify the `kube-api` server container. Run `crictl logs container-id` command to view the logs.
+*Hint:* Run `crictl ps -a` command to identify the `kube-apiserver` container. Run `crictl logs container-id` command to view the logs.
 
 *Answer:* If we inspect the `kube-apiserver` container on the `controlplane`, we can see that it is frequently exiting: 
 
 ```bash
+$ docker ps -a | grep kube-apiserver
+$ docker ps -a | grep etcd
+$ docker logs <etcd-container-ID>
 $ crictl ps -a | grep kube-apiserver
 ```
 
