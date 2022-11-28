@@ -2,10 +2,6 @@
 
 He requires access to our cluster. The Certificate Signing Request is at the `/root` location.
 
-*Hint:*
-
-*Answer:*
-
 ```bash
 $ cat /root/akshay.csr 
 ```
@@ -23,7 +19,7 @@ $ cat akshay.csr | base64 -w 0
 LS0tLS1CRUdJTiBDRVJUSUZJQ0FURSBSRVFVRVNULS0tLS0KTUlJQ1ZqQ0NBVDRDQVFBd0VURVBNQTBHQTFVRUF3d0dZV3R6YUdGNU1JSUJJakFOQmdrcWhraUc5dzBCQVFFRgpBQU9DQVE4QU1JSUJDZ0tDQVFFQXJzbUEvSjczQThQcmJndEpGK0V0MDhoUjhwNlJUSUd5aXZnQW1STnpESXJnClNmSzE0Uk9lVVVjVUVSOEpKcldaZG9BU3dyYWVuT1FzUWpVMFFtUEZWVFBPdmNuL3h1aUlqby9RSDkxZWFwVUEKby9CVkdROWl0Si9nYUlJWHpzNkRzNW5GTGJkL2VLc1BaSENONXhDbVBGMW82aGdTdXJ4c1NUTUlpL2dkWWlJSApTOEVvZTlZYlVHcXRsSkJZcWttTXhIR2l3OEtJZ2Z1aU5LRFIyTUhFL1JkUWh1OVZSUTk2ZmZSN2twUlhKOWJPCnJUSzg5ZDhoWElMSUR5L1JSWS9IcHZuS3J3K3hQa2dFN1B3NldtLzZmV213R1g5UEV0eVF4U2ljc3Z4SkNBNmsKbldVQXgvR3lwRmZOTklCTFZGeEgwekY0VlVRS2F1TnByU1RtMlBSYkt3SURBUUFCb0FBd0RRWUpLb1pJaHZjTgpBUUVMQlFBRGdnRUJBS0xtV2FtQ3RUL1NVRVgvdUlVNWZvUFlrdFVrOERoQ2pyTzhtVXVFbjhLK3prcTlvYTBRCnEyZTlGbEFUbjNMTXlLQng4cmk5SDlpeElTTzdWNmRGa0IrTFFIQVpqRDZqNXVwNTFSQ2MrTEo5MVZDWnhnV1MKYmhtMTg1MWpSdk1OSUNsdmtBOUFORFhlVHY4Yi9mbU50bnk0ZFpjenFOTDYrc0xueXlIRkxXcit5bEdqcm5EOQpVTk11a0NkUGVLeUQ1ZGd2aElsUGFDNi9GNDY1S3dDVVNKN0RGNGJCU0hmWEE0UGJZR0x6U1E3RU8wR082eFB5CllJTHRnNEpaSmlPcjFWRHREeDdVYmlDWnZIQ09HM1dGcGt5OS9qYXdFdmhLNjlUdWxFYkhUNnZyZGFpbE1QRkEKckxnbXpKRHlnVWExRGVscnRGSEVZZGJsbHhBNWZuV2lJRjQ9Ci0tLS0tRU5EIENFUlRJRklDQVRFIFJFUVVFU1QtLS0tLQo=
 ```
 
-and finally, create a YAML format CSR named `akshay-csr.yaml` as follows:
+and create a YAML format CSR named `akshay-csr.yaml` as follows:
 
 ```yaml
 ---
@@ -40,82 +36,62 @@ spec:
   - client auth
 ```
 
-### 3. 
-
-*Hint:*
-
-*Answer:*
+Last, create the CSR object by issuing:
 
 ```bash
-
+$ kubectl create -f akshay-csr.yaml
 ```
 
-### 4. 
+### 3. What is the condition of the newly created `CertificateSigningRequest` object?
 
-*Hint:*
-
-*Answer:*
+*Answer:* Its condition is `Pending`.
 
 ```bash
-
+$ kubectl get csr
 ```
 
-### 5. 
-
-*Hint:*
-
-*Answer:*
+### 4. Approve the CSR Request
 
 ```bash
-
+$ kubectl certificate approve akshay
 ```
 
-### 6. 
+### 5. How many CSR requests are available on the cluster (including approved and pending)?
 
-*Hint:*
-
-*Answer:*
+*Answer:* There are in total **2** CSR requests available on the cluster, both in `Approved` condition. 
 
 ```bash
-
+$ kubectl get csr
 ```
 
-### 7. 
+### 6. During a routine check you realized that there is a new CSR request in place. What is the name of this request?
 
-*Hint:*
-
-*Answer:*
+*Answer:* The new CSR request in place is `agent-smith`.
 
 ```bash
-
+$ kubectl get csr
 ```
 
-### 8. 
+### 7. Hmmm... You are NOT aware of a request coming in. What groups is this CSR requesting access to?
 
-*Hint:*
+*Hint:* Check the details about the request. Preferebly in YAML.
 
-*Answer:*
+*Answer:* The groups this CSR is requesting access to is `system:masters`.
 
 ```bash
-
+$ kubectl get csr agent-smith -o yaml
 ```
 
-### 9. 
-
-*Hint:*
-
-*Answer:*
+### 8. That doesn't look very right. Reject that request!
 
 ```bash
-
+$ kubectl certificate deny agent-smith
+$ kubectl get csr
 ```
 
-### 10. 
-
-*Hint:*
-
-*Answer:*
+### 9. Let's get rid of it. Delete the new CSR object
 
 ```bash
-
+$ kubectl delete csr agent-smith
+$ kubectl get csr
 ```
