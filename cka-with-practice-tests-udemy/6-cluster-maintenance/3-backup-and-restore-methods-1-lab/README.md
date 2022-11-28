@@ -71,32 +71,50 @@ ETCDCTL_API=3 etcdctl --endpoints=https://[127.0.0.1]:2379 \
 snapshot save /opt/snapshot-pre-boot.db
 ```
 
-### 7.
+### 7. Wake up! We have a conference call! After the reboot the master nodes came back online, but none of our applications are accessible. Check the status of the applications on the cluster. What's wrong?
 
-*Hint:*
-
-*Answer:*
+*Answer:* All Pods, Deployments and Services we had in the cluster are gone.
 
 ```bash
-
+$ kubectl get pods,deploy,services -n default -o wide
 ```
 
-### 8.
+### 8. Luckily we took a backup. Restore the original state of the cluster using the backup file
 
-*Hint:*
-
-*Answer:*
+*Note:* In this case, we are restoring the snapshot to a different directory but in the same server where we took the backup (the `controlplane` node). As a result, the only required option for the restore command is the `--data-dir`.
 
 ```bash
-
+ETCDCTL_API=3 etcdctl --data-dir /var/lib/etcd-from-backup \
+snapshot restore /opt/snapshot-pre-boot.db
 ```
 
-### 9.
+Next, update the `/etc/kubernetes/manifests/etcd.yaml`:
 
-*Hint:*
-
-*Answer:*
+We have now restored the `etcd` snapshot to a new path on the `controlplane` - `/var/lib/etcd-from-backup`, so, the only change to be made in the YAML file, is to change the `hostPath` for the volume called `etcd-data` from old directory (`/var/lib/etcd`) to the new directory (`/var/lib/etcd-from-backup`).
 
 ```bash
+volumes:
+  - hostPath:
+      path: /var/lib/etcd-from-backup
+      type: DirectoryOrCreate
+    name: etcd-data
+```
 
+With this change, `/var/lib/etcd` on the container points to `/var/lib/etcd-from-backup` on the `controlplane` (which is what we want).
+
+When this file is updated, the ETCD Pod is automatically re-created as this is a static pod placed under the `/etc/kubernetes/manifests` directory.
+
+- *Note 1:* As the ETCD pod has changed it will automatically restart, and also `kube-controller-manager` and `kube-scheduler`. Wait 1-2 to mins for this Pods to restart. You can run the command: `watch "crictl ps | grep etcd"` to see when the ETCD Pod is restarted.
+
+- *Note 2:* If the `etcd` Pod is not getting Ready 1/1, then restart it by `kubectl delete pod -n kube-system etcd-controlplane` and wait 1 minute.
+
+- *Note 3:* This is the simplest way to make sure that ETCD uses the restored data after the ETCD Pod is recreated. You don't have to change anything else.
+
+If you do change `--data-dir` to `/var/lib/etcd-from-backup` in the ETCD YAML file, make sure that the `volumeMounts` for `etcd-data` is updated as well, with the `mountPath` pointing to `/var/lib/etcd-from-backup` (THIS COMPLETE STEP IS OPTIONAL AND NEED NOT BE DONE FOR COMPLETING THE RESTORE).
+
+Checks:
+
+```bash
+$ kubectl get pods,deploy,services -n default -o wide
+$ kubectl get pods -n kube-system -o wide
 ```
