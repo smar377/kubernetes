@@ -1,4 +1,4 @@
-*Attention:* For the first few questions of this lab, you would have to inspect the existing ClusterRoles and ClusterRoleBindings that have been created in this cluster.
+*Attention: For the first few questions of this lab, you would have to inspect the existing ClusterRoles and ClusterRoleBindings that have been created in this cluster.*
 
 ### 1. How many ClusterRoles do you see defined in the cluster?
 
