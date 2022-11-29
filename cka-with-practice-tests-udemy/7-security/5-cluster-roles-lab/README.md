@@ -44,20 +44,46 @@ $ kubectl describe clusterrole cluster-admin
 
 ### 6. A new user `michelle` joins the team. She will be focusing on the `nodes` in the cluster. Create the required `ClusterRoles` and `ClusterRoleBindings` so she gets access to the nodes
 
-*Answer:*
+*Answer:* We will use the command `kubectl create` to create a ClusterRole and ClusterRoleBinding for user `michelle` to grant access to the nodes.
+After that, we will test the access using the command `kubectl auth can-i list nodes --as michelle`:
 
 ```bash
-
+$ kubectl create -f node-admin-clusterrole.yaml
+$ kubectl create -f michelle-clusterrolebinding.yaml
 ```
 
-### 7. 
-
-*Hint:*
-
-*Answer:*
+Verification and testing:
 
 ```bash
+$ kubectl get clusterrole node-admin
+$ kubectl get clusterrolebindings michelle-binding
+$ kubectl describe clusterrole node-admin
+$ kubectl describe clusterrolebindings michelle-binding
+$ kubectl auth can-i list nodes --as michelle
+```
 
+### 7. User `michelle's` responsibilities are growing and now she will be responsible for storage as well. Create the required ClusterRoles and ClusterRoleBindings to allow her access to Storage
+
+*Hint:* Get the API groups and resource names from command `kubectl api-resources`.
+
+*Answer:* We will use the command `kubectl create` to create a new ClusterRole and ClusterRoleBinding. Then we will assign the correct resources and verbs. After that, we will test the access using the command `kubectl auth can-i list storageclasses --as michelle`.
+
+```bash
+$
+$
+$
+$
+$
+```
+
+Verification and testing:
+
+```bash
+$
+$
+$
+$
+$
 ```
 
 ### 8. 
