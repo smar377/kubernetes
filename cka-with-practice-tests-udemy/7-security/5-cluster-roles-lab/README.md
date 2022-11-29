@@ -50,7 +50,17 @@ $ kubectl describe clusterrole cluster-admin
 
 ```bash
 $ kubectl create clusterrole node-admin --verd=get,list,watch --resource=nodes
-$ kubectl create clusterrolebinding --verd=get,list,watch --resource=nodes
+$ kubectl create clusterrolebinding michelle-binding --clusterrole=node-admin --user=michelle
+```
+
+Verification and testing:
+
+```bash
+$ kubectl get clusterrole node-admin
+$ kubectl get clusterrolebindings michelle-binding
+$ kubectl describe clusterrole node-admin
+$ kubectl describe clusterrolebindings michelle-binding
+$ kubectl auth can-i list nodes --as michelle
 ```
 
 - **2nd WAY** - Via manifest files (*declarative way*)
@@ -74,7 +84,26 @@ $ kubectl auth can-i list nodes --as michelle
 
 *Hint:* Get the API groups and resource names from command `kubectl api-resources`.
 
-*Answer:* We will use the command `kubectl create` to create a new ClusterRole and ClusterRoleBinding. Then we will assign the correct resources and verbs. After that, we will test the access using the command `kubectl auth can-i list storageclasses --as michelle`.
+*Answer:* We will use again two different ways to solve this:
+
+- **1st WAY** - Directly via the command line (*imperative way*)
+
+```bash
+$ kubectl create clusterrole storage-admin --resource=persistentcolumes,storageclasses --verb=list,create,get,watch
+$ kubectl create clusterrolebinding michelle-storage-binding --user=michelle --clusterrole=storage-admin
+```
+
+Verification and testing:
+
+```bash
+$ kubectl get clusterrole storage-admin
+$ kubectl get clusterrolebindings michelle-storage-admin
+$ kubectl describe clusterrole storage-admin
+$ kubectl describe clusterrolebindings michelle-storage-admin
+$ kubectl auth can-i list storageclasses --as michelle
+```
+
+- **2nd WAY** - Via manifest files (*declarative way*)
 
 ```bash
 $ kubectl create -f storage-admin-clusterrole.yaml
@@ -84,7 +113,7 @@ $ kubectl create -f michelle-clusterrolebinding-storage.yaml
 Verification and testing:
 
 ```bash
-$ kubectl get clusterrole storage-admin 
+$ kubectl get clusterrole storage-admin
 $ kubectl get clusterrolebindings michelle-storage-admin
 $ kubectl describe clusterrole storage-admin
 $ kubectl describe clusterrolebindings michelle-storage-admin
