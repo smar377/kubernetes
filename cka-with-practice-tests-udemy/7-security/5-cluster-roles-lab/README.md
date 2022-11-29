@@ -44,8 +44,16 @@ $ kubectl describe clusterrole cluster-admin
 
 ### 6. A new user `michelle` joins the team. She will be focusing on the `nodes` in the cluster. Create the required `ClusterRoles` and `ClusterRoleBindings` so she gets access to the nodes
 
-*Answer:* We will use the command `kubectl create` to create a ClusterRole and ClusterRoleBinding for user `michelle` to grant access to the nodes.
-After that, we will test the access using the command `kubectl auth can-i list nodes --as michelle`:
+*Answer:* We will use two different way to solve this task.
+
+- **1st WAY** - Directly via the command line (*imperative way*)
+
+```bash
+$ kubectl create clusterrole node-admin --verd=get,list,watch --resource=nodes
+$ kubectl create clusterrolebinding --verd=get,list,watch --resource=nodes
+```
+
+- **2nd WAY** - Via manifest files (*declarative way*)
 
 ```bash
 $ kubectl create -f node-admin-clusterrole.yaml
