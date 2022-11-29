@@ -69,49 +69,16 @@ $ kubectl auth can-i list nodes --as michelle
 *Answer:* We will use the command `kubectl create` to create a new ClusterRole and ClusterRoleBinding. Then we will assign the correct resources and verbs. After that, we will test the access using the command `kubectl auth can-i list storageclasses --as michelle`.
 
 ```bash
-$
-$
-$
-$
-$
+$ kubectl create -f storage-admin-clusterrole.yaml
+$ kubectl create -f michelle-clusterrolebinding-storage.yaml
 ```
 
 Verification and testing:
 
 ```bash
-$
-$
-$
-$
-$
-```
-
-### 8. 
-
-*Hint:*
-
-*Answer:*
-
-```bash
-
-```
-
-### 9. 
-
-*Hint:*
-
-*Answer:*
-
-```bash
-
-```
-
-### 10. 
-
-*Hint:*
-
-*Answer:*
-
-```bash
-
+$ kubectl get clusterrole storage-admin 
+$ kubectl get clusterrolebindings michelle-storage-admin
+$ kubectl describe clusterrole storage-admin
+$ kubectl describe clusterrolebindings michelle-storage-admin
+$ kubectl auth can-i list storageclasses --as michelle
 ```
