@@ -9,6 +9,7 @@
 ```bash
 $ kubectl describe pod kube-apiserver-controlplane -n kube-system | grep '\-\-authorization-mode' 
 $ cat /etc/kubernetes/manifests/kube-apiserver.yaml | grep '\-\-authorization-mode'
+$ ps -aux | grep authorization
 ```
 
 ### 2. How many Roles exist in the default namespace?
