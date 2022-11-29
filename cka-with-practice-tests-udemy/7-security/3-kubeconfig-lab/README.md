@@ -125,16 +125,21 @@ $ kubectl config use-context research --kubeconfig my-kube-config
 
 ### 13. We don't want to have to specify the `kubeconfig` file option on each command. Make the `my-kube-config` file the default `kubeconfig`
 
-*Answer:* 
+*Answer:* In order to do that we simply need to overwrite the content of `/root/.kube/config` file with the content of `my-kube-config`
 
 ```bash
-$ 
+$ vi /root/.kube/config
+# Copy ALL
+
+$ vi /root/.kube/config
 ```
 
-### 14.
+### 14. With the `current-context` set to `research`, we are trying to access the cluster. However something seems to be wrong. Identify and fix the issue
 
-*Answer:* 
+*Hint:* Try running the `kubectl get pods` command and look for the error. All users certificates are stored at `/etc/kubernetes/pki/users`.
+
+*Answer:* The path to certificate for `dev-user` is incorrect in the `kubeconfig` file. Correct the certificate name which is available at `/etc/kubernetes/pki/users/`. The path needs to be changed from `/etc/kubernetes/pki/users/dev-user/developer-user.crt` to `/etc/kubernetes/pki/users/dev-user/dev-user.crt`
 
 ```bash
-$ 
+$ $ kubectl config view
 ```
