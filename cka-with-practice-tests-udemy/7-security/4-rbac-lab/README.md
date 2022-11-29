@@ -59,7 +59,7 @@ Inspect the permissions granted to the user. Check if the user can list Pods in 
 
 *Hint:* Use the `--as dev-user` option with `kubectl` to run commands as the `dev-user`.
 
-*Answer:* User named `dev-user` **CANNOT* list Pods in the default namespace.
+*Answer:* User named `dev-user` **CANNOT** list Pods in the default namespace.
 
 ```bash
 $ kubectl get pod --as dev-user -n default
