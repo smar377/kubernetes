@@ -26,7 +26,7 @@ $ kubectl get role -n default -o wide
 
 ```bash
 $ kubectl get role -A --no-headers | wc -l
-$ kubectl get roles --all-namespaces
+$ kubectl get roles --all-namespaces --no-headers | wc -l
 ```
 
 ### 4. What are the resources the `kube-proxy` Role in the `kube-system` namespace is given access to?
