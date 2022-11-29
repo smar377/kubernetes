@@ -142,6 +142,7 @@ $ kubectl auth can-i delete pods -n default --as dev-user
 
 ```bash
 $ kubectl edit role developer -n blue
+$ kubectl get pod dark-blue-app --as dev-user -n blue
 ```
 
 ### 10. Add a new rule in the existing Role `developer` to grant the `dev-user` permissions to create Deployments in the `blue` namespace
