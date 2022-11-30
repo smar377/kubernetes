@@ -67,7 +67,7 @@ under the `securityContext` section. After that we need to recreate the Pod by i
 $ kubectl replace --force -f ubuntu-sleeper-pod.yaml
 ```
 
-### 6. 
+### 6. Now update the Pod to also make use of the `NET_ADMIN` capability
 
 *Note:* Only make the necessary changes. Do not modify the name of the Pod.
 
