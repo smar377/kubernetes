@@ -1,16 +1,15 @@
----
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   annotations:
-    deployment.kubernetes.io/revision: "2"
+    deployment.kubernetes.io/revision: "3"
   creationTimestamp: "2022-11-30T11:48:56Z"
-  generation: 2
+  generation: 3
   labels:
     app: web
   name: web
   namespace: default
-  resourceVersion: "2106"
+  resourceVersion: "3813"
   uid: 870e13ee-17aa-413e-aadc-b919e2c53d58
 spec:
   progressDeadlineSeconds: 600
@@ -38,6 +37,8 @@ spec:
         terminationMessagePath: /dev/termination-log
         terminationMessagePolicy: File
       dnsPolicy: ClusterFirst
+      imagePullSecrets:
+      - name: private-reg-cred
       restartPolicy: Always
       schedulerName: default-scheduler
       securityContext: {}
@@ -51,14 +52,13 @@ status:
     reason: MinimumReplicasAvailable
     status: "True"
     type: Available
-  - lastTransitionTime: "2022-11-30T11:49:09Z"
-    lastUpdateTime: "2022-11-30T12:04:58Z"
-    message: ReplicaSet "web-79d66f5cbb" is progressing.
-    reason: ReplicaSetUpdated
+  - lastTransitionTime: "2022-11-30T12:27:05Z"
+    lastUpdateTime: "2022-11-30T12:27:10Z"
+    message: ReplicaSet "web-7689b48b97" has successfully progressed.
+    reason: NewReplicaSetAvailable
     status: "True"
     type: Progressing
-  observedGeneration: 2
+  observedGeneration: 3
   readyReplicas: 2
-  replicas: 3
-  unavailableReplicas: 1
-  updatedReplicas: 1
+  replicas: 2
+  updatedReplicas: 2
