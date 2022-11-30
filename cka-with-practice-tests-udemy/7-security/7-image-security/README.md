@@ -62,50 +62,21 @@ $ kubectl describe secrets private-reg-cred
 
 ### 6. Configure the Deployment to use credentials from the new secret to pull images from the private registry
 
-*Hint:*
-
-*Answer:*
+*Answer:* We need to edit the Deployment `web` and add:
 
 ```bash
-
+imagePullSecrets:
+      - name: private-reg-cred
 ```
 
-### 7. 
-
-*Hint:*
-
-*Answer:*
+under `spec:` section.
 
 ```bash
-
+$ kubectl edit deploy web
 ```
 
-### 8. 
-
-*Hint:*
-
-*Answer:*
+### 7. Check the status of Pods. Wait for them to be running. You have now successfully configured a Deployment to pull images from the private registry
 
 ```bash
-
-```
-
-### 9. 
-
-*Hint:*
-
-*Answer:*
-
-```bash
-
-```
-
-### 10. 
-
-*Hint:*
-
-*Answer:*
-
-```bash
-
+$ kubectl get pod,deploy -o wide -n default
 ```
