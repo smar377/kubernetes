@@ -30,7 +30,9 @@ Verification:
 $ kubectl exec -it ubuntu-sleeper -- ps -aux | grep sleep
 ```
 
-### 3. 
+### 3. A Pod definition file named `multi-pod.yaml` is given. With what user are the processes in the web container started?
+
+The pod is created with multiple containers and security contexts defined at the Pod and Container level.
 
 *Hint:*
 
