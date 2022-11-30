@@ -58,11 +58,39 @@ $ kubectl get pod web-dashboard-68f98dc77c-chqq5 -o yaml | grep mountPath
 $ kubectl create serviceaccount dashboard-sa
 ```
 
-### 10. 
+### 10. Enter the access token in the UI of the dashboard application. Click Load Dashboard button to load Dashboard
 
-*Hint:*
+Create an authorization token for the newly created service account, copy the generated token and paste it into the token field of the UI.
+
+*Hint:* To do this, run `kubectl create token dashboard-sa` for the `dashboard-sa` service account, copy the token and paste it in the UI.
 
 *Answer:*
+
+```bash
+$ kubectl create token dashboard-sa
+```
+
+### 11. You shouldn't have to copy and paste the token each time 
+
+The Dashboard application is programmed to read token from the secret mount location. However currently, the default service account is mounted. Update the Deployment to use the newly created ServiceAccount.
+
+*Hint:* Edit the deployment to change ServiceAccount from default to `dashboard-sa`.
+
+*Asnwer:* We will present two different ways to solve this task:
+
+**1st WAY** - Directly leveraging the command line and `kubectl` (*imperative way*)
+
+```bash
+# Edit the Deployment and specify the serviceAccountName field with value as dashbpard-sa inside the Pod spec
+$ kubectl edit deploy web-dashboard
+
+OR
+
+# Run the following command to use the newly created service account 
+$ kubectl set serviceaccount deploy/web-dashboard dashboard-sa
+```
+
+**2nd WAY** - Via manifest YAML file and `kubectl` (*declarative way*)
 
 ```bash
 
