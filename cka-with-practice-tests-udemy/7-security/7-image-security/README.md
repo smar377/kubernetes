@@ -35,7 +35,7 @@ $ kubectl get pod,deploy -o wide -n default
 
 ### 4. Are the new Pods created with the new images successfully running?
 
-*Answer:* No. One out of three Pods has its status set to `ImagePyllBackOff`.
+*Answer:* No, 1/2 Pods has its status set to `ImagePullBackOff`.
 
 ```bash
 $ kubectl get pod -n default -o wide
