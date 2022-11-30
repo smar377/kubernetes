@@ -7,6 +7,8 @@ metadata:
 spec:
   securityContext:
     runAsUser: 1010
+    capabilities:
+        add: ["SYS_TIME"]
   containers:
   - command:
     - sleep
