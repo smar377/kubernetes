@@ -52,7 +52,7 @@ $ kubectl describe netpol payroll-policy
 
 ### 8. Perform a connectivity test using the User Interface of the Internal Application to access the `external-service` at `port 8080`
 
-*Answer:* After checking and running the tests on both UIs in these Applications to try and access the `payroll-service` at `port 8080` we see that *BOTH* attempts on External and Internal portals were successful. 
+*Answer:* After checking and running the test Internal Application UI to try and access the `payroll-service` at `port 8080` we see that it is successful. 
 
 ### 9. Create a network policy to allow traffic from the `internal` application only to the `payroll-service` and `db-service`
 
