@@ -14,8 +14,8 @@ $ kubectl exec -it ubuntu-sleeper -- ps -aux
 *Answer:* We need to edit the Pod named `ubuntu-sleeper` and add:
 
 ```bash
-secretContext:
-      runAsUser: 1010
+securityContext:
+  runAsUser: 1010
 ```
 
 under the `spec -> containers` section. Then use below command to populates the change:
