@@ -93,5 +93,7 @@ $ kubectl set serviceaccount deploy/web-dashboard dashboard-sa
 **2nd WAY** - Via manifest YAML file and `kubectl` (*declarative way*)
 
 ```bash
-
+$ kubectl apply -f web-dashboard-deploy.yaml
 ```
+
+*Refresh the Dashboard application UI and you should now see the Pods now listed automatically. This time you shouldn't have to put in the token manually.*
