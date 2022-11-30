@@ -79,9 +79,6 @@ spec:
       name: internal
   policyTypes:
   - Egress
-  - Ingress
-  ingress:
-    - {}
   egress:
   - to:
     - podSelector:
