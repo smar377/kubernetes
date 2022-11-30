@@ -58,10 +58,69 @@ $ kubectl describe netpol payroll-policy
 
 *Hint:* Use the spec given below. You might want to enable ingress traffic to the Pod to test your rules in the UI.
 
-*Answer:*
-
-Check resources:
+First we check the resources configured in the Kubernetes cluster:
 
 ```bash
 $ kubectl get pod,svc -n default -o wide
+```
+
+Next we create the YAML manifest file for this network policy named `internal-policy.yaml` as follows:
+
+```yaml
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: internal-policy
+  namespace: default
+spec:
+  podSelector:
+    matchLabels:
+      name: internal
+  policyTypes:
+  - Egress
+  - Ingress
+  ingress:
+    - {}
+  egress:
+  - to:
+    - podSelector:
+        matchLabels:
+          name: mysql
+    ports:
+    - protocol: TCP
+      port: 3306
+
+  - to:
+    - podSelector:
+        matchLabels:
+          name: payroll
+    ports:
+    - protocol: TCP
+      port: 8080
+
+  - ports:
+    - port: 53
+      protocol: UDP
+    - port: 53
+      protocol: TCP
+```
+
+**Note:** We have also allowed `Egress` traffic to TCP and UDP port. This has been added to ensure that the internal DNS resolution works from the internal pod. *Remember: The `kube-dns` service is exposed on port 53:*
+
+```bash
+$ kubectl get svc -n kube-system 
+```
+
+Last but not least we create the network policy by issuing:
+
+```bash
+$ kubectl create -f internal-policy.yaml
+```
+
+Verification:
+
+```bash
+$ kubectl get netpol -n default
+$ kubectl describe netpol internal-policy
 ```
