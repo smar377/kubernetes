@@ -18,7 +18,7 @@ secretContext:
       runAsUser: 1010
 ```
 
-under the `spec: -> containers` section. Then use below command to populates the change:
+under the `spec -> containers` section. Then use below command to populates the change:
 
 ```bash
 $ kubectl replace --force -f /tmp/kubectl-edit-3133368033.yaml
