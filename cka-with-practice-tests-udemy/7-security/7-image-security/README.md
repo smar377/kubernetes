@@ -22,30 +22,45 @@ $ kubectl describe deploy web | grep -i image
 *Answer:* We need to edit the Deployment and modify the image name to `myprivateregistry.com:5000/nginx:alpine`.
 
 ```bash
-$ 
+$ kubectl edit deploy web
+$ kubectl get deploy -n default -o yaml
 ```
 
-### 4. 
-
-*Hint:*
-
-*Answer:*
+Verification:
 
 ```bash
-
+$ kubectl describe deploy web | grep -i image
+$ kubectl get pod,deploy -o wide -n default
 ```
 
-### 5. 
+### 4. Are the new Pods created with the new images successfully running?
 
-*Hint:*
-
-*Answer:*
+*Answer:* No. One out of three Pods has its status set to `ImagePyllBackOff`.
 
 ```bash
-
+$ kubectl get pod -n default -o wide
 ```
 
-### 6. 
+### 5. Create a secret object with the credentials required to access the registry
+
+- Name: private-reg-cred
+- Username: dock_user
+- Password: dock_password
+- Server: myprivateregistry.com:5000
+- Email: dock_user@myprivateregistry.com
+
+```bash
+$ kubectl create secret docker-registry private-reg-cred --docker-username=dock_user --docker-password=dock_password --docker-server=myprivateregistry.com:5000 --docker-email=dock_user@myprivateregistry.com
+```
+
+Verification:
+
+```bash
+$ kubectl get secret -o wide
+$ kubectl describe secrets private-reg-cred
+```
+
+### 6. Configure the Deployment to use credentials from the new secret to pull images from the private registry
 
 *Hint:*
 
