@@ -54,12 +54,17 @@ $ cat multi-pod.yaml
 
 *Note:* Only make the necessary changes. Do not modify the name of the Pod.
 
-*Hint:*
-
-*Answer:*
+*Answer:* Once more we need to edit the `ubuntu-sleeper-pod.yaml` and add:
 
 ```bash
+capabilities:
+        add: ["SYS_TIME"]
+```
 
+under the `securityContext` section. After that we need to recreate the Pod by issuing:
+
+```bash
+$ kubectl replace --force -f ubuntu-sleeper-pod.yaml
 ```
 
 ### 6. 
