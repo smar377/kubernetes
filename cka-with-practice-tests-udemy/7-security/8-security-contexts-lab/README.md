@@ -27,7 +27,7 @@ $ kubectl replace --force -f /tmp/kubectl-edit-3133368033.yaml
 Verification:
 
 ```bash
-$ 
+$ kubectl exec -it ubuntu-sleeper -- ps -aux | grep sleep
 ```
 
 ### 3. 
