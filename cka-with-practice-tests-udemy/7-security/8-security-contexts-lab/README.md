@@ -69,50 +69,45 @@ $ kubectl replace --force -f ubuntu-sleeper-pod.yaml
 
 ### 6. 
 
-*Hint:*
+*Note:* Only make the necessary changes. Do not modify the name of the Pod.
 
-*Answer:*
-
-```bash
-
-```
-
-### 7. 
-
-*Hint:*
-
-*Answer:*
+*Answer:* Once more we need to edit the `ubuntu-sleeper-pod.yaml` and add:
 
 ```bash
-
+capabilities:
+        add: ["SYS_TIME", "NET_ADMIN"]
 ```
 
-### 8. 
-
-*Hint:*
-
-*Answer:*
+under the `securityContext` section. After that we need to recreate the Pod by issuing:
 
 ```bash
-
+$ kubectl replace --force -f ubuntu-sleeper-pod.yaml
 ```
 
-### 9. 
-
-*Hint:*
-
-*Answer:*
+Verification:
 
 ```bash
-
+# Get a shell into the running container
+$ kubectl exec -it ubuntu-sleeper -- sh
+$ ps -aux
+$ cd /proc/1
+$ cat status
 ```
 
-### 10. 
-
-*Hint:*
-
-*Answer:*
+The output shows capabilities bitmap for the process:
 
 ```bash
-
+...
+CapPrm:	00000000aa0435fb
+CapEff:	00000000aa0435fb
+...
 ```
+
+Compare the capabilities of the two containers:
+
+```bash
+00000000a80425fb
+00000000aa0435fb
+```
+
+In the capability bitmap of the first container, bits 12 and 25 are clear. In the second container, bits 12 and 25 are set. Bit 12 is `CAP_NET_ADMIN`, and bit 25 is `CAP_SYS_TIME`. See `capability.h` for definitions of the capability constants.
