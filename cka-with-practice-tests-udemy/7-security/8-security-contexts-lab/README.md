@@ -30,29 +30,29 @@ Verification:
 $ kubectl exec -it ubuntu-sleeper -- ps -aux | grep sleep
 ```
 
-### 3. A Pod definition file named `multi-pod.yaml` is given. With what user are the processes in the web container started?
+### 3. A Pod definition file named `multi-pod.yaml` is given. With what user are the processes in the `web` container started?
 
-The pod is created with multiple containers and security contexts defined at the Pod and Container level.
+*Note:* The Pod is created with multiple containers and security contexts defined at the Pod and Container level.
 
-*Hint:*
-
-*Answer:*
+*Answer:* After looking into the YAML definition file give `multi-pod.yaml` and based on the fact that the user ID defined in the `securityContext` of the container overrides the user ID in the Pod, the correct answer is `1002`.
 
 ```bash
-
+$ cat multi-pod.yaml
 ```
 
-### 4. 
+### 4. With what user are the processes in the `sidecar` container started?
 
-*Hint:*
+*Note:* The Pod is created with multiple containers and security contexts defined at the Pod and Container level.
 
-*Answer:*
+*Answer:* The correct answer is with user ID `1001`. In case of `sidecar` container, there is **NOT** any `securityContext` parameters set at container level, so the Pod one with persist which happens to exist and is set with `runAsUser: 1001`.
 
 ```bash
-
+$ cat multi-pod.yaml
 ```
 
-### 5. 
+### 5. Update Pod `ubuntu-sleeper` to run as Root user and with the `SYS_TIME` capability
+
+*Note:* Only make the necessary changes. Do not modify the name of the Pod.
 
 *Hint:*
 
