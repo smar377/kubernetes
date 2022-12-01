@@ -161,16 +161,19 @@ $ kubectl get pvc -n default
 - `provisioner:` kubernetes.io/no-provisioner
 - `volumeBindingMode:` WaitForFirstConsumer
 
-*Answer:*
+*Answer:* We will build the YAML manifest file for the requested StorageClass object definition and then create it:
 
-```bash
-
+```yaml
+---
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: delayed-volume-sc
+provisioner: kubernetes.io/no-provisioner
+volumeBindingMode: WaitForFirstConsumer
 ```
 
-### 13.
-
-*Answer:*
-
 ```bash
-
+$ kubectl create -f delayed-volume-sc.yaml
+$ kubectl get sc -n default
 ```
