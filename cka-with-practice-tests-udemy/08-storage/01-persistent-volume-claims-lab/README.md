@@ -31,6 +31,14 @@ Use the spec provided below:
 $ kubectl get pod webapp -n default -o yaml > webapp-pod-hostpath.yaml
 ```
 
+Then, we need to edit and save the YAML file and configure a volume as per instructions on the host (please inspect file `webapp-pod-hostpath-1.yaml` for this).
+
+Last but not least, we recreate the file as per below:
+
+```bash
+$ kubectl replace -f webapp-pod-hostpath-1.yaml --force
+```
+
 **2nd WAY** - Build a Pod definition YAML manifest file from scratch (using a template) and use it to create the Pod later 
 
 ```bash
