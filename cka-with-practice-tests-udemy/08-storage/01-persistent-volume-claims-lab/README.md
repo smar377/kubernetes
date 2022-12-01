@@ -16,10 +16,10 @@ $ kubectl get pv,pvc -n default
 
 ### 3. Configure a volume to store these logs at `/var/log/webapp` on the host
 
-Use the spec provided below:
+Use the specifications provided below:
 
 - Name: `webapp`
-- Image Name: `kodekloud/event-simulator
+- Image Name: `kodekloud/event-simulator`
 - Volume HostPath: `/var/log/webapp`
 - Volume Mount: `/log`
 
