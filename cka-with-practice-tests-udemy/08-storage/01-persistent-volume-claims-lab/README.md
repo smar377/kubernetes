@@ -91,15 +91,92 @@ $ kubectl describe pv pv-log -n default
 - Storage Request: 50Mi
 - Access Modes: ReadWriteOnce
 
+*Answer:* Solution includes build a YAML manifest file to create a PVC named `claim-log-1` with given properties:
+
+```yaml
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: claim-log-1
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 50Mi
+```
+
+```bash
+$ kubectl create -f claim-log-1.yaml
+```
+
+Verification:
+
+```bash
+$ kubectl get pvc -n default
+$ kubectl describe pvc claim-log-1 -n default
+```
+
+### 6. What is the state of the Persistent Volume Claim?
+
+*Answer:* The status of PVC named `claim-log-1` is `Pending`.
+
+```bash
+$ kubectl get pvc -n default
+```
+
+### 7. What is the state of the Persistent Volume?
+
+*Answer:* The status of PV named `pv-log` is `Available`.
+
+```bash
+$ kubectl get pv -n default
+```
+
+### 8. Why is the claim not bound to the available Persistent Volume?
+
+*Answer:* After running below commands and looking at the Access Modes we figure out that they do **NOT** match and this is preventing the PVC from binding to PV.
+
+```bash
+$ kubectl get pv,pvc -n default
+```
+
+### 9. Update the Access Mode on the claim to bind it to the PV
+
+*Hint:* Delete and recreate the PVC `claim-log-1`.
+
+*Answer:* Change `accessModes` in PVC manifest file from `ReadWriteOnce` to `ReadWriteMany` and then I recreate the PVC:
+
+```bash
+$ kubectl replace --force -f claim-log-1.yaml
+```
+
+### 10. You requested `50Mi`, how much capacity is now available on the PVC?
+
+*Answer:* The capacity available on the PVC is `100Mi`.
+
+```bash
+$ kubectl get pvc claim-log-1
+```
+
+### 11. Update the `webapp` Pod to use the PersistentVolumeClaim as its storage
+
+*Answer:* Replace `hostPath` configured earlier with the newly created `PersistentVolumeClaim`.
+
+```bash
+$
+```
+
+### 12.
+
 *Answer:*
 
 ```bash
 
 ```
 
-### 6. 
-
-*Hint:*
+### 13.
 
 *Answer:*
 
@@ -107,9 +184,7 @@ $ kubectl describe pv pv-log -n default
 
 ```
 
-### 7. 
-
-*Hint:*
+### 14.
 
 *Answer:*
 
@@ -117,9 +192,7 @@ $ kubectl describe pv pv-log -n default
 
 ```
 
-### 8. 
-
-*Hint:*
+### 15.
 
 *Answer:*
 
@@ -127,9 +200,7 @@ $ kubectl describe pv pv-log -n default
 
 ```
 
-### 9. 
-
-*Hint:*
+### 16.
 
 *Answer:*
 
@@ -137,9 +208,7 @@ $ kubectl describe pv pv-log -n default
 
 ```
 
-### 10. 
-
-*Hint:*
+### 17.
 
 *Answer:*
 
