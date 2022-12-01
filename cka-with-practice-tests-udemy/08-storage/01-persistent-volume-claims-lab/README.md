@@ -82,11 +82,14 @@ Verification:
 
 ```bash
 $ kubect  get pv -n default
+$ kubectl describe pv pv-log -n default
 ```
 
-### 5. 
+### 5. Let us claim some of that storage for our application. Create a Persistent Volume Claim with the given specification
 
-*Hint:*
+- Volume Name: claim-log-1
+- Storage Request: 50Mi
+- Access Modes: ReadWriteOnce
 
 *Answer:*
 
