@@ -1,8 +1,6 @@
 ### 1. How many StorageClasses exist in the cluster right now?
 
-*Hint:* There is only **1** StorageClass configured in the cluster named `local-path (ddefault)`.
-
-*Answer:* 
+*Answer:*  There is only **1** StorageClass configured in the cluster named `local-path (default)`.
 
 ```bash
 $ kubectl get storageclasses -n default
@@ -69,37 +67,39 @@ $ kubectl get pvc -n default
 
 *Hint:* Inspect the PersistentVolume `local-pv` and look for the Access Mode, Storage and StorageClassName used. Use this information to create the PVC.
 
-*Answer:*
-
 ```bash
 $ kubectl get pv local-pv -o yaml
 $ vi local-pvc.yaml
 $ kubectl create -f local-pvc.yaml
 ```
 
-### 8. 
-
-*Hint:*
-
-*Answer:*
+Verification:
 
 ```bash
-
+$ kubectl get pv,pvc -n default
 ```
 
-### 9. 
+### 8. What is the status of the newly created PersistentVolumeClaim?
 
-*Hint:*
-
-*Answer:*
+*Answer:* The status of newly created PVC named `local-pvc` is `Pending`.
 
 ```bash
-
+$ kubectl get pv,pvc -n default
 ```
 
-### 10. 
+### 9. Why is the PVC in a `Pending` state despite making a valid request to claim the volume called `local-pv`?
 
-*Hint:*
+*Hint:* Inspect the PVC events.
+
+*Answer:* The StorageClass used by the PVC uses `WaitForFirstConsumer` volume binding mode. This means that the persistent volume will **NOT** bind to the claim until a Pod makes use of the PVC to request storage.
+
+```bash
+$ kubectl describe pvc local-pvc | grep -iA3 events
+```
+
+### 10. Create a new Pod called nginx with the image `nginx:alpine`. The Pod should make use of the PVC `local-pvc` and mount the volume at the path `/var/www/html`
+
+*Hint:* The PV local-pv should in a bound state.
 
 *Answer:*
 
