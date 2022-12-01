@@ -162,34 +162,33 @@ $ kubectl get pvc claim-log-1
 
 ### 11. Update the `webapp` Pod to use the PersistentVolumeClaim as its storage
 
-*Answer:* Replace `hostPath` configured earlier with the newly created `PersistentVolumeClaim`.
+*Answer:* Replace `hostPath` configured earlier with the newly created `PersistentVolumeClaim`. For this I have created a new manifest file called `webapp-pod-pvc.yaml`. Please check it to see what has been changed to facilitate the requirements of this task.
 
 ```bash
-$
+$ kubectl delete pod webapp -n default
+$ kubectl create -f webapp-pod-pvc.yaml
 ```
 
-### 12.
+### 12. What is the Reclaim Policy set on the Persistent Volume `pv-log`?
 
-*Answer:*
+*Answer:* The Reclaim Policy set on the Persistent Volume `pv-log` is set to `Retain`.
 
 ```bash
-
+$ kubectl describe pv -n default | grep -i reclaim
 ```
 
-### 13.
+### 13. What would happen to the PV if the PVC was destroyed?
 
-*Answer:*
+*Answer:* The PV is **NOT** deleted but it will be unavailable. This is because the reclaim policy is set to `Retain` which basically means that it needs to be deleted manually by admin, but in the meantime will remain unavailable from other PVC to be claimed.
 
-```bash
+### 14. Try deleting the PVC and notice what happens
 
-```
+*Hint*: If the command hangs, you can use `CTRL+C` to get back to the bash prompt **OR** check the status of the PVC from another terminal.
 
-### 14.
-
-*Answer:*
+*Answer:* The PVC is stuck in `Terminating` state.
 
 ```bash
-
+$ kubectl delete pvc claim-log-1 -n default 
 ```
 
 ### 15.
