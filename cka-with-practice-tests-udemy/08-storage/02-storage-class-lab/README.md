@@ -101,13 +101,75 @@ $ kubectl describe pvc local-pvc | grep -iA3 events
 
 *Hint:* The PV `local-pv` should in a bound state.
 
-*Answer:* First we will create a basic manifest Pod file via command line (*imperative way*) like this
+*Answer:* First we will create a basic manifest Pod file via command line (*imperative way*) like this:
 
 ```bash
 $ kubectl run nginx --image=nginx:alpine --dry-run=client -o yaml > nginx-pod-with-pvc.yaml
 ```
 
 Then we will edit the file and adjust it to use PVC `local-pvc` and mount that volume to `/var/www/html`:
+
+```yaml
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  creationTimestamp: null
+  labels:
+    run: nginx
+  name: nginx
+spec:
+  volumes:
+    - name: local-pvc
+      persistentVolumeClaim:
+        claimName: local-pvc
+  containers:
+  - image: nginx:alpine
+    name: nginx
+    resources: {}
+    volumeMounts:
+        - mountPath: "/var/www/html"
+          name: local-pvc
+  dnsPolicy: ClusterFirst
+  restartPolicy: Always
+status: {}
+```
+
+Last, we will create the Pod with the PVC:
+
+```bash
+$ kubectl create -f nginx-pod-with-pvc.yaml
+```
+
+Verification:
+
+```bash
+$ kubectl get pod,pv,pvc -n default -o wide
+$ kubectl exec -it nginx -- ls -lah /var/www/html
+```
+
+### 11. What is the status of the local-pvc Persistent Volume Claim now?
+
+*Answer:* The status of the `local-pvc` PersistentVolumeClaim now is set to `Bound`.
+
+```bash
+$ kubectl get pvc -n default
+```
+
+### 12. Create a new StorageClass called `delayed-volume-sc` that makes use of the below specs
+
+- `provisioner:` kubernetes.io/no-provisioner
+- `volumeBindingMode:` WaitForFirstConsumer
+
+*Answer:*
+
+```bash
+
+```
+
+### 13.
+
+*Answer:*
 
 ```bash
 
