@@ -28,7 +28,7 @@ Use the spec provided below:
 **1st WAY** - Extract Pod definition to a YAML manifest file, edit and then recreate it
 
 ```bash
-$ kubectl get pod webapp -n default -o yaml > webapp-pod-hostpath.yaml
+$ kubectl get pod webapp -n default -o yaml > webapp-pod-hostpath-1.yaml
 ```
 
 Then, we need to edit and save the YAML file and configure a volume as per instructions on the host (please inspect file `webapp-pod-hostpath-1.yaml` for this).
@@ -42,17 +42,46 @@ $ kubectl replace -f webapp-pod-hostpath-1.yaml --force
 **2nd WAY** - Build a Pod definition YAML manifest file from scratch (using a template) and use it to create the Pod later 
 
 ```bash
-
+$ vi webapp-pod-hostpath-2.yaml
+$ kubectl create -f webapp-pod-hostpath-2.yaml
 ```
 
-### 4. 
+### 4. Create a Persistent Volume with the given specification
 
-*Hint:*
+Use the spec provided below:
 
-*Answer:*
+- Volume Name: `pv-log`
+- Storage: `100Mi`
+- Access Modes: `ReadWriteMany`
+- Host Path: `/pv/log`
+- Reclaim Policy: `Retain`
+
+*Answer:* We will create a YAML manifest file named `pv-log.yaml` and then use it to create the PersistentVolume:
+
+```yaml
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: pv-log
+spec:
+  persistentVolumeReclaimPolicy: Retain
+  accessModes:
+    - ReadWriteMany
+  capacity:
+    storage: 100Mi
+  hostPath:
+    path: /pv/log
+```
 
 ```bash
+$ kubectl create -f pv-log.yaml
+```
 
+Verification:
+
+```bash
+$ kubect  get pv -n default
 ```
 
 ### 5. 
