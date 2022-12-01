@@ -99,9 +99,15 @@ $ kubectl describe pvc local-pvc | grep -iA3 events
 
 ### 10. Create a new Pod called nginx with the image `nginx:alpine`. The Pod should make use of the PVC `local-pvc` and mount the volume at the path `/var/www/html`
 
-*Hint:* The PV local-pv should in a bound state.
+*Hint:* The PV `local-pv` should in a bound state.
 
-*Answer:*
+*Answer:* First we will create a basic manifest Pod file via command line (*imperative way*) like this
+
+```bash
+$ kubectl run nginx --image=nginx:alpine --dry-run=client -o yaml > nginx-pod-with-pvc.yaml
+```
+
+Then we will edit the file and adjust it to use PVC `local-pvc` and mount that volume to `/var/www/html`:
 
 ```bash
 
