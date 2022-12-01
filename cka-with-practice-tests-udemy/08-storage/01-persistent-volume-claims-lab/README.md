@@ -46,9 +46,7 @@ $ vi webapp-pod-hostpath-2.yaml
 $ kubectl create -f webapp-pod-hostpath-2.yaml
 ```
 
-### 4. Create a Persistent Volume with the given specification
-
-Use the spec provided below:
+### 4. Create a PersistentVolume with the given specifications
 
 - Volume Name: `pv-log`
 - Storage: `100Mi`
@@ -85,7 +83,7 @@ $ kubect  get pv -n default
 $ kubectl describe pv pv-log -n default
 ```
 
-### 5. Let us claim some of that storage for our application. Create a Persistent Volume Claim with the given specification
+### 5. Let us claim some of that storage for our application. Create a PersistentVolumeClaim with the given specification
 
 - Volume Name: claim-log-1
 - Storage Request: 50Mi
@@ -118,7 +116,7 @@ $ kubectl get pvc -n default
 $ kubectl describe pvc claim-log-1 -n default
 ```
 
-### 6. What is the state of the Persistent Volume Claim?
+### 6. What is the state of the PersistentVolumeClaim?
 
 *Answer:* The status of PVC named `claim-log-1` is `Pending`.
 
@@ -126,7 +124,7 @@ $ kubectl describe pvc claim-log-1 -n default
 $ kubectl get pvc -n default
 ```
 
-### 7. What is the state of the Persistent Volume?
+### 7. What is the state of the PersistentVolume?
 
 *Answer:* The status of PV named `pv-log` is `Available`.
 
@@ -134,7 +132,7 @@ $ kubectl get pvc -n default
 $ kubectl get pv -n default
 ```
 
-### 8. Why is the claim not bound to the available Persistent Volume?
+### 8. Why is the claim not bound to the available PersistentVolume?
 
 *Answer:* After running below commands and looking at the Access Modes we figure out that they do **NOT** match and this is preventing the PVC from binding to PV.
 
@@ -142,7 +140,7 @@ $ kubectl get pv -n default
 $ kubectl get pv,pvc -n default
 ```
 
-### 9. Update the Access Mode on the claim to bind it to the PV
+### 9. Update the `accessModes` on the claim to bind it to the PV
 
 *Hint:* Delete and recreate the PVC `claim-log-1`.
 
@@ -152,7 +150,7 @@ $ kubectl get pv,pvc -n default
 $ kubectl replace --force -f claim-log-1.yaml
 ```
 
-### 10. You requested `50Mi`, how much capacity is now available on the PVC?
+### 10. You have requested `50Mi`, how much capacity is now available on the PVC?
 
 *Answer:* The capacity available on the PVC is `100Mi`.
 
@@ -169,7 +167,7 @@ $ kubectl delete pod webapp -n default
 $ kubectl create -f webapp-pod-pvc.yaml
 ```
 
-### 12. What is the Reclaim Policy set on the Persistent Volume `pv-log`?
+### 12. What is the Reclaim Policy set on the PersistentVolume `pv-log`?
 
 *Answer:* The Reclaim Policy set on the Persistent Volume `pv-log` is set to `Retain`.
 
@@ -188,29 +186,34 @@ $ kubectl describe pv -n default | grep -i reclaim
 *Answer:* The PVC is stuck in `Terminating` state.
 
 ```bash
-$ kubectl delete pvc claim-log-1 -n default 
+$ kubectl delete pvc claim-log-1 -n default
+$ kubectl get pvc -n default
 ```
 
-### 15.
+### 15. Why is the PVC stuck in `Terminating` state?
 
-*Answer:*
+*Answer:* The PVC was still being used by the `webapp` Pod when we issued the `delete` command. Until the Pod is deleted, the PVC will remain in the `Terminating` state.
+
+### 16. Let us now delete the `webapp` Pod
+
+*Hint*: Once deleted, wait for the Pod to fully terminate.
 
 ```bash
-
+$ kubectl delete pod webapp -n default
 ```
 
-### 16.
+### 17. What is the state of the PVC now?
 
-*Answer:*
+*Answer:* It has been deleted.
 
 ```bash
-
+$ kubectl get pvc -n default
 ```
 
-### 17.
+### 18. What is the state of the PersistentVolume now?
 
-*Answer:*
+*Answer:* The status of the PV `pv-log` is set to `Released`.
 
 ```bash
-
+$ kubectl get pv,pvc,pod -n default
 ```
