@@ -93,4 +93,10 @@ status: {}
 $ kubectl create -f busybox-pod.yaml
 ```
 
-The default gateway configured on the Pods schedules on `node01` is **`10.50.192.0`**.
+Verification:
+
+```bash
+$ kubectl get pod -o wide
+$ kubectl exec -it busybox -- ip route
+```
+So based on above, we can conclude that the default gateway configured on the Pods scheduled on `node01` is **`10.50.192.0`**.
