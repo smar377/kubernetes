@@ -42,20 +42,55 @@ $ ip link
 
 ### 6. What is the Pod IP address range configured by `weave`?
 
-*Answer:* The Pod IP address range configured by `weave` is **`10.x.x.x`**.
+*Answer:* The Pod IP address range configured by `weave` is **`10.x.x.x`** (specifically **`10.50.0.0/16`**):
 
 ```bash
-$ 'ip addr show weave
+$ ip addr show weave
+$ kubectl get pods -n kube-system
+$ kubectl logs -n kube-system weave-net-bbhb2 weave
 ```
 
 ### 7. What is the default gateway configured on the Pods scheduled on `node01`?
 
-*Hint:* Try scheduling a pod on `node01` and check `ip route` output.
+*Hint:* Try scheduling a Pod on `node01` and check `ip route` output.
 
 *Answer:* SSH to `node01`, then run below command and look at the `weave` line:
 
 ```bash
-$  ip route
+$ ip route
+```
+
+We will also do what is being suggested, meaning try scheduling a Pod on `node01` and check `ip route` output:
+
+```bash
+$ kubectl run busybox --image=busybox --dry-run=client -o yaml -- sleep 1000 > busybox-pod.yaml
+```
+
+```yaml
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  creationTimestamp: null
+  labels:
+    run: busybox
+  name: busybox
+spec:
+  nodeName: node01
+  containers:
+  - args:
+    - sleep
+    - "1000"
+    image: busybox
+    name: busybox
+    resources: {}
+  dnsPolicy: ClusterFirst
+  restartPolicy: Always
+status: {}
+```
+
+```bash
+$ kubectl create -f busybox-pod.yaml
 ```
 
 The default gateway configured on the Pods schedules on `node01` is **`10.50.192.0`**.
