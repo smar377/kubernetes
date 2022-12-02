@@ -14,82 +14,48 @@ $ kubectl get nodes
 $ ls -lah /etc/cni/net.d/10-weave.conflist
 ```
 
-### 3. 
+### 3. How many `weave` agents/peers are deployed in this cluster?
 
 *Hint:*
 
-*Answer:*
+*Answer:* After running below commad we can see that there are **2** `weave` agents/peers deployed in the cluster:
+
+```bash
+$ kubectl get pods -n kube-system | grep weave 
+```
+
+### 4. On which nodes are the weave peers present?
+
+*Answer:* One on every node.
 
 ```bash
 
 ```
 
-### 4. 
+### 5. Identify the name of the bridge network/interface created by `weave` on each node.
 
-*Hint:*
-
-*Answer:*
+*Answer:* The name of the bridge network/interface created by `weave` on each node is called `weave`.
 
 ```bash
-
+$ ip link
 ```
 
-### 5. 
+### 6. What is the Pod IP address range configured by `weave`?
 
-*Hint:*
-
-*Answer:*
+*Answer:* The Pod IP address range configured by `weave` is **`10.x.x.x`**.
 
 ```bash
-
+$ 'ip addr show weave
 ```
 
-### 6. 
+### 7. What is the default gateway configured on the Pods scheduled on `node01`?
 
-*Hint:*
+*Hint:* Try scheduling a pod on `node01` and check `ip route` output.
 
-*Answer:*
+*Answer:* SSH to `node01`, then run below command and look at the `weave` line:
 
 ```bash
-
+$  ip route
 ```
 
-### 7. 
-
-*Hint:*
-
-*Answer:*
-
-```bash
-
-```
-
-### 8. 
-
-*Hint:*
-
-*Answer:*
-
-```bash
-
-```
-
-### 9. 
-
-*Hint:*
-
-*Answer:*
-
-```bash
-
-```
-
-### 10. 
-
-*Hint:*
-
-*Answer:*
-
-```bash
-
-```
+The default gateway configured on the Pods schedules on `node01` is **`10.50.192.0`**.
