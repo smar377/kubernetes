@@ -1,4 +1,6 @@
-### 1. 
+***Important:*** In this practice test we will install `weave-net` Pod networking solution to the cluster. Let us first inspect the setup.
+
+### 1. We have deployed an application called app in the default namespace. What is the state of the pod?
 
 *Hint:*
 
