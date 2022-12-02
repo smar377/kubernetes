@@ -26,11 +26,7 @@ $ kubectl get pods -n kube-system | grep weave
 
 ### 4. On which nodes are the weave peers present?
 
-*Answer:* One on every node.
-
-```bash
-
-```
+*Answer:* One on every node by default and as per CNI standard.
 
 ### 5. Identify the name of the bridge network/interface created by `weave` on each node.
 
