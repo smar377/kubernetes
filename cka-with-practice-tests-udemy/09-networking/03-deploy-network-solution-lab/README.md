@@ -2,10 +2,10 @@
 
 ### 1. We have deployed an application called `app` in the default `namespace`. What is the state of the pod?
 
-*Answer:* The application is **NOT** running. Try to issue below command gives errors: 
+*Answer:* The application is **NOT** running.  
 
 ```bash
-$ kubelete get pod -n default
+$ kubelet get pod -n default
 ```
 
 ### 2. Inspect why the Pod is not running.
