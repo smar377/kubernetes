@@ -18,82 +18,16 @@ $ kubectl describe pod app
 
 ### 3. Deploy `weave-net` networking solution to the cluster
 
-*Note:* We already have provided a weave manifest file under the /root/weave directory.
+*Note:* We already have provided a weave manifest file under the `/root/weave` directory. Please check out also the official weaveworks GitHub page for various `weave` releases, available at the top right panel.
 
-*Hint:*
-
-*Answer:*
+*Answer:* Run the below command to deploy the `weave` on the cluster: 
 
 ```bash
-
+$ kubectl apply -f /root/weave/weave-daemonset-k8s.yaml
 ```
 
-### 4. 
-
-*Hint:*
-
-*Answer:*
+Verification:
 
 ```bash
-
-```
-
-### 5. 
-
-*Hint:*
-
-*Answer:*
-
-```bash
-
-```
-
-### 6. 
-
-*Hint:*
-
-*Answer:*
-
-```bash
-
-```
-
-### 7. 
-
-*Hint:*
-
-*Answer:*
-
-```bash
-
-```
-
-### 8. 
-
-*Hint:*
-
-*Answer:*
-
-```bash
-
-```
-
-### 9. 
-
-*Hint:*
-
-*Answer:*
-
-```bash
-
-```
-
-### 10. 
-
-*Hint:*
-
-*Answer:*
-
-```bash
-
+$ kubectl get pods -A | grep weave
 ```
