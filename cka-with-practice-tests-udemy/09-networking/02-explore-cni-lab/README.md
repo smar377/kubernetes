@@ -22,20 +22,40 @@ $ ls -lah /opt/cni/bin
 
 *Hint:*
 
-*Answer:* The name of the CNI plugin configured to be used on this Kubernetes cluster is **`flannel`**.
+*Answer:* The name of the CNI plugin configured to be used on this Kubernetes cluster is `flannel`.
 
 ```bash
 $ ls -lah /etc/cni/net.d/
 ```
 
-### 5. 
+### 5. What binary executable file will be run by `kubelet` after a container and its associated `namespace` are created
 
-*Hint:*
-
-*Answer:*
+*Answer:* After looking at the `type` field in file `/etc/cni/net.d/10-flannel.conflist` the correct answer is `flannel`.
 
 ```bash
+$ cat /etc/cni/net.d/10-flannel.conflist
+```
 
+```json
+{
+  "name": "cbr0",
+  "cniVersion": "0.3.1",
+  "plugins": [
+    {
+      "type": "flannel",
+      "delegate": {
+        "hairpinMode": true,
+        "isDefaultGateway": true
+      }
+    },
+    {
+      "type": "portmap",
+      "capabilities": {
+        "portMappings": true
+      }
+    }
+  ]
+}
 ```
 
 ### 6. 
