@@ -50,29 +50,31 @@ $ kubectl create configmap nginx-configuration --namespace ingress-space
 $ kubectl get configmaps -n ingress-space
 ```
 
-### 3. 
+### 3. The NGINX Ingress Controller requires a ServiceAccount. Create a ServiceAccount in the `ingress-space` namespace. Use the spec provided below
 
-*Hint:*
+- Name: `ingress-serviceaccount`
 
-*Answer:*
-
-```bash
-
-```
-
-### 4. 
-
-*Hint:*
-
-*Answer:*
+*Answer:* We will do it via the *imperative way* as it is faster:
 
 ```bash
+# Create the requested serviceAccount in the ingress-space namespace
+$ kubectl create serviceaccount ingress-serviceaccount -n ingress-space
 
+# Check if account was created successfully
+$ kubectl get sa -n ingress-space
 ```
 
-### 5. 
+### 4. We have created the Roles and RoleBindings for the ServiceAccount. Check it out!!
 
-*Hint:*
+We inspect the created objects by running the following commands:
+
+```bash
+$ kubectl get role,rolebindings -n ingress-space
+$ kubectl describe role ingress-role -n ingress-space
+$ kubectl describe rolebinding ingress-role-binding -n ingress-space
+```
+
+### 5. Let us now deploy the Ingress Controller. Create a Deployment using the file given. The Deployment configuration is given at `/root/ingress-controller.yaml`. There are several issues with it. Try to fix them
 
 *Answer:*
 
