@@ -188,42 +188,43 @@ We will use below command to know the service and port details:
 $ kubectl get svc -n critical-space
 ```
 
-### 20. 
+Then we build the YAML manifest file to create the new ingress service to make the application available at `/pay` as follows:
 
-*Hint:*
-
-*Answer:*
-
-```bash
-
+```yaml
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: ingress-pay
+  namespace: critical-space
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+    nginx.ingress.kubernetes.io/ssl-redirect: "false"
+spec:
+  rules:
+  - http:
+      paths:
+      - path: /pay
+        pathType: Prefix
+        backend:
+          service:
+           name: pay-service
+           port:
+            number: 8282
 ```
 
-### 21. 
-
-*Hint:*
-
-*Answer:*
-
 ```bash
+# Create the Ingress Resource
+$ kubectl create -f ingress-pay.yaml
 
+# Check if deployment was successfull
+$ kubectl get ingress -n critical-space
 ```
 
-### 22. 
+### 20. View the Payment application using the `/pay` URL in your browser. Click on the Ingress tab above your terminal, if its not open already, and append `/pay` to the URL in the browser
 
-*Hint:*
+*Answer:* Test the newly create Ingress Resource for the payment critical path by browsing to:
 
-*Answer:*
+*URL:*
 
-```bash
-
-```
-
-### 23. 
-
-*Hint:*
-
-*Answer:*
-
-```bash
-
-```
+- https://30080-port-4cf11ea4a7084f36.labs.kodekloud.com/pay 
