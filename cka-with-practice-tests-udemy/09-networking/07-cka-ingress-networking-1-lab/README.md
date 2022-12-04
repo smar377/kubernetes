@@ -252,8 +252,6 @@ annotations:
 
 ### 20. View the Payment application using the `/pay` URL in your browser. Click on the Ingress tab above your terminal, if its not open already, and append `/pay` to the URL in the browser
 
-*Answer:* Test the newly create Ingress Resource for the payment critical path by browsing to:
-
-*URL:*
+*Answer:* Test the newly create Ingress Resource for the payment critical path by browsing to *URL:*
 
 - https://30080-port-4cf11ea4a7084f36.labs.kodekloud.com/pay 
