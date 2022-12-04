@@ -93,21 +93,46 @@ $ kubectl get deploy -n ingress-space
 - Namespace: `ingress-space`
 - Use the right selector
 
-*Answer:* 
+*Answer:* I have created the YAML manifest file named `ingress-service-external-usage.yaml` as per specifications.
 
 ```bash
+# Create manifest file for Ingress service
+$ vi ingress-service-external-usage.yaml
+$ cat ingress-service-external-usage.yaml
 
+# Create the Ingress service for external usage
+$ kubectl create -f ingress-service-external-usage.yaml
+
+# Verify that deployment was successfull
+$ kubectl get svc -n ingress-space
 ```
 
-### 7. 
-
-*Hint:*
-
-*Answer:*
+***Note:*** Anothey way (*imperative way*) to implement this, is by leveraging directly the command line and issuing:
 
 ```bash
-
+$ kubectl expose -n ingress-space deployment ingress-controller --type=NodePort --port=80 --name=ingress --dry-run=client -o yaml > ingress-service-external-usage.yaml
 ```
+
+and then manually add the given `nodePort` and `namespace`.
+
+### 7. Create the Ingress Resource to make the applications available at `/wear` and `/watch` on the Ingress service. Create the ingress in the `app-space` namespace.
+
+*Answer:* We will create a manifest file for this and then create the Ingress Resource:
+
+```bash
+$ vi ingress.yaml
+$ cat ingress.yaml
+```
+
+```bash
+# Creation of Ingress Resource
+$ kubectl create -f ingress.yaml
+
+# Check if creation was successfull
+$ kubectl get ingress -n app-space
+```
+
+
 
 ### 8. 
 
