@@ -13,8 +13,8 @@ We must configure Ingress to achieve the below. When user visits the URL on the 
   
 Without the rewrite-target option, this is what would happen:
 
-- `http://<ingress-service>:<ingress-port>/watch` --> http://<watch-service>:<port>/watch`
-- `http://<ingress-service>:<ingress-port>/wear` --> http://<wear-service>:<port>/wear`
+- `http://<ingress-service>:<ingress-port>/watch` --> `http://<watch-service>:<port>/watch`
+- `http://<ingress-service>:<ingress-port>/wear` --> `http://<wear-service>:<port>/wear`
   
 Notice `watch` and `wear` at the end of the target URLs. The target applications are not configured with `/watch` or `/wear` paths. They are different applications built specifically for their purpose, so they don't expect `/watch` or `/wear` in the URLs. And as such the requests would fail and throw a `404` not found error.
   
