@@ -65,7 +65,7 @@ $ kubectl get configmap -n kube-system
 $ kubectl describe configmap coredns -n kube-system
 ```
 
-### 9. We have deployed a set of Pods and Services in the `default` and `payroll` namespaces. 
+### 9. We have deployed a set of Pods and Services in the `default` and `payroll` namespaces
 
 *Answer:* Just inspect them and go to the next question:
 
