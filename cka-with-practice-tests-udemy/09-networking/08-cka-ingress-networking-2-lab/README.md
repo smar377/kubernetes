@@ -76,17 +76,24 @@ $ kubectl describe rolebinding ingress-role-binding -n ingress-space
 
 ### 5. Let us now deploy the Ingress Controller. Create a Deployment using the file given. The Deployment configuration is given at `/root/ingress-controller.yaml`. There are several issues with it. Try to fix them
 
-*Answer:*
+*Answer:* There were **2** errors with the Deployment YAML file. The first was an *indentation* error at line 36 and the second one was a wrong name set for the namespace. It was wrongly set to `ingress-`. After fixing these two errors the Deployment was successful:
 
 ```bash
-
+$ kubectl create -f ingress-controller.yaml
+$ kubectl get deploy -n ingress-space
 ```
 
-### 6. 
+### 6. Let us now create a service to make Ingress available to external users. Create a service following the given specs
 
-*Hint:*
+- Name: `ingress`
+- Type: `NodePort`
+- Port: `80`
+- TargetPort: `80`
+- NodePort: `30080`
+- Namespace: `ingress-space`
+- Use the right selector
 
-*Answer:*
+*Answer:* 
 
 ```bash
 
