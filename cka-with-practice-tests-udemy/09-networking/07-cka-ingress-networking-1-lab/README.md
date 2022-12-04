@@ -140,40 +140,52 @@ Specifications:
 - Backend Service: `food-service`
 - Backend Service Port: 8080`
 
-*Answer:*
+*Answer:* We need to edit the Ingress Resource named `ingress-wear-watch` and add below new path details to facilitate the food service:
 
 ```bash
-
+- backend:
+            service:
+              name: food-service
+              port:
+                number: 8080
+          path: /eat
+          pathType: Prefix
 ```
 
-### 17. 
-
-*Hint:*
-
-*Answer:*
-
 ```bash
-
+$ kubectl edit ingress -n app-space
 ```
 
-### 18. 
+Last, test the new path by browsing to the following URL:
 
-*Hint:*
+- https://30080-port-4cf11ea4a7084f36.labs.kodekloud.com/eat
 
-*Answer:*
+### 17. A new payment service has been introduced. Since it is critical, the new application is deployed in its own namespace. Identify the namespace in which the new application is deployed
+
+*Answer:* After running below command:
 
 ```bash
-
+$ kubectl get deploy -A
 ```
 
-### 19. 
+we can see that the new critical payment application Deployment named `webapp-pay` has been deployed in the `critical-space` namespace.
 
-*Hint:*
+### 18. What is the name of the Deployment of the new application?
 
-*Answer:*
+*Answer:* The name of the Deployment of the new payment application is `webapp-pay`.
 
 ```bash
+$ kubectl get deploy -A
+```
 
+### 19. You are requested to make the new application available at `/pay`. Identify and implement the best approach to making this application available on the ingress controller and test to make sure its working. Look into `annotations: rewrite-target` as well
+
+*Answer:* We will have to create a new Ingress for the new pay application in the `critical-space` namespace.
+
+We will use below command to know the service and port details: 
+
+```bash
+$ kubectl get svc -n critical-space
 ```
 
 ### 20. 
