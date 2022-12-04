@@ -1,0 +1,41 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: webapp
+  labels:
+    name: webapp
+spec:
+  selector:
+    matchLabels:
+      name: webapp
+  template:
+    metadata:
+      labels:
+        name: webapp
+    spec:
+      containers:
+      - name: simple-webapp-mysql
+        image: mmumshad/simple-webapp-mysql
+        ports:
+        - containerPort: 8080
+        env:
+          - name: DB_Host
+            value: mysql.payroll
+          - name: DB_User
+            value: root
+          - name: DB_Password
+            value: paswrd
+
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: webapp-service
+spec:
+  selector:
+    name: webapp
+  type: NodePort
+  ports:
+  - port: 8080
+    targetPort: 8080
