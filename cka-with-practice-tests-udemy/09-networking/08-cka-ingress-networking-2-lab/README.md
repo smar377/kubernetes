@@ -146,6 +146,14 @@ $ kubectl get ingress -n app-space
 $ kubectl describe ingress -n app-space
 ```
 
+***Important:*** In order to avoid error with too many redirects we need to edit the Ingress and add the following annotations:
+
+```bash
+annotation:
+  nginx.ingress.kubernetes.io/rewrite-target: /
+  nginx.ingress.kubernetes.io/ssl-redirect: "false"
+```
+
 ### 8. Access the application using the Ingress tab on top of your terminal. Make sure you can access the right applications at `/wear` and `/watch` paths.
 
 *Answer:* We test by browsing to the following *URLs*:
