@@ -148,7 +148,7 @@ $ kubectl describe ingress -n app-space
 
 ***Important:*** In order to avoid error with too many redirects we need to edit the Ingress and add the following annotations:
 
-```bash
+```yaml
 annotation:
   nginx.ingress.kubernetes.io/rewrite-target: /
   nginx.ingress.kubernetes.io/ssl-redirect: "false"
