@@ -17,7 +17,7 @@ $ kubectl get namespaces
 
 *Answer:* We will do this via **2** different ways.
 
-**1st WAY** - Build a YAML manifest definition file and then create the ConfigMap (*declarative way*):
+**1st WAY** - Build a YAML manifest definition file and then create the ConfigMap (*declarative way*)
 
 ```bash
 $ vi configmap-nginx.yaml
