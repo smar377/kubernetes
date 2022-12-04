@@ -182,6 +182,8 @@ $ kubectl get deploy -A
 
 *Answer:* We will have to create a new Ingress for the new pay application in the `critical-space` namespace.
 
+**1st WAY** - Build a manifest YAML file (*declarative way*)
+
 We will use below command to know the service and port details: 
 
 ```bash
@@ -219,6 +221,33 @@ $ kubectl create -f ingress-pay.yaml
 
 # Check if deployment was successfull
 $ kubectl get ingress -n critical-space
+$ kubectl describe ingress -n critical-space
+```
+
+**2nd WAY** - Create the new Ingress Resource directly from command line (*imperative way*)
+
+```bash
+# Create Ingress Resource
+$ kubectl create ingress ingress-pay -n critical-space --rule="/pay=pay-service:8282"
+
+# Check if creation was successfull
+$ kubectl get ingress -n critical-space
+$ kubectl describe ingress -n critical-space
+```
+
+Trying to browse in this case to `/pay` URL path, it seems that it does **NOT** work.
+We inspect the logs by running:
+
+```bash
+$ kubectl get pods -n critical-space
+$ kubectl logs <WEBAPP_POD_ID> -n critical-space
+```
+
+For this to be fixed we need to add the following annotation:
+
+```yaml
+annotations:
+  nginx.ingress.kubernetes.io/rewrite-target: /
 ```
 
 ### 20. View the Payment application using the `/pay` URL in your browser. Click on the Ingress tab above your terminal, if its not open already, and append `/pay` to the URL in the browser
