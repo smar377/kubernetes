@@ -115,29 +115,30 @@ $ kubectl describe ingress -n app-space
 $ kubectl edit ingress -n app-space 
 ```
 
-### 14. 
+Test it by browsing to *URL*:
 
-*Hint:*
+- https://30080-port-4cf11ea4a7084f36.labs.kodekloud.com/stream
 
-*Answer:*
+### 14. A user is trying to view the `/eat` URL on the Ingress Service. Which page would he see?
 
-```bash
+*Hint:* If not open already, click on the Ingress tab above your terminal, and append `/eat` to the URL in the browser.
 
-```
+*Answer:* The user should see the `404 Error page` as the `/eat` path is not configured in the Ingress Resource named `ingress-wear-watch`.
 
-### 15. 
-
-*Hint:*
-
-*Answer:*
+### 15. Due to increased demand, your business decides to take on a new venture. You acquired a food delivery company. Their applications have been migrated over to your cluster. Inspect the new Deployments in the `app-space` namespace
 
 ```bash
-
+$ kubectl get all -n app-space
 ```
 
-### 16. 
+### 16. You are requested to add a new path to your ingress to make the food delivery application available to your customers. Make the new application available at `/eat`
 
-*Hint:*
+Specifications:
+
+- Ingress: `ingress-wear-watch
+- Path: `/eat`
+- Backend Service: `food-service`
+- Backend Service Port: 8080`
 
 *Answer:*
 
