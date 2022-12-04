@@ -156,7 +156,7 @@ Specifications:
 $ kubectl edit ingress -n app-space
 ```
 
-Last, test the new path by browsing to the following URL:
+Last, test the new path by browsing to the following *URL*:
 
 - https://30080-port-4cf11ea4a7084f36.labs.kodekloud.com/eat
 
