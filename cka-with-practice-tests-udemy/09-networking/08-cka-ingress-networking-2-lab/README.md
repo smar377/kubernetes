@@ -132,6 +132,20 @@ $ kubectl create -f ingress.yaml
 $ kubectl get ingress -n app-space
 ```
 
+Another way to create the Ingress Resource is by running:
+
+```bash
+# First check the services running in app-space namespace
+$ kubectl get svc -n app-space
+
+# Create the requested Ingress Resource
+$ kubectl create ingress ingress-wear-watch -n app-space --rule="/wear=wear-service:8080" --rule="/watch=video-service:8080"
+
+# Check if deployment was successfull
+$ kubectl get ingress -n app-space
+$ kubectl describe ingress -n app-space
+```
+
 ### 8. Access the application using the Ingress tab on top of your terminal. Make sure you can access the right applications at `/wear` and `/watch` paths.
 
 *Answer:* We test by browsing to the following *URLs*:
