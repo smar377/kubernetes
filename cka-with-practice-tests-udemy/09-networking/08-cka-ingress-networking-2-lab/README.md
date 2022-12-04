@@ -117,7 +117,7 @@ and then manually add the given `nodePort` and `namespace`.
 
 ### 7. Create the Ingress Resource to make the applications available at `/wear` and `/watch` on the Ingress service. Create the ingress in the `app-space` namespace.
 
-*Answer:* We will create a manifest file for this and then create the Ingress Resource:
+*Answer:* We will build a YAML manifest file for this and then create the Ingress Resource:
 
 ```bash
 $ vi ingress.yaml
@@ -132,34 +132,9 @@ $ kubectl create -f ingress.yaml
 $ kubectl get ingress -n app-space
 ```
 
+### 8. Access the application using the Ingress tab on top of your terminal. Make sure you can access the right applications at `/wear` and `/watch` paths.
 
+*Answer:* We test by browsing to the following *URLs*:
 
-### 8. 
-
-*Hint:*
-
-*Answer:*
-
-```bash
-
-```
-
-### 9. 
-
-*Hint:*
-
-*Answer:*
-
-```bash
-
-```
-
-### 10. 
-
-*Hint:*
-
-*Answer:*
-
-```bash
-
-```
+- https://30080-port-375dff9e3f9745e6.labs.kodekloud.com/wear
+- https://30080-port-375dff9e3f9745e6.labs.kodekloud.com/watch
