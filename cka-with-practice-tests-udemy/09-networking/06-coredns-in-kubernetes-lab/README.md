@@ -37,6 +37,7 @@ $ kubectl get svc -n kube-system
 *Answer:* After issuing the following command the config file is located in `/etc/coredns/Corefile`.
 
 ```bash
+$ kubectl describe pod <COREDNS_POD(1|2)_NAME> -n kube-system | grep -A2 Args
 $ kubectl describe deploy coredns -n kube-system | grep -A2 Args | grep -i corefile
 ```
 
