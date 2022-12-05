@@ -4,7 +4,12 @@
 
 *Hint:* Stick to the given architecture. Use the same names and port numbers as given in the below architecture diagram. Feel free to edit, delete or recreate objects as necessary.
 
-*Answer:* Initally we check all Deployment, Service and Pod objects deployed in `alpha` namespace in order to check if naming is correct:
+*Answer:* First we check the error we get:
+
+***`Environment Variables: DB_Host=mysql-service; DB_Database=Not Set; DB_User=root; DB_Password=paswrd; 2003: Can't connect to MySQL server on 'mysql-service:3306' (-2 Name does not resolve)
+From webapp-mysql-ddd686475-7mwcg!`***
+
+Initially we check all Deployment, Service and Pod objects deployed in `alpha` namespace in order to check if naming is correct:
 
 ```bash
 $ kubectl get svc,deploy,pod -n alpha -o wide
