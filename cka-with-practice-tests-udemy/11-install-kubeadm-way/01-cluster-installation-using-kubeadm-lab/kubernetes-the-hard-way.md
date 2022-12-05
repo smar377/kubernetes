@@ -10,3 +10,12 @@ The GIT Repo for this tutorial can be found here:
 
 - https://github.com/mmumshad/kubernetes-the-hard-way
 
+Resources of the `kubeadm` demo presented:
+
+The vagrant file used in the next video is available here:
+
+- https://github.com/kodekloudhub/certified-kubernetes-administrator-course
+
+Here is also the link to the documentation:
+
+- https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/install-kubeadm/
