@@ -1,4 +1,4 @@
-## End to End Section
+## End-to-End CKA Section
 
 As per the CKA exam changes (effective September 2020), End-to-End tests is ***NO*** longer part of the exam and hence it has been removed from the course.
 
