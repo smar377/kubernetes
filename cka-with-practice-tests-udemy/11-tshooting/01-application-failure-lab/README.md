@@ -1,3 +1,9 @@
+***Important:*** In this lab we will work with multiple namespaces, so it is good for our convenience to always set the correct namespace as the default before we start so we do not have to specify the namespace parameter all the time. We do this by issuing:
+
+```bash
+$ kubectl config set-context --current --namespace=<PREFERRED_NAMESPACE_NAME>
+```
+
 ### Troubleshooting Test 1
 
 *Description:* A simple 2 tier application is deployed in the `alpha` namespace. It must display a green web page on success. Click on the `App` tab at the top of your terminal to view your application. It is currently failed. Troubleshoot and fix the issue.
