@@ -1,4 +1,4 @@
-***__Important:__*** In this lab we will work with multiple namespaces, so it is good for our convenience to always set the correct namespace as the default before we start so we do not have to specify the namespace parameter all the time. We do this by issuing:
+***Important:*** In this lab we will work with multiple namespaces, so it is good for our convenience to always set the correct namespace as the default before we start so we do not have to specify the namespace parameter all the time. We do this by issuing:
 
 ```bash
 $ kubectl config set-context --current --namespace=<PREFERRED_NAMESPACE_NAME>
