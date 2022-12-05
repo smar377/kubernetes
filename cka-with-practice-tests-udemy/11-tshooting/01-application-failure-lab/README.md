@@ -19,6 +19,8 @@ $ kubectl delete svc mysql -n alpha
 $ kubectl create -f mysql-service.yaml
 ```
 
+Checking afterwards the `mysql-service` on the browser we see that the issue is now solved.
+
 ### 2. 
 
 *Hint:*
