@@ -87,11 +87,16 @@ $ kubectl create -f mysql-service-gamma.yaml
 
 Last, trying to browse again the `App` it gives us now a reply!
 
-### 4. 
+### Troubleshooting Test 4
 
-*Hint:*
+*Description:* The same 2 tier application is deployed in the `delta` namespace. It must display a green web page on success. Click on the `App` tab at the top of your terminal to view your application. It is currently failed. Troubleshoot and fix the issue.
 
-*Answer:*
+*Hint:* Stick to the given architecture. Use the same names and port numbers as given in the below architecture diagram. Feel free to edit, delete or recreate objects as necessary.
+
+*Answer:* The error we see is:
+
+`Environment Variables: DB_Host=mysql-service; DB_Database=Not Set; DB_User=sql-user; DB_Password=paswrd; 1045 (28000): Access denied for user 'sql-user'@'10.42.0.16' (using password: YES)
+From webapp-mysql-67785889c9-84krh!`
 
 ```bash
 
