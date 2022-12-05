@@ -181,12 +181,79 @@ Finally, we try to browse again the `App` and it gives us now a green page!
 
 ### Troubleshooting Test 6
 
-*Description:*
+*Description:* The same 2 tier application is deployed in the `zeta` namespace. It must display a green web page on success. Click on the `App` tab at the top of your terminal to view your application. It is currently failed. Troubleshoot and fix the issue.
 
-*Hint:*
+*Hint:* Stick to the given architecture. Use the same names and port numbers as given in the below architecture diagram. Feel free to edit, delete or recreate objects as necessary.
 
-*Answer:*
+*Answer:* Checking the error we get it is a ***`502 Bad Gateway`*** one!
+
+Let's get an overiew of all the objects created in `zeta` namespace:
 
 ```bash
-
+$ kubectl get svc,deploy,pod -n zeta -o wide
 `````
+
+Having a first look in the output of above command, it seems that the ports for `web-service` Service is not correctly configured.
+
+Let's look into this:
+
+```bash
+$ kubectl describe svc -n zeta web-service | grep -i nodeport
+```
+
+By running above command we see that `NodePort` is wrongly set to `30088` instead of `30081` as per architectural design. We need to get this fixed.
+
+For this we will edit the service and fix the port:
+
+```bash
+# Fix
+$ kubectl describe svc -n zeta web-service | grep -i nodeport
+
+# Check again
+$ kubectl describe svc -n zeta web-service | grep -i nodeport
+```
+
+Trying to access again the application from the `App` tab we see now a different error:
+
+***`Environment Variables: DB_Host=mysql-service; DB_Database=Not Set; DB_User=sql-user; DB_Password=paswrd; 1045 (28000): Access denied for user 'sql-user'@'10.42.0.23' (using password: YES)
+From webapp-mysql-67785889c9-zbmp7!`***
+
+Let us inspect once more the `env` variables set for Deployment `webapp-mysql`:
+
+```bash
+$ kubectl describe -n zeta deploy webapp-mysql | grep -i -A3 environment
+```
+
+Again we see that one of them, specifically the `DB_Host` is wrongly set to `sql-user` instead of `root`. We will also fix this:
+
+```bash
+# Fix
+$ kubectl edit -n zeta deploy webapp-mysql
+
+# Check again
+$ kubectl describe -n zeta deploy webapp-mysql | grep -i -A3 environment
+```
+
+Trying once more to access the application from the `App` tab we see now another error:
+
+***`Environment Variables: DB_Host=mysql-service; DB_Database=Not Set; DB_User=root; DB_Password=paswrd; 1045 (28000): Access denied for user 'root'@'10.42.0.24' (using password: YES)
+From webapp-mysql-ddd686475-4fsl4!`***
+
+It seems that the error is again related to user access. We will inspect the `env` variables set to the Pod named `mysql`:
+
+```bash
+$ kubectl describe -n zeta pod mysql | grep -i -A1 environment
+```
+
+We see that again the password environmental variable is wrongly set to `passwooooorrddd` instead of `paswrd` according to architectural design. We will fix this as well:
+
+```bash
+# Fix
+$ kubectl edit -n zeta pod mysql
+$ kubectl replace --force -f /tmp/kubectl-edit-3245965610.yaml
+
+# Check again
+$ kubectl describe -n zeta pod mysql | grep -i -A1 environment
+```
+
+Finally, we try to browse again the `App` and it this time it returns a green page to us!
