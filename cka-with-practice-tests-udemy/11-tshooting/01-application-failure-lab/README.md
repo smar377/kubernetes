@@ -132,15 +132,53 @@ Finally, we try to browse again the `App` and it gives us now a green page!
 
 ### Troubleshooting Test 5
 
-*Description:*
+*Description:* The same 2 tier application is deployed in the `epsilon` namespace. It must display a green web page on success. Click on the `App` tab at the top of your terminal to view your application. It is currently failed. Troubleshoot and fix the issue.
 
-*Hint:*
+*Hint:* Stick to the given architecture. Use the same names and port numbers as given in the below architecture diagram. Feel free to edit, delete or recreate objects as necessary.
 
-*Answer:*
+*Answer:* We see the following error:
+
+***`Environment Variables: DB_Host=mysql-service; DB_Database=Not Set; DB_User=sql-user; DB_Password=paswrd; 1045 (28000): Access denied for user 'sql-user'@'10.42.0.19' (using password: YES)
+From webapp-mysql-67785889c9-ql8nh!`***
+
+Let's gather all objects created in `epsilon` namespace:
 
 ```bash
-
+$ kubectl get svc,deploy,pod -n epsilon -o wide
 `````
+
+By inspecting Deployment `webapp-mysql` we see once more that one of the `env` variables has a wrong value. That variable is `DB_Host` which is wrongly set to `sql-user` instead of `root`:
+
+```bash
+$ kubectl describe -n epsilon deploy webapp-mysql | grep -i -A3 environment
+```
+
+so we will fix this by editing the Deployment and changing it to reflect the correct value.
+
+We test again the `App` tab and see again the error but with the correct `DB_Host` value this time:
+
+***`Environment Variables: DB_Host=mysql-service; DB_Database=Not Set; DB_User=root; DB_Password=paswrd; 1045 (28000): Access denied for user 'root'@'10.42.0.20' (using password: YES)
+From webapp-mysql-ddd686475-kl4d9!`***
+
+We will continue by inspecting the description of the Pod `mysql`:
+
+```bash
+$ kubectl describe -n epsilon pod mysql | grep -i -A1 environment
+```
+
+After issuing above command we see that the password used is incorrect and it should be set to `paswrd`. We need to fix that as well.
+We need to edit the Pod and force its recreation:
+
+```bash
+# Pod recreation
+$ kubectl replace --force -f /tmp/kubectl-edit-2815223671.yaml
+
+# Check again if password value seen is now the correct one
+$ kubectl describe -n epsilon pod mysql | grep -i -A1 environment
+```
+
+Finally, we try to browse again the `App` and it gives us now a green page!
+
 ### Troubleshooting Test 6
 
 *Description:*
