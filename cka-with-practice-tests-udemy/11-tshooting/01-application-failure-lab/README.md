@@ -34,7 +34,7 @@ Checking afterwards the `mysql-service` on the browser we see that the issue is 
 
 *Answer:* Let's first inspect the error we get:
 
-`Environment Variables: DB_Host=mysql-service; DB_Database=Not Set; DB_User=root; DB_Password=paswrd; 2003: Can't connect to MySQL server on 'mysql-service:3306' (111 Connection refused)`
+***`Environment Variables: DB_Host=mysql-service; DB_Database=Not Set; DB_User=root; DB_Password=paswrd; 2003: Can't connect to MySQL server on 'mysql-service:3306' (111 Connection refused)`***
 
 As a first thought, it seems to be a network issue. Let's investigate. First we gather all objects created in `beta` namespace:
 
@@ -100,14 +100,39 @@ Last, trying to browse again the `App` it gives us now a reply!
 
 *Answer:* The error we see is:
 
-`Environment Variables: DB_Host=mysql-service; DB_Database=Not Set; DB_User=sql-user; DB_Password=paswrd; 1045 (28000): Access denied for user 'sql-user'@'10.42.0.16' (using password: YES)
-From webapp-mysql-67785889c9-84krh!`
+***`Environment Variables: DB_Host=mysql-service; DB_Database=Not Set; DB_User=sql-user; DB_Password=paswrd; 1045 (28000): Access denied for user 'sql-user'@'10.42.0.16' (using password: YES)
+From webapp-mysql-67785889c9-84krh!`***
+
+The error points out potentially to some `env` variables that have been added to our Deployment.
+Let's first gather all objects created in the `delta` namespace:
 
 ```bash
-
+$ kubectl get svc,deploy,pod -n delta -o wide
 `````
 
-### 5. 
+Let us now see the `env` variables that used by our Deployment:
+
+```bash
+$ kubectl describe -n delta deploy webapp-mysql | grep -i -A3 environment
+```
+
+We see that `DB_User` one is set to `sql-user` while, according to the architectural diagram should be set to `root`. We need to edit the Deployment `webapp-mysql` and fix that:
+
+```bash
+$ kubectl edit deploy -n delta webapp-mysql
+```
+
+Next we watch till the new Pod with the corrected `env` variables gets created again:
+
+```bash
+$ kubectl get pod -n delta -o wide --watch
+```
+
+Finally, we try to browse again the `App` and it gives us now a green page!
+
+### Troubleshooting Test 5
+
+*Description:*
 
 *Hint:*
 
@@ -116,18 +141,9 @@ From webapp-mysql-67785889c9-84krh!`
 ```bash
 
 `````
+### Troubleshooting Test 6
 
-### 6. 
-
-*Hint:*
-
-*Answer:*
-
-```bash
-
-`````
-
-### 7. 
+*Description:*
 
 *Hint:*
 
@@ -136,42 +152,3 @@ From webapp-mysql-67785889c9-84krh!`
 ```bash
 
 `````
-
-### 8. 
-
-*Hint:*
-
-*Answer:*
-
-```bash
-
-`````
-
-### 9. 
-
-*Hint:*
-
-*Answer:*
-
-```bash
-
-`````
-
-### 10. 
-
-*Hint:*
-
-*Answer:*
-
-```bash
-
-`````````
-````
-````
-````
-````
-````
-````
-````
-````
-````
