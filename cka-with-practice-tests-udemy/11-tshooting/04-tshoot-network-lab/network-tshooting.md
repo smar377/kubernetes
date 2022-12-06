@@ -1,0 +1,115 @@
+## Network Troubleshooting
+
+### Network plugin in Kubernetes
+
+Kubernetes uses CNI plugins to setup network. The `kubelet` is responsible for executing plugins as we mention the following parameters in `kubelet` configuration.
+
+- `cni-bin-dir`: Kubelet probes this directory for plugins on startup
+- `network-plugin`: The network plugin to use from `cni-bin-dir`. It must match the name reported by a plugin probed from the plugin directory.
+
+There are several plugins available and these are some:
+
+#### 1. Weave Net
+
+Installation:
+
+```bash
+$ kubectl apply -f https://github.com/weaveworks/weave/releases/download/v2.8.1/weave-daemonset-k8s.yaml
+```
+
+You can find details about the network plugins in the following documentation:
+
+- https://kubernetes.io/docs/concepts/cluster-administration/addons/#networking-and-network-policy
+
+#### 2. Flannel
+
+Installation:
+
+```bash
+$ kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/2140ac876ef134e0ed5af15c65e414cf26827915/Documentation/kube-flannel.yml
+```
+
+***Note:** As of now flannel does not support kubernetes network policies.*
+
+#### 3. Calico
+
+Installation:
+
+```bash
+$ curl https://docs.projectcalico.org/manifests/calico.yaml -O
+```
+
+Apply the manifest using the following command:
+
+```bash
+$ kubectl apply -f calico.yaml
+```
+
+Calico is said to be the most advanced CNI network plugin.
+
+In CKA and CKAD exam, you won't be asked to install the CNI plugin. But if asked you will be provided with the exact URL to install it.
+
+***Note:** If there are multiple CNI configuration files in the directory, the `kubelet` uses the configuration file that comes first by name in lexicographic order.*
+
+## DNS in Kubernetes
+
+*Kubernetes uses **CoreDNS**. CoreDNS is a flexible, extensible DNS server that can serve as the Kubernetes cluster DNS.*
+
+### Memory and Pods
+
+In large scale Kubernetes clusters, CoreDNS's memory usage is predominantly affected by the number of Pods and Services in the cluster. Other factors include the size of the filled DNS answer cache, and the rate of queries received (QPS) per CoreDNS instance.
+
+Kubernetes resources for **coreDNS** are:
+
+1. a service account named **coredns**,
+2. cluster-roles named **coredns** and **kube-dns**
+3. clusterrolebindings named **coredns** and **kube-dns**, 
+4. a deployment named **coredns**,
+5. a configmap named **coredns** and a
+6. service named **kube-dns**.
+
+While analyzing the coreDNS deployment you can see that the the **Corefile plugin** consists of important configuration which is defined as a **configmap**.
+
+Port 53 is used for for DNS resolution.
+
+```bash
+kubernetes cluster.local in-addr.arpa ip6.arpa {
+      pods insecure
+      fallthrough in-addr.arpa ip6.arpa
+      ttl 30
+}
+```
+
+This is the backend to k8s for *cluster.local and reverse domains*.
+
+
+```bash
+proxy . /etc/resolv.conf
+```
+
+Forward out of cluster domains directly to right authoritative DNS server.
+
+### Troubleshooting issues related to coreDNS
+
+1. If you find **CoreDNS** Pods in pending state first check network plugin is installed.
+
+2. coredns Pods are in `CrashLoopBackOff` or `Error` state:
+
+If you have nodes that are running SELinux with an older version of Docker you might experience a scenario where the coredns pods are not starting. To solve that you can try one of the following options:
+
+  - a) Upgrade to a newer version of Docker
+  - b) Disable SELinux
+  - c) Modify the coredns deployment to set allowPrivilegeEscalation to true:
+
+```bash
+kubectl -n kube-system get deployment coredns -o yaml | \
+  sed 's/allowPrivilegeEscalation: false/allowPrivilegeEscalation: true/g' | \
+  kubectl apply -f -
+```
+  - d) Another cause for **CoreDNS** to be in `CrashLoopBackOff` is when a **CoreDNS** Pod deployed in Kubernetes detects a loop. There are many ways to work around this issue, some are listed here:
+  
+    -  Add the following to your kubelet config yaml: resolvConf: <path-to-your-real-resolv-conf-file> This flag tells kubelet to pass an alternate resolv.conf to Pods. For systems using systemd-resolved, /run/systemd/resolve/resolv.conf is typically the location of the "real" resolv.conf, although this can be different depending on your distribution.
+    - Disable the local DNS cache on host nodes, and restore /etc/resolv.conf to the original.
+    - A quick fix is to edit your Corefile, replacing forward . /etc/resolv.conf with the IP address of your upstream DNS, for example forward . 8.8.8.8. But this only fixes the issue for CoreDNS, kubelet will continue to forward the invalid resolv.conf to all default dnsPolicy Pods, leaving them unable to resolve DNS.
+
+
