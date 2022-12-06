@@ -92,14 +92,8 @@ clusters:
 Last, we need to restart the `kubelet` service for the change to take effect. Then we check again the statuses of the nodes to see if the problem is now solved:
 
 ```bash
+$ ssh node01
 $ service kubelet restart && service kubelet status
+$ exit
 $ kubectl get nodes -o wide
 ```
-#
-*Answer:*
-
-```bash
-
-`````
-
-
