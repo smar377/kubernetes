@@ -16,7 +16,6 @@ We check the statuses of all objects created in the `triton` namespace and we se
 
 ```bash
 $ kubectl get deploy,svc,pod
-$ 
 ```
 
 After checking also the descriptions of the Pods we can more details on the errrors:
