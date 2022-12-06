@@ -108,8 +108,64 @@ kubectl -n kube-system get deployment coredns -o yaml | \
 ```
   - d) Another cause for **CoreDNS** to be in `CrashLoopBackOff` is when a **CoreDNS** Pod deployed in Kubernetes detects a loop. There are many ways to work around this issue, some are listed here:
   
-    -  Add the following to your kubelet config yaml: resolvConf: <path-to-your-real-resolv-conf-file> This flag tells kubelet to pass an alternate resolv.conf to Pods. For systems using systemd-resolved, /run/systemd/resolve/resolv.conf is typically the location of the "real" resolv.conf, although this can be different depending on your distribution.
-    - Disable the local DNS cache on host nodes, and restore /etc/resolv.conf to the original.
-    - A quick fix is to edit your Corefile, replacing forward . /etc/resolv.conf with the IP address of your upstream DNS, for example forward . 8.8.8.8. But this only fixes the issue for CoreDNS, kubelet will continue to forward the invalid resolv.conf to all default dnsPolicy Pods, leaving them unable to resolve DNS.
+    -  Add the following to your `kubelet` YAML config file: `resolvConf: <path-to-your-real-resolv-conf-file>`. This flag tells `kubelet` to pass an alternate `resolv.conf` to Pods. For systems using `systemd-resolved`, `/run/systemd/resolve/resolv.conf` is typically the location of the **"real" resolv.conf**, although this can be different depending on your distribution.
+    - Disable the local DNS cache on host nodes, and restore `/etc/resolv.conf` to the original.
+    - A quick fix is to edit your **Corefile**, replacing `forward . /etc/resolv.conf` with the IP address of your upstream DNS, for example `forward . 8.8.8.8`. But this only fixes the issue for **CoreDNS**, `kubelet` will continue to forward the invalid `resolv.conf` to all default `dnsPolicy` Pods, leaving them unable to resolve DNS.
 
+3. If **CoreDNS** Pods and the `kube-dns` service is working fine, check if the `kube-dns` service has valid endpoints:
 
+```bash
+$ kubectl -n kube-system get ep kube-dns
+```
+If there are no endpoints for the service, inspect the service and make sure it uses the correct selectors and ports.
+
+## Kube-Proxy
+
+Proxy `kube-proxy` is a network proxy that runs on each node in the cluster. It maintains network rules on nodes. These network rules allow network communication to the Pods from network sessions inside or outside of the cluster.
+
+In a cluster configured with `kubeadm`, you can find `kube-proxy` as a `daemonset`.
+
+`kube-proxy` is responsible for watching services and endpoint associated with each service. When the client is going to connect to the service using the virtual IP the `kube-proxy` is responsible for sending traffic to actual Pods.
+
+If you run:
+
+```bash
+kubectl describe ds kube-proxy -n kube-system
+```
+
+you can see that the `kube-proxy` binary runs with following command inside the `kube-proxy` container.
+
+```bash
+Command:
+      /usr/local/bin/kube-proxy
+      --config=/var/lib/kube-proxy/config.conf
+      --hostname-override=$(NODE_NAME)
+```
+
+So it fetches the configuration from a configuration file i.e., `/var/lib/kube-proxy/config.conf` and we can override the hostname with the node name of at which the Pod is running.
+
+In the config file we define the `clusterCIDR`, `kubeproxy` mode, `ipvs`, `iptables`, `bindaddress`, `kube-config` etc.
+
+### Troubleshooting issues related to kube-proxy
+
+1. Check `kube-proxy` Pod in the `kube-system` namespace is running.
+2. Check `kube-proxy` logs.
+3. Check `configmap` is correctly defined and the config file for running `kube-proxy` binary is correct.
+4. `kube-config` is defined in the ConfigMap.
+5. Check `kube-proxy` is running inside the container:
+
+```bash
+# netstat -plan | grep kube-proxy
+tcp        0      0 0.0.0.0:30081           0.0.0.0:*               LISTEN      1/kube-proxy
+tcp        0      0 127.0.0.1:10249         0.0.0.0:*               LISTEN      1/kube-proxy
+tcp        0      0 172.17.0.12:33706       172.17.0.12:6443        ESTABLISHED 1/kube-proxy
+tcp6       0      0 :::10256                :::*                    LISTEN      1/kube-proxy
+```
+
+***References:***
+
+*Debug Service issues:*
+- https://kubernetes.io/docs/tasks/debug-application-cluster/debug-service/
+
+*DNS Troubleshooting:*
+- https://kubernetes.io/docs/tasks/administer-cluster/dns-debugging-resolution/
