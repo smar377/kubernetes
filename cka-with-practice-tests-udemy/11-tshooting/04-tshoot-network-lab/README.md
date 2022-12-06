@@ -58,15 +58,60 @@ $ kubectl get deploy,svc,pod
 
 Finally we see that when now we browse to `App` tab we get a green page!
 
-### 2. 
+### 2. Troubleshooting Test 2
 
-*Hint:*
+*Description:* The same 2 tier application is having issues again. It must display a green web page on success. Click on the `App` tab at the top of your terminal to view your application. It is currently failed. Troubleshoot and fix the issue.
 
-*Answer:*
+*Hint:* Stick to the given architecture. Use the same names and port numbers as given in the below architecture diagram. Feel free to edit, delete or recreate objects as necessary.
+
+*Answer:* There seems to be an issue with the Service Proxy. We need to inspect and fix the `kube-proxy daemonset`. We see that the `kube-proxy` Pods are **NOT** running. As a result the rules needed to allow connectivity to the services have **NOT** been created. Check also the `kube-proxy` Pod logs.
 
 ```bash
-
+$ kubectl get pod,ds -n kube-system
+$ kubectl -n kube-system logs kube-proxy-zcd7g
+F1206 12:16:43.509914       1 server.go:490] failed complete: open /var/lib/kube-proxy/configuration.conf: no such file or directory
 `````
+
+The configuration file `/var/lib/kube-proxy/configuration.conf` is **NOT** valid. The configuration path does not match the data in the ConfigMap. 
+
+```bash
+$ kubectl -n kube-system describe configmap kube-proxy
+```
+
+shows that the file name used is `config.conf` which is mounted in the `kube-proxy` DaemonSet Pods lies in path `/var/lib/kube-proxy/config.conf`.
+
+However in the DaemonSet for `kube-proxy`, the command used to start the `kube-proxy` Pod makes use of the path `/var/lib/kube-proxy/configuration.conf`.
+
+We need to correct this path to `/var/lib/kube-proxy/config.conf` as per ConfigMap and recreate the `kube-proxy` Pods.
+
+Here is the snippet of the command to be run by the `kube-proxy` Pods:
+
+```bash
+spec:
+      containers:
+      - command:
+        - /usr/local/bin/kube-proxy
+        - --config=/var/lib/kube-proxy/config.conf
+        - --hostname-override=$(NODE_NAME)
+```
+
+We deploy the fix by editing the DaemonSet for the `kube-proxy` Pods:
+
+```bash
+$ kubectl -n kube-system edit ds kube-proxy
+```
+
+This will get the kube-proxy pods back in a running state.
+
+Verification and testing:
+
+
+```bash
+$ kubectl get pod,ds -n kube-system
+$ kubectl -n kube-system logs kube-proxy-rgp2m
+$ kubectl describe svc mysql | grep -i endpoint
+$ kubectl describe svc web-service | grep -i endpoint
+```
 
 ### 3. 
 
