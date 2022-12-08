@@ -147,9 +147,6 @@ $ kubectl get pods,deploy -o wide
 
 ### 2. Print the names of all Deployments in the `admin2406` namespace in the following format
 
-DEPLOYMENT        CONTAINER_IMAGE         READY_REPLICAS         NAMESPACE
-<deployment name> <container image used>  <ready replica count>  <Namespace>
-
 | DEPLOYMENT  | CONTAINER_IMAGE | READY_REPLICAS | NAMESPACE |
 | ------------- | ------------- | ------------- | ------------- |
 | *deployment name*  | *container image used*  | *ready replica count* | *namespace* |
