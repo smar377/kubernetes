@@ -150,7 +150,7 @@ $ kubectl get pods,deploy -o wide
 DEPLOYMENT        CONTAINER_IMAGE         READY_REPLICAS         NAMESPACE
 <deployment name> <container image used>  <ready replica count>  <Namespace>
 
-The data should be sorted by the increasing order of the deployment name.
+The data should be sorted by the increasing order of the Deployment name.
 
 ***Example:***
 DEPLOYMENT  CONTAINER_IMAGE   READY_REPLICAS  NAMESPACE
