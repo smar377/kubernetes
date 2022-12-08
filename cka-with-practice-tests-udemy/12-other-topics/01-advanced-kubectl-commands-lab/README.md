@@ -1,19 +1,17 @@
 ### 1. Get the list of nodes in JSON format and store it in a file at `/opt/outputs/nodes.json`
 
-*Answer:*
+*Answer:* We need to use the following command:
 
 ```bash
-$ 
+$ kubectl get nodes -o json > /opt/outputs/nodes.json
 `````
 
-### 2. 
+### 2. Get the details of the node `node01` in JSON format and store it in file `/opt/outputs/node01.json`
 
-*Hint:*
-
-*Answer:*
+*Answer:* Below command should be used:
 
 ```bash
-
+$ kubectl get nodes node01 -o json > /opt/outputs/node01.json
 `````
 
 ### 3. 
