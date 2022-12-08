@@ -158,10 +158,10 @@ deploy0     nginx:alpine      1               admin2406
   
 Write the result to the file `/opt/admin2406_data`.
 
-*Answer:*
+*Answer:* We should use the following command:
 
 ```bash
-
+$ kubectl get deploy -n admin2406 --sort-by=.metadata.name -o=custom-columns=DEPLOYMENT:.metadata.name,CONTAINER_IMAGE:.spec.template.spec.containers[*].image,READY_REPLICAS:.status.readyReplicas,NAMESPACE:.metadata.namespace > /opt/admin2406_data
 ```
 
 ### 3. A `kubeconfig` file called `admin.kubeconfig` has been created in `/root/CKA`. There is something wrong with the configuration. Troubleshoot and fix it
