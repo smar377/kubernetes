@@ -145,9 +145,18 @@ $ kubectl get node -o wide
 $ kubectl get pods,deploy -o wide
 ```
 
-### 2. 
+### 2. Print the names of all Deployments in the `admin2406` namespace in the following format
 
-*Hint:*
+DEPLOYMENT        CONTAINER_IMAGE         READY_REPLICAS         NAMESPACE
+<deployment name> <container image used>  <ready replica count>  <Namespace>
+
+The data should be sorted by the increasing order of the deployment name.
+
+***Example:***
+DEPLOYMENT  CONTAINER_IMAGE   READY_REPLICAS  NAMESPACE
+deploy0     nginx:alpine      1               admin2406
+  
+Write the result to the file `/opt/admin2406_data`.
 
 *Answer:*
 
