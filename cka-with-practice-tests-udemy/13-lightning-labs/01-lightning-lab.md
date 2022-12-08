@@ -172,23 +172,25 @@ $ kubectl get deploy -n admin2406 --sort-by=.metadata.name -o=custom-columns=DEP
 
 ### 3. A `kubeconfig` file called `admin.kubeconfig` has been created in `/root/CKA`. There is something wrong with the configuration. Troubleshoot and fix it
 
-*Hint:*
-
-*Answer:*
+*Answer:* We noticed that port configured for the Kube API server is wrongly set to `4380`. We need to edit and change that to default `6443`:
 
 ```bash
-
+$ kubectl config view --kubeconfig /root/CKA/admin.kubeconfig
+$ vi /root/CKA/admin.kubeconfig
 ```
 
 ### 4. Create a new Deployment called `nginx-deploy`, with image `nginx:1.16` and `1 replica`. Next upgrade the Deployment to `version 1.17` using rolling update
 
-*Hint:*
-
-*Answer:*
+*Answer:* We first create the requested Deployment via the imperative way as follows:
 
 ```bash
+# Creation
+$ kubectl create deployment nginx-deploy --image=nginx:1.16 --replicas=1
 
+# Verification  
+$ kubectl get deploy -n default -o wide  
 ```
+
 
 ### 5. A new Deployment called `alpha-mysql` has been deployed in the `alpha` namespace. However, the Pods are not running. Troubleshoot and fix the issue. The Deployment should make use of the persistentVolume `alpha-pv` to be mounted at `/var/lib/mysql` and should use the environment variable `MYSQL_ALLOW_EMPTY_PASSWORD=1` to make use of an empty root password
 
