@@ -2,6 +2,8 @@
 
 *Hint:* Upgrade `controlplane` node first and drain node `node01` before upgrading it. Pods for `gold-nginx` should run on the `controlplane` node subsequently.
 
+#### Upgrading control plane node(s)
+
 **STEP 1:** Determine which version to upgrade to (in our case we need `version 1.24.0-00`)
 
 ```bash
@@ -47,7 +49,62 @@ Your Container Network Interface (CNI) provider may have its own upgrade instruc
 
 This step is not required on additional control plane nodes if the CNI provider runs as a DaemonSet.
 
-**STEP 3:** Drain worker node `node01`
+**STEP 3:** Drain control plane node `controlplane`
+
+- Prepare the node for maintenance by marking it unschedulable and evicting the workloads:
+
+```bash
+$ kubectl drain controlplane --ignore-daemonsets
+```
+
+**STEP 4:** Upgrade `kubelet` and `kubectl`
+
+- Upgrade the `kubelet` and `kubectl`:
+
+```bash
+$ ssh controlplane
+$ apt-mark unhold kubelet kubectl && \
+$ apt-get update && apt-get install -y kubelet=1.24.0-00 kubectl=1.24.0-00 && \
+$ apt-mark hold kubelet kubectl
+```
+
+- Restart the `kubelet`:
+
+```bash
+$ sudo systemctl daemon-reload
+$ sudo systemctl restart kubelet
+```
+
+**STEP 5:** Uncordon the `controlplane` node
+
+- Bring the node back online by marking it schedulable:
+
+```bash
+$ kubectl uncordon controlplane
+```
+
+#### Upgrading worker node(s)
+
+**STEP 1:** Upgrade kubeadm
+
+- Upgrade kubeadm:
+
+```bash
+$ ssh node01
+$ apt-mark unhold kubeadm && \
+$ apt-get update && apt-get install -y kubeadm=1.24.0-00 && \
+$ apt-mark hold kubeadm
+```
+
+**STEP 2:** Call "kubeadm upgrade"
+
+- For worker nodes this upgrades the local kubelet configuration:
+
+```bash
+$ sudo kubeadm upgrade node
+```
+
+**STEP 3:** Drain the node
 
 - Prepare the node for maintenance by marking it unschedulable and evicting the workloads:
 
@@ -73,13 +130,20 @@ $ sudo systemctl daemon-reload
 $ sudo systemctl restart kubelet
 ```
 
-**STEP 5:** 
+**STEP 5:** Uncordon the worker node `node01`
 
+- Bring the node back online by marking it schedulable:
 
 ```bash
-
+$ kubectl uncordon controlplane
 ```
 
+Last, let's verify the status of the cluster and the fact that Pods of `gold-nginx` Deployment is running on `controlplane` node:
+
+```bash
+$ kubectl get node -o wide
+$ kubectl get pods,deploy -o wide
+```
 
 ### 2. 
 
