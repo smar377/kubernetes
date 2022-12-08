@@ -155,7 +155,7 @@ $ kubectl get pods,deploy -o wide
 
 ```
 
-### 3. 
+### 3. A `kubeconfig` file called `admin.kubeconfig` has been created in `/root/CKA`. There is something wrong with the configuration. Troubleshoot and fix it
 
 *Hint:*
 
@@ -165,7 +165,7 @@ $ kubectl get pods,deploy -o wide
 
 ```
 
-### 4. 
+### 4. Create a new Deployment called `nginx-deploy`, with image `nginx:1.16` and `1 replica`. Next upgrade the Deployment to `version 1.17` using rolling update
 
 *Hint:*
 
@@ -175,7 +175,17 @@ $ kubectl get pods,deploy -o wide
 
 ```
 
-### 5. 
+### 5. A new Deployment called `alpha-mysql` has been deployed in the `alpha` namespace. However, the Pods are not running. Troubleshoot and fix the issue. The Deployment should make use of the persistentVolume `alpha-pv` to be mounted at `/var/lib/mysql` and should use the environment variable `MYSQL_ALLOW_EMPTY_PASSWORD=1` to make use of an empty root password
+
+***Important:*** Do not alter the persistent volume.
+
+*Answer:*
+
+```bash
+
+```
+
+### 6. Take the backup of ETCD at the location `/opt/etcd-backup.db` on the `controlplane` node
 
 *Hint:*
 
@@ -185,47 +195,9 @@ $ kubectl get pods,deploy -o wide
 
 ```
 
-### 6. 
+### 7. Create a Pod called `secret-1401` in the `admin1401` namespace using the `busybox` image. The container within the Pod should be called `secret-admin` and should sleep for `4800` seconds
 
-*Hint:*
-
-*Answer:*
-
-```bash
-
-```
-
-### 7. 
-
-*Hint:*
-
-*Answer:*
-
-```bash
-
-```
-
-### 8. 
-
-*Hint:*
-
-*Answer:*
-
-```bash
-
-```
-
-### 9. 
-
-*Hint:*
-
-*Answer:*
-
-```bash
-
-```
-
-### 10. 
+The container should mount a `read-only` secret volume called `secret-volume` at the path `/etc/secret-volume`. The secret being mounted has already been created for you and is called `dotfile-secret`.
 
 *Hint:*
 
