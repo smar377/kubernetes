@@ -152,7 +152,7 @@ DEPLOYMENT        CONTAINER_IMAGE         READY_REPLICAS         NAMESPACE
 
 | DEPLOYMENT  | CONTAINER_IMAGE | READY_REPLICAS | NAMESPACE |
 | ------------- | ------------- | ------------- | ------------- |
-| <deployment name>  | <container image used>  | <ready replica count> | <Namespace> |
+| *deployment name*  | *container image used*  | *ready replica count* | *namespace* |
 
 The data should be sorted by the increasing order of the Deployment name.
 
