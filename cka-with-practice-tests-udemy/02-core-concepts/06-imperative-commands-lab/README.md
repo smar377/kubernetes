@@ -43,25 +43,27 @@ spec:
 Then run the command:
 
 ```bash
-$ kubectl create -f redis-pod.yaml` to create the pod from the definition file`
+$ kubectl create -f redis-pod.yaml
 ```
+
+to create the pod from the definition file.
 
 ### 3. Create a Service `redis-service` to expose the redis application within the cluster on `port 6379` (only imperative commands are allowed)
 
 ```bash
-$ kubectl expose pod redis --port=6379 --name redis-service`
+$ kubectl expose pod redis --port=6379 --name redis-service
 ```
 
 ### 4. Create a Deployment named `webapp` using the image `kodekloud/webapp-color` with 3 replicas (only imperative commands are allowed)
 
 ```bash
-$ kubectl create deployment webapp --image=kodekloud/webapp-color --replicas=3`
+$ kubectl create deployment webapp --image=kodekloud/webapp-color --replicas=3
 ```
 
 ### 5. Create a new Pod called `custom-nginx` using the `nginx` image and expose it on container `port 8080`
 
 ```bash
-$ kubectl run custom-nginx --image=nginx --port=8080`
+$ kubectl run custom-nginx --image=nginx --port=8080
 ```
 
 ### 6. Create a new Namespace called `dev-ns` (only imperative commands are allowed)
