@@ -148,7 +148,7 @@ $ kubectl describe pod gold-nginx-7cf65dbf6d-g9xdx
 
 Paradoxically, once we drain the `node01` in order to prepare it for maintenance, we see that the Pod hosted there of the `gold-nginx` Deployment is not being moved to `controlplane`. After doing some investigation, we noticed that `controlplane` has a Taint of `NoSchedule` configured that wasn't permitting the Pod to be created there leaving it in a `Pending` state. 
 
-We solved that by removing that Taint and then by checking again:
+We solve this by removing that Taint and then we check again:
 
 ```bash
 # Check if controlplane has any Taints
@@ -185,7 +185,7 @@ $ kubectl get deploy -n admin2406 --sort-by=.metadata.name -o=custom-columns=DEP
 
 ### 3. A `kubeconfig` file called `admin.kubeconfig` has been created in `/root/CKA`. There is something wrong with the configuration. Troubleshoot and fix it
 
-*Answer:* We noticed that port configured for the Kube API server is wrongly set to `4380`. We need to edit and change that to default `6443`:
+*Answer:* We noticed that the port configured for the Kube API server is wrongly set to `4380`. We need to edit the given `kube-config` file and correct it to (default) `6443`:
 
 ```bash
 $ kubectl config view --kubeconfig /root/CKA/admin.kubeconfig
@@ -194,7 +194,7 @@ $ vi /root/CKA/admin.kubeconfig
 
 ### 4. Create a new Deployment called `nginx-deploy`, with image `nginx:1.16` and `1 replica`. Next upgrade the Deployment to `version 1.17` using rolling update
 
-*Answer:* We first create the requested Deployment via the imperative way as follows:
+*Answer:* We first create the requested Deployment via the *imperative* way as follows:
 
 ```bash
 # Creation
@@ -204,6 +204,11 @@ $ kubectl create deployment nginx-deploy --image=nginx:1.16 --replicas=1
 $ kubectl get deploy -n default -o wide  
 ```
 
+Next, in order to upgrade the Deployment to `version 1.17` using RollingUpdate we use:
+
+```bash
+$ kubectl set image deploy nginx-deploy nginx=nginx:1.17
+```
 
 ### 5. A new Deployment called `alpha-mysql` has been deployed in the `alpha` namespace. However, the Pods are not running. Troubleshoot and fix the issue. The Deployment should make use of the persistentVolume `alpha-pv` to be mounted at `/var/lib/mysql` and should use the environment variable `MYSQL_ALLOW_EMPTY_PASSWORD=1` to make use of an empty root password
 
