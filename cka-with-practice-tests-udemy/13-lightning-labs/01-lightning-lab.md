@@ -143,6 +143,22 @@ Last, let's verify the status of the cluster and the fact that Pods of `gold-ngi
 ```bash
 $ kubectl get node -o wide
 $ kubectl get pods,deploy -o wide
+$ kubectl describe pod gold-nginx-7cf65dbf6d-g9xdx
+```
+
+Paradoxically, once we drain the `node01` in order to prepare it for maintenance, we see that the Pod hosted there of the `gold-nginx` Deployment is not being moved to `controlplane`. After doing some investigation, we noticed that `controlplane` has a Taint of `NoSchedule` configured that wasn't permitting the Pod to be created there leaving it in a `Pending` state. 
+
+We solved that by removing that Taint and then by checking again:
+
+```bash
+# Check if controlplane has any Taints
+$ kubectl describe nodes controlplane | grep -i taints
+
+# Untaint controlplane node
+$ kubectl taint node controlplane node-role.kubernetes.io/control-plane:NoSchedule-
+
+# Check again
+$ kubectl get pods,deploy -o wide
 ```
 
 ### 2. Print the names of all Deployments in the `admin2406` namespace in the following format
