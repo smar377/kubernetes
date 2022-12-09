@@ -135,7 +135,7 @@ $ sudo systemctl restart kubelet
 - Bring the node back online by marking it schedulable:
 
 ```bash
-$ kubectl uncordon controlplane
+$ kubectl uncordon node01
 ```
 
 Last, let's verify the status of the cluster and the fact that Pods of `gold-nginx` Deployment is running on `controlplane` node:
@@ -146,7 +146,7 @@ $ kubectl get pods,deploy -o wide
 $ kubectl describe pod gold-nginx-7cf65dbf6d-g9xdx
 ```
 
-Paradoxically, once we drain the `node01` in order to prepare it for maintenance, we see that the Pod hosted there of the `gold-nginx` Deployment is not being moved to `controlplane`. After doing some investigation, we noticed that `controlplane` has a Taint of `NoSchedule` configured that wasn't permitting the Pod to be created there leaving it in a `Pending` state. 
+Paradoxically, once we drain the `node01`, in order to prepare it for maintenance, we see that the Pod hosted there of the `gold-nginx` Deployment is not being moved to `controlplane`. After doing some investigation, we noticed that `controlplane` has a Taint of `NoSchedule` configured that wasn't permitting the Pod to be created there leaving it in a `Pending` state. 
 
 We solve this by removing that Taint and then we check again:
 
@@ -188,7 +188,7 @@ $ kubectl get deploy -n admin2406 --sort-by=.metadata.name -o=custom-columns=DEP
 *Answer:* We noticed that the port configured for the Kube API server is wrongly set to `4380`. We need to edit the given `kube-config` file and correct it to (default) `6443`:
 
 ```bash
-$ kubectl config view --kubeconfig /root/CKA/admin.kubeconfig
+$ kubectl config view --kubeconfig /root/CKA/admin.kubeconfig | grep server
 $ vi /root/CKA/admin.kubeconfig
 ```
 
