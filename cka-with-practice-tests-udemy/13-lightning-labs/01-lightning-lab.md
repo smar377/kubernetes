@@ -204,11 +204,15 @@ $ kubectl create deployment nginx-deploy --image=nginx:1.16 --replicas=1
 $ kubectl get deploy -n default -o wide  
 ```
 
-Next, in order to upgrade the Deployment to `version 1.17` using RollingUpdate we use:
+Next, in order to upgrade the Deployment to `version 1.17` using `RollingUpdate`:
 
 ```bash
+$ kubectl describe deploy nginx-deploy | grep -i strategy
 $ kubectl set image deploy nginx-deploy nginx=nginx:1.17
 ```
+
+The strategy used is `RollingUpdate` (default) so all we need to do is to set the image of the Deployment to `version 1.17` and that is all.
+Another way to do this is by editing the Deployment.
 
 ### 5. A new Deployment called `alpha-mysql` has been deployed in the `alpha` namespace. However, the Pods are not running. Troubleshoot and fix the issue. The Deployment should make use of the persistentVolume `alpha-pv` to be mounted at `/var/lib/mysql` and should use the environment variable `MYSQL_ALLOW_EMPTY_PASSWORD=1` to make use of an empty root password
 
