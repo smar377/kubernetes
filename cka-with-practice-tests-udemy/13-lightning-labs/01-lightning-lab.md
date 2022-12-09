@@ -18,8 +18,8 @@ $ apt-cache madison kubeadm
 - Upgrade `kubeadm`:
 
 ```bash
-$ apt-mark unhold kubeadm && \
-$ apt-get update && apt-get install -y kubeadm=1.24.0-00 && \
+$ apt-mark unhold kubeadm &&
+$ apt-get update && apt-get install -y kubeadm=1.24.0-00 &&
 $ apt-mark hold kubeadm
 ```
 
@@ -63,8 +63,8 @@ $ kubectl drain controlplane --ignore-daemonsets
 
 ```bash
 $ ssh controlplane
-$ apt-mark unhold kubelet kubectl && \
-$ apt-get update && apt-get install -y kubelet=1.24.0-00 kubectl=1.24.0-00 && \
+$ apt-mark unhold kubelet kubectl &&
+$ apt-get update && apt-get install -y kubelet=1.24.0-00 kubectl=1.24.0-00 &&
 $ apt-mark hold kubelet kubectl
 ```
 
@@ -91,8 +91,8 @@ $ kubectl uncordon controlplane
 
 ```bash
 $ ssh node01
-$ apt-mark unhold kubeadm && \
-$ apt-get update && apt-get install -y kubeadm=1.24.0-00 && \
+$ apt-mark unhold kubeadm &&
+$ apt-get update && apt-get install -y kubeadm=1.24.0-00 &&
 $ apt-mark hold kubeadm
 ```
 
@@ -118,8 +118,8 @@ $ kubectl drain node01 --ignore-daemonsets
 
 ```bash
 $ ssh node01
-$ apt-mark unhold kubelet kubectl && \
-$ apt-get update && apt-get install -y kubelet=1.24.0-00 kubectl=1.24.0-00 && \
+$ apt-mark unhold kubelet kubectl &&
+$ apt-get update && apt-get install -y kubelet=1.24.0-00 kubectl=1.24.0-00 &&
 $ apt-mark hold kubelet kubectl
 ```
 
