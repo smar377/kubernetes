@@ -218,30 +218,103 @@ Another way to do this is by editing the Deployment.
 
 ***Important:*** Do not alter the persistent volume.
 
-*Answer:*
+*Answer:* First of all, we get an overview of all Kubernetes objects created in `alpha` namespace:
 
 ```bash
-
+$ kubectl get pod,deploy,pv,pvc,sc -n alpha
 ```
+
+Next, let's check the error message in the Pod description:
+
+```bash
+$ kubectl describe pod alpha-mysql-56bdcdf8f7-hclgx -n alpha
+```
+
+***ERROR_1:`2 persistentvolumeclaim "mysql-alpha-pvc" not found`***
 
 ### 6. Take the backup of ETCD at the location `/opt/etcd-backup.db` on the `controlplane` node
 
-*Hint:*
-
-*Answer:*
+*Answer:* We need to issue the following command:
 
 ```bash
-
+ETCDCTL_API=3 etcdctl --endpoints=https://[127.0.0.1]:2379 \
+--cacert=/etc/kubernetes/pki/etcd/ca.crt \
+--cert=/etc/kubernetes/pki/etcd/server.crt \
+--key=/etc/kubernetes/pki/etcd/server.key \
+snapshot save /opt/etcd-backup.db
 ```
 
 ### 7. Create a Pod called `secret-1401` in the `admin1401` namespace using the `busybox` image. The container within the Pod should be called `secret-admin` and should sleep for `4800` seconds
 
 The container should mount a `read-only` secret volume called `secret-volume` at the path `/etc/secret-volume`. The secret being mounted has already been created for you and is called `dotfile-secret`.
 
-*Hint:*
+*Answer:* There is **2** ways to solve this. We will present both.
 
-*Answer:*
+**1st WAY:** Create the Pod directly from command line by issuing with some basic characteristics (*imperative way*):
 
 ```bash
+$ kubectl run secret-1401 --image=busybox --namespace=admin1401 --command sleep 4800
+```
 
+Then we will have to edit it via:
+
+```bash
+$ kubectl edit pod secret-1401 -n admin1401
+```
+
+and do the following changes:
+
+1. Change the container name from `secret-1401` (default while creating) to `secret-admin`
+2. Add a new volume for `secret-volume` under `spec -> volumes` section:
+
+```bash
+volumes:
+- name: secret-volume
+    secret:
+      secretName: dotfile-secret
+      optional: false
+```
+
+3. Add a `volumeMounts` new list entry for `secret-volume`:
+
+```bash
+volumeMounts:
+  - name: secret-volume
+    mountPath: "/etc/secret-volume"
+    readOnly: true
+```
+
+Last, we need to save the file and recreate the Pod by issuing:
+
+```bash
+$ kubectl replace --force -f <tmp_manifest_pod_definition_file>
+```
+
+**2nd WAY:** Build a manifest YAML file for the Pod as per below (*declarative way*):
+
+```yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: secret-1401
+  namespace: admin1401
+spec:
+  containers:
+  - name: secret-admin
+    image: busybox
+    volumeMounts:
+    - name: secret-volume
+      mountPath: "/etc/secret-volume"
+      readOnly: true
+  volumes:
+  - name: secret-volume
+    secret:
+      secretName: dotfile-secret
+      optional: false
+```
+
+and then create the Pod by running:
+
+```bash
+$ kubectl create -f secret-1401-pod.yaml
 ```
