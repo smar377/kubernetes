@@ -281,7 +281,7 @@ The container should mount a `read-only` secret volume called `secret-volume` at
 **1st WAY:** Create the Pod directly from command line by issuing with some basic characteristics (*imperative way*):
 
 ```bash
-$ kubectl run secret-1401 --image=busybox --namespace=admin1401 --command sleep 4800
+$ kubectl run secret-1401 --image=busybox --namespace=admin1401 --dry-run=client -o yaml --command sleep 4800
 ```
 
 Then we will have to edit it via:
