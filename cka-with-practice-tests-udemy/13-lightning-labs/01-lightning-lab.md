@@ -226,11 +226,39 @@ $ kubectl get pod,deploy,pv,pvc,sc -n alpha
 
 Next, let's check the error message in the Pod description:
 
+***ERROR_1: `2 persistentvolumeclaim "mysql-alpha-pvc" not found`***
+
 ```bash
-$ kubectl describe pod alpha-mysql-56bdcdf8f7-hclgx -n alpha
+$ kubectl describe pod alpha-mysql-<random_id> -n alpha
 ```
 
-***ERROR_1:`2 persistentvolumeclaim "mysql-alpha-pvc" not found`***
+We need to edit the Deployment `alpha-mysql`:
+
+```bash
+$ kubectl edit deploy alpha-mysql -n alpha 
+```
+
+and change in `volumes` section the PVC name from `mysql-alpha-pvc` to `alpha-claim`. After this we check again the description of the Pod for errors:
+
+```bash
+$ kubectl describe pod alpha-mysql-<random_id> -n alpha
+```
+
+and we see:
+
+***ERROR_2: `2 pod has unbound immediate PersistentVolumeClaims. preemption: 0/2 nodes are available: 2 Preemption is not helpful for scheduling.`*** 
+
+Pod now seems to be OK, bust still is unable to run properly. We continue the investigation to PVC.
+
+```bash
+$ kubectl describe -n alpha pvc alpha-claim
+```
+
+and we see an error referring to:
+
+***ERROR_3: `storageclass.storage.k8s.io "slow-storage" not found`***
+
+I changed the value of `storageClassName` in the PVC definition from `slow-storage` to `slow` (as this is how it is defined in the PV and since we cannot touch PV, we change the PVC to be in sync with PV).
 
 ### 6. Take the backup of ETCD at the location `/opt/etcd-backup.db` on the `controlplane` node
 
