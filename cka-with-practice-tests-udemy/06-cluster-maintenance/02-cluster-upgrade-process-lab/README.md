@@ -93,9 +93,9 @@ $ kubectl drain controlplane --ignore-daemonsets
 
 ```bash
 # STEP 1
-apt-mark unhold kubeadm && \
-apt-get update && apt-get install -y kubeadm=1.25.0-00 && \
-apt-mark hold kubeadm
+$ apt-mark unhold kubeadm && \
+$ apt-get update && apt-get install -y kubeadm=1.25.0-00 && \
+$ apt-mark hold kubeadm
 ```
 
 ```bash
@@ -110,9 +110,9 @@ $ kubeadm upgrade apply v1.25.0
 
 ```bash
 # STEP 4
-apt-mark unhold kubelet kubectl && \
-apt-get update && apt-get install -y kubelet=1.25.0-00 kubectl=1.25.0-00 && \
-apt-mark hold kubelet kubectl
+$ apt-mark unhold kubelet kubectl && \
+$ apt-get update && apt-get install -y kubelet=1.25.0-00 kubectl=1.25.0-00 && \
+$ apt-mark hold kubelet kubectl
 ```
 
 ```bash
@@ -147,9 +147,9 @@ $ kubectl drain node01 --ignore-daemonsets
 
 ```bash
 # STEP 1
-apt-mark unhold kubeadm && \
-apt-get update && apt-get install -y kubeadm=1.25.0-00 && \
-apt-mark hold kubeadm
+$ apt-mark unhold kubeadm && \
+$ apt-get update && apt-get install -y kubeadm=1.25.0-00 && \
+$ apt-mark hold kubeadm
 ```
 
 ```bash
@@ -164,9 +164,9 @@ $ kubeadm upgrade node
 
 ```bash
 # STEP 4
-apt-mark unhold kubelet kubectl && \
-apt-get update && apt-get install -y kubelet=1.25.0-00 kubectl=1.25.0-00 && \
-apt-mark hold kubelet kubectl
+$ apt-mark unhold kubelet kubectl && \
+$ apt-get update && apt-get install -y kubelet=1.25.0-00 kubectl=1.25.0-00 && \
+$ apt-mark hold kubelet kubectl
 ```
 
 ```bash
