@@ -326,6 +326,8 @@ kind: Pod
 metadata:
   name: secret-1401
   namespace: admin1401
+  labels:
+    run: secret-1401
 spec:
   containers:
   - name: secret-admin
@@ -338,7 +340,6 @@ spec:
   - name: secret-volume
     secret:
       secretName: dotfile-secret
-      optional: false
 ```
 
 and then create the Pod by running:
