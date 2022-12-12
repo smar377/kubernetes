@@ -6,6 +6,8 @@
 
 ```bash
 $ kubectl run nginx-pod --image=nginx:alpine
+$ kubectl get pod
+$ kubectl describe pod nginx-pod
 ```
 
 ### 2. Deploy a `messaging` Pod using the `redis:alpine` image with the labels set to `tier=msg`
@@ -14,6 +16,8 @@ $ kubectl run nginx-pod --image=nginx:alpine
 
 ```bash
 $ kubectl run messaging --image=redis:alpine --labels='tier=msg'
+$ kubectl get pod
+$ kubectl describe pod messaging 
 ```
 
 ### 3. Create a namespace named `apx-x9984574`
@@ -22,6 +26,7 @@ $ kubectl run messaging --image=redis:alpine --labels='tier=msg'
 
 ```bash
 $ kubectl create namespace apx-x9984574
+$ kubectl get ns
 ```
 
 ### 4. Get the list of nodes in JSON format and store it in a file at `/opt/outputs/nodes-z3444kd9.json`
@@ -30,6 +35,7 @@ $ kubectl create namespace apx-x9984574
 
 ```bash
 $ kubectl get nodes -o json > /opt/outputs/nodes-z3444kd9.json
+$ cat /opt/outputs/nodes-z3444kd9.json
 ```
 
 ### 5. Create a Service `messaging-service` to expose the `messaging` application within the cluster on `port 6379`
@@ -41,6 +47,7 @@ $ kubectl get nodes -o json > /opt/outputs/nodes-z3444kd9.json
 ```bash
 $ kubectl expose pod messaging --port=6379 --name=messaging-service --type=ClusterIP
 $ kubectl get svc -o wide
+$ kubectl describe messaging-service -o wide
 ```
 
 ### 6. Create a Deployment named `hr-web-app` using the image `kodekloud/webapp-color` with 2 replicas
@@ -50,13 +57,16 @@ $ kubectl get svc -o wide
 ```bash
 $ kubectl create deployment hr-web-app --image=kodekloud/webapp-color --replicas=2
 $ kubectl get pod,svc,deploy -o wide
+$ kubectl describe deploy hr-web-app
 ```
 
-### 7. Create a static Pod named `static-busybox` on the `controlplane` node that uses the `busybox` image and the command sleep 1000
+### 7. Create a static Pod named `static-busybox` on the `controlplane` node that uses the `busybox` image and the command `sleep 1000`
 
 *Answer:*
 
 ```bash
+$ kubectl run static-busybox --image=busybox --dry-run=client -o yaml --command -- sleep 1000 > /etc/kubernetes/manifests/static-busybox-pod.yaml
+OR
 $ vi /etc/kubernetes/manifests/static-busybox-pod.yaml
 ```
 
@@ -75,6 +85,7 @@ spec:
 Verification:
 
 ```bash
+$ kubectl get pod
 $ kubectl describe pod static-busybox-controlplane
 ```
 
@@ -88,6 +99,10 @@ $ kubectl get namespaces | grep finance
 
 # Create the requested Pod
 $ kubectl run temp-bus --image=redis:alpine --namespace=finance --restart=Never
+
+# Check if procedure was successful
+$ kubectl get pod -n finance
+$ kubectl describe pod temp-bus -n finance
 ```
 
 ### 9. A new application `orange` is deployed. There is something wrong with it. Identify and fix the issue
@@ -180,6 +195,7 @@ $ kubectl describe svc hr-web-app-service
 ```bash
 $ kubectl get nodes -o wide
 $ kubectl get nodes -o=jsonpath='{.items[*].status.nodeInfo.osImage}' > /opt/outputs/nodes_os_x43kj56.txt
+$ cat /opt/outputs/nodes_os_x43kj56.txt
 ```
 
 ### 12. Create a PersistentVolume with the given specifications
