@@ -41,7 +41,7 @@ spec:
   - image: redis:alpine
     name: redis-storage
     volumeMounts:
-    - mountPath: /data/redis
+    - mountPath: "/data/redis"
       name: temp-volume
   volumes:
   - name: temp-volume
@@ -119,14 +119,14 @@ spec:
     name: use-pv
     resources: {}
     volumeMounts:
-      - mountPath: "/data"
-        name: pv-1
+    - mountPath: "/data"
+      name: pv-1
   dnsPolicy: ClusterFirst
   restartPolicy: Always
   volumes:
-    - name: pv-1
-      persistentVolumeClaim:
-        claimName: my-pvc
+  - name: pv-1
+    persistentVolumeClaim:
+      claimName: my-pvc
 status: {}
 ```
 
@@ -160,6 +160,7 @@ Verification:
 ```bash
 $ kubectl get pod use-pv -o wide
 $ kubectl describe pod use-pv
+$ kubectl get pod,pv,pvc -o wide
 ```
 
 ### 5. Create a new Deployment called `nginx-deploy`, with image `nginx:1.16` and **1** replica. Next upgrade the Deployment to `version 1.17` using rolling update.
@@ -175,7 +176,7 @@ $ kubectl create deployment nginx-deploy --image=nginx:1.16 --dry-run=client -o 
 To create a resource from definition file and to record:
 
 ```bash
-$ kubectl apply -f deploy.yaml --record
+$ kubectl apply -f nginx-deploy.yaml --record
 ```
 
 To view the history of Deployment `nginx-deploy`:
@@ -218,10 +219,11 @@ spec:
   - client auth
 ```
 
-To approve this certificate we run: 
+To create and approve this certificate we run: 
 
 ```bash
-kubectl certificate approve john-developer
+$ kubectl create -f john-developer-csr.yaml
+$ kubectl certificate approve john-developer
 ```
 
 Next, we need to create a Role `developer` and RoleBinding `developer-role-binding`, so we run:
@@ -229,6 +231,9 @@ Next, we need to create a Role `developer` and RoleBinding `developer-role-bindi
 ```bash
 $ kubectl create role developer --resource=pods --verb=create,list,get,update,delete --namespace=development
 $ kubectl create rolebinding developer-role-binding --role=developer --user=john --namespace=development
+$ kubectl get roles,rolebindings -n development
+$ kubectl describe roles developer -n development
+$ kubectl describe rolebindings developer-role-binding -n development
 ```
 
 To verify the permission from `kubectl` utility tool:
@@ -239,20 +244,83 @@ $ kubectl auth can-i update pods --as=john --namespace=development
 
 ### 7. Create a NGINX Pod called `nginx-resolver` using image `nginx`, expose it internally with a Service called `nginx-resolver-service`. Test that you are able to look up the Service and Pod names from within the cluster. Use the image `busybox:1.28` for DNS lookup. Record results in `/root/CKA/nginx.svc` and `/root/CKA/nginx.pod`
 
-*Hint:*
-
-*Answer:*
+*Answer:* First we create a NGINX Pod called `nginx-resolver` using image `nginx`:
 
 ```bash
+$ kubectl run nginx-resolver --image=nginx
+```
 
+Then we create the Service named `nginx-resolver-service` by issuing:
+
+```bash
+$ kubectl expose pod nginx-resolver --name=nginx-resolver-service --port=80 --target-port=80 --type=ClusterIP
+```
+
+To create a Pod `test-nslookup`. Test that you are able to look up the service and Pod names from within the cluster:
+
+```bash
+$ kubectl run test-nslookup --image=busybox:1.28 --rm -it --restart=Never -- nslookup nginx-resolver-service
+$ kubectl run test-nslookup --image=busybox:1.28 --rm -it --restart=Never -- nslookup nginx-resolver-service > /root/CKA/nginx.svc
+```
+
+Get the IP of the `nginx-resolver` Pod and replace the dots(.) with hyphon(-) which will be used below:
+
+```bash
+$ kubectl get pod nginx-resolver -o wide
+$ kubectl run test-nslookup --image=busybox:1.28 --rm -it --restart=Never -- nslookup <P-O-D-I-P.default.pod> > /root/CKA/nginx.pod
 ```
 
 ### 8. Create a static Pod on `node01` called `nginx-critical` with image `nginx` and make sure that it is recreated/restarted automatically in case of a failure.
 
 *Hint:* Use `/etc/kubernetes/manifests` as the Static Pod path for example.
 
-*Answer:*
+*Answer:* To create a static Pod called `nginx-critical` use below command:
 
 ```bash
+$ kubectl run nginx-critical --image=nginx --dry-run=client -o yaml > static-pod.yaml
+```
 
+Copy the contents of this file or use scp command to transfer this file from `controlplane` to `node01` node.
+
+```bash
+$ root@controlplane:~# scp static.yaml node01:/root/
+```
+
+To know the IP Address of the `node01` node:
+
+```bash
+root@controlplane:~# kubectl get nodes -o wide
+
+# Perform SSH
+root@controlplane:~# ssh node01
+OR
+root@controlplane:~# ssh <IP of node01>
+```
+
+On `node01` node:
+
+Check if static Pod directory is present which is `/etc/kubernetes/manifests`, if it's not present then create it.
+
+```bash
+root@node01:~# mkdir -p /etc/kubernetes/manifests
+```
+
+Add that complete path to the `staticPodPath` field in the `kubelet` `config.yaml` file.
+
+```bash
+root@node01:~# vi /var/lib/kubelet/config.yaml
+```
+
+now, move/copy the `static-pod.yaml` to path `/etc/kubernetes/manifests/`.
+
+```bash
+root@node01:~# cp /root/static.yaml /etc/kubernetes/manifests/
+```
+
+Go back to the `controlplane` node and check the status of static Pod:
+
+```bash
+root@node01:~# exit
+logout
+root@controlplane:~# kubectl get pods 
 ```
