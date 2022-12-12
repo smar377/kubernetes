@@ -2,7 +2,7 @@
 
 *Once done, click on the Next Question button in the top right corner of this panel. You may navigate back and forth freely between all questions. Once done with all questions, click on End Exam. Your work will be validated at the end and score shown. Good Luck!*
 
-*Answer:* We will use the following command:
+*Answer:*
 
 ```bash
 $ kubectl run nginx-pod --image=nginx:alpine
@@ -10,7 +10,7 @@ $ kubectl run nginx-pod --image=nginx:alpine
 
 ### 2. Deploy a `messaging` Pod using the `redis:alpine` image with the labels set to `tier=msg`
 
-*Answer:* We will use the following command:
+*Answer:*
 
 ```bash
 $ kubectl run messaging --image=redis:alpine --labels='tier=msg'
@@ -18,7 +18,7 @@ $ kubectl run messaging --image=redis:alpine --labels='tier=msg'
 
 ### 3. Create a namespace named `apx-x9984574`
 
-*Answer:* We will use the following command:
+*Answer:*
 
 ```bash
 $ kubectl create namespace apx-x9984574
@@ -26,7 +26,7 @@ $ kubectl create namespace apx-x9984574
 
 ### 4. Get the list of nodes in JSON format and store it in a file at `/opt/outputs/nodes-z3444kd9.json`
 
-*Answer:* We will use the following command:
+*Answer:*
 
 ```bash
 $ kubectl get nodes -o json > /opt/outputs/nodes-z3444kd9.json
@@ -36,7 +36,7 @@ $ kubectl get nodes -o json > /opt/outputs/nodes-z3444kd9.json
 
 *Hint:* Use imperative commands.
 
-*Answer:* We will use the following command:
+*Answer:*
 
 ```bash
 $ kubectl expose pod messaging --port=6379 --name=messaging-service --type=ClusterIP
@@ -45,7 +45,7 @@ $ kubectl get svc -o wide
 
 ### 6. Create a Deployment named `hr-web-app` using the image `kodekloud/webapp-color` with 2 replicas
 
-*Answer:* We will use the following command:
+*Answer:*
 
 ```bash
 $ kubectl create deployment hr-web-app --image=kodekloud/webapp-color --replicas=2
@@ -53,8 +53,6 @@ $ kubectl get pod,svc,deploy -o wide
 ```
 
 ### 7. Create a static Pod named `static-busybox` on the `controlplane` node that uses the `busybox` image and the command sleep 1000
-
-*Hint:*
 
 *Answer:*
 
@@ -139,10 +137,38 @@ $ kubectl get pod,svc,deploy -o wide
 $ kubectl expose deployment hr-web-app --type=NodePort --port=8080 --name=hr-web-app-service --dry-run=client -o yaml > hr-web-app-service.yaml
 ```
 
+```yaml
+apiVersion: v1
+kind: Service
+metadata:
+  creationTimestamp: null
+  labels:
+    app: hr-web-app
+  name: hr-web-app-service
+spec:
+  ports:
+  - port: 8080
+    protocol: TCP
+    targetPort: 8080
+    nodePort: 30082
+  selector:
+    app: hr-web-app
+  type: NodePort
+status:
+  loadBalancer: {}
+```
+
 Now, in the generated service definition file add the `nodePort` field with the given port number under the `ports section` and create the service issuing the command:
 
 ```bash
 $ kubectl create -f hr-web-app-service.yaml
+```
+
+Verification:
+
+```bash
+$ kubectl get svc hr-web-app-service -o wide
+$ kubectl describe svc hr-web-app-service
 ```
 
 ### 11. Use JSON PATH query to retrieve the osImages of all the nodes and store it in a file /opt/outputs/nodes_os_x43kj56.txt.
@@ -152,7 +178,8 @@ $ kubectl create -f hr-web-app-service.yaml
 *Answer:*
 
 ```bash
-
+$ kubectl get nodes -o wide
+$ 
 ```
 
 ### 12. 
