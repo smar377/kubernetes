@@ -170,7 +170,7 @@ $ kubectl get pod,pv,pvc -o wide
 To create a Deployment definition file `nginx-deploy`:
 
 ```bash
-$ kubectl create deployment nginx-deploy --image=nginx:1.16 --dry-run=client -o yaml > nginx-deploy.yaml
+$ kubectl create deployment nginx-deploy --image=nginx:1.16 --replicas=1 --dry-run=client -o yaml > nginx-deploy.yaml
 ```
 
 To create a resource from definition file and to record:
@@ -219,18 +219,28 @@ spec:
   - client auth
 ```
 
-To create and approve this certificate we run: 
+To create and approve this certificate we run:
 
 ```bash
 $ kubectl create -f john-developer-csr.yaml
+$ kubectl get csr
 $ kubectl certificate approve john-developer
+```
+
+***(!) ATTENTION:*** In order to add the CSR in the CSR object definition file we need first to get the BASE64 format of it. To get that we do:
+
+```bash
+$ cat /root/CKA/john.csr | base64 | tr -d "\n"
 ```
 
 Next, we need to create a Role `developer` and RoleBinding `developer-role-binding`, so we run:
 
 ```bash
+# Create Role and RoleBinding objects
 $ kubectl create role developer --resource=pods --verb=create,list,get,update,delete --namespace=development
 $ kubectl create rolebinding developer-role-binding --role=developer --user=john --namespace=development
+
+# Check if objects created correctly
 $ kubectl get roles,rolebindings -n development
 $ kubectl describe roles developer -n development
 $ kubectl describe rolebindings developer-role-binding -n development
@@ -239,7 +249,9 @@ $ kubectl describe rolebindings developer-role-binding -n development
 To verify the permission from `kubectl` utility tool:
 
 ```bash
+$ kubectl auth can-i create pods --as=john --namespace=development
 $ kubectl auth can-i update pods --as=john --namespace=development
+$ kubectl auth can-i get pods --as=john --namespace=development
 ```
 
 ### 7. Create a NGINX Pod called `nginx-resolver` using image `nginx`, expose it internally with a Service called `nginx-resolver-service`. Test that you are able to look up the Service and Pod names from within the cluster. Use the image `busybox:1.28` for DNS lookup. Record results in `/root/CKA/nginx.svc` and `/root/CKA/nginx.pod`
