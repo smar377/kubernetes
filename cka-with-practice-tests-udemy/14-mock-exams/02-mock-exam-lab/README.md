@@ -48,14 +48,54 @@ spec:
     emptyDir: {}
 ```
 
+Last we need to create the Pod by issuing:
+
+```bash
+$ kubectl create -f redis-storage-pod.yaml
+```
+
+Verification:
+
+```bash
+$ kubectl get pod redis-storage
+$ kubectl describe pod redis-storage
+```
+
 ### 3. Create a new Pod called `super-user-pod` with image `busybox:1.28`. Allow the Pod to be able to `set system_time` (SYS_TIME capabilities)
 
 *Hint:* The container should sleep for 4800 seconds.
 
-*Answer:*
+*Answer:* We will create a YAML Pod definition file with described specifications as per below:
+
+```yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: super-user-pod
+spec:
+  containers:
+  - name: super-user-pod
+    image: busybox:1.28
+    command: ["sleep", "4800"]
+    securityContext:
+      capabilities:
+        add: ["SYS_TIME"]
+```
+
+and then create the Pod by issuing:
 
 ```bash
+$ kubectl create -f super-user-pod.yaml
+```
 
+Verification:
+
+```bash
+$ kubectl get pod super-user-pod -o wide
+$ kubectl describe pod super-user-pod
+$ kubectl exec -it super-user-pod -- sh
+  # cd /proc/1
+  # cat status
 ```
 
 ### 4. A Pod definition file is created at `/root/CKA/use-pv.yaml`. Make use of this manifest file and mount the persistent volume called `pv-1`. Ensure the Pod is running and the PV is bound
@@ -63,10 +103,63 @@ spec:
 - `mountPath: `/data`
 - `persistentVolumeClaim Name: my-pvc`
 
-*Answer:*
+*Answer:* We edit the specificed Pod definition file as per below:
+
+```yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  creationTimestamp: null
+  labels:
+    run: use-pv
+  name: use-pv
+spec:
+  containers:
+  - image: nginx
+    name: use-pv
+    resources: {}
+    volumeMounts:
+      - mountPath: "/data"
+        name: pv-1
+  dnsPolicy: ClusterFirst
+  restartPolicy: Always
+  volumes:
+    - name: pv-1
+      persistentVolumeClaim:
+        claimName: my-pvc
+status: {}
+```
+
+Then we deploy the Pod by issuing:
 
 ```bash
+$ kubectl create -f /root/CKA/use-pv.yaml 
+```
 
+We need also to deploy PVC `my-pvc`:
+
+```yaml
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: my-pvc
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Mi
+```
+
+```bash
+$ kubectl create -f /root/CKA/my-pvc.yaml
+```
+
+Verification:
+
+```bash
+$ kubectl get pod use-pv -o wide
+$ kubectl describe pod use-pv
 ```
 
 ### 5. Create a new Deployment called `nginx-deploy`, with image `nginx:1.16` and **1** replica. Next upgrade the Deployment to `version 1.17` using rolling update.
@@ -76,7 +169,7 @@ spec:
 To create a Deployment definition file `nginx-deploy`:
 
 ```bash
-$ kubectl create deployment nginx-deploy --image=nginx:1.16 --dry-run=client -o yaml > deploy.yaml
+$ kubectl create deployment nginx-deploy --image=nginx:1.16 --dry-run=client -o yaml > nginx-deploy.yaml
 ```
 
 To create a resource from definition file and to record:
@@ -85,7 +178,7 @@ To create a resource from definition file and to record:
 $ kubectl apply -f deploy.yaml --record
 ```
 
-To view the history of deployment nginx-deploy:
+To view the history of Deployment `nginx-deploy`:
 
 ```bash
 $ kubectl rollout history deployment nginx-deploy
@@ -97,7 +190,7 @@ To upgrade the image to next given version:
 $ kubectl set image deployment/nginx-deploy nginx=nginx:1.17 --record
 ```
 
-To view the history of deployment nginx-deploy:
+To view the history of Deployment `nginx-deploy`:
 
 ```bash
 $ kubectl rollout history deployment nginx-deploy
