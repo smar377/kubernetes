@@ -1,6 +1,6 @@
 ### 1. Deploy a Pod named `nginx-pod` using the `nginx:alpine` image
 
-*Once done, click on the Next Question button in the top right corner of this panel. You may navigate back and forth freely between all questions. Once done with all questions, click on End Exam. Your work will be validated at the end and score shown. Good Luck!*
+*Once done, click on the **Next Question** button in the top right corner of this panel. You may navigate back and forth freely between all questions. When done with all questions, click on **End Exam**. Your work will be validated at the end and score shown. Good Luck!*
 
 *Answer:*
 
@@ -171,7 +171,7 @@ $ kubectl get svc hr-web-app-service -o wide
 $ kubectl describe svc hr-web-app-service
 ```
 
-### 11. Use JSON PATH query to retrieve the osImages of all the nodes and store it in a file /opt/outputs/nodes_os_x43kj56.txt.
+### 11. Use JSON PATH query to retrieve the osImages of all the nodes and store it in a file `/opt/outputs/nodes_os_x43kj56.txt`
 
 *Hint:* The `osImages` are under the `nodeInfo` section under `status` of each node.
 
@@ -179,15 +179,45 @@ $ kubectl describe svc hr-web-app-service
 
 ```bash
 $ kubectl get nodes -o wide
-$ 
+$ kubectl get nodes -o=jsonpath='{.items[*].status.nodeInfo.osImage}' > /opt/outputs/nodes_os_x43kj56.txt
 ```
 
-### 12. 
+### 12. Create a PersistentVolume with the given specifications
 
-*Hint:*
+- Volume name: `pv-analytics`
+- Storage: `100Mi`
+- Access modes: `ReadWriteMany`
+- Host path: `/pv/data-analytics`
 
 *Answer:*
 
 ```bash
+# Create a PV YAML definition file with all above specifications
+$ vi pv-analytics.yaml
+```
 
+```yaml
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: pv-analytics
+spec:
+  capacity:
+    storage: 100Mi
+  accessModes:
+  - ReadWriteMany
+  hostPath:
+    path: "/pv/data-analytics"
+```
+
+```bash
+# Create PV
+$ kubectl create -f pv-analytics.yaml
+```
+
+Verification:
+
+```bash
+$ kubectl get pv -o wide
+$ kubectl describe pv pv-analytics
 ```
