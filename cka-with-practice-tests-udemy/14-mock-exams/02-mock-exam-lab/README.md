@@ -100,7 +100,7 @@ $ kubectl exec -it super-user-pod -- sh
 
 ### 4. A Pod definition file is created at `/root/CKA/use-pv.yaml`. Make use of this manifest file and mount the persistent volume called `pv-1`. Ensure the Pod is running and the PV is bound
 
-- `mountPath: `/data`
+- `mountPath: /data`
 - `persistentVolumeClaim Name: my-pvc`
 
 *Answer:* We edit the specificed Pod definition file as per below:
