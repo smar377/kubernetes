@@ -120,11 +120,11 @@ spec:
     resources: {}
     volumeMounts:
     - mountPath: "/data"
-      name: pv-1
+      name: my-pv
   dnsPolicy: ClusterFirst
   restartPolicy: Always
   volumes:
-  - name: pv-1
+  - name: my-pv
     persistentVolumeClaim:
       claimName: my-pvc
 status: {}
@@ -148,7 +148,7 @@ spec:
     - ReadWriteOnce
   resources:
     requests:
-      storage: 1Mi
+      storage: 10Mi
 ```
 
 ```bash
