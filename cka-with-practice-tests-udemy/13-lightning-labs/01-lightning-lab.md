@@ -260,6 +260,8 @@ and we see an error referring to:
 
 I changed the value of `storageClassName` in the PVC definition from `slow-storage` to `slow` (as this is how it is defined in the PV and since we cannot touch PV, we change the PVC to be in sync with PV).
 
+Additionally we needed to change the `accessModes` of PVC from `ReadWriteMany` to `ReadWriteOnce` to be the same as PV's and last but not least we also change the PVC `capacity -> storage` from `2Gi` to `1Gi` so it can be bound. 
+
 ### 6. Take the backup of ETCD at the location `/opt/etcd-backup.db` on the `controlplane` node
 
 *Answer:* We need to issue the following command:
