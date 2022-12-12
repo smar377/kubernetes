@@ -256,18 +256,18 @@ Then we create the Service named `nginx-resolver-service` by issuing:
 $ kubectl expose pod nginx-resolver --name=nginx-resolver-service --port=80 --target-port=80 --type=ClusterIP
 ```
 
-To create a Pod `test-nslookup`. Test that you are able to look up the service and Pod names from within the cluster:
+For the testing we will use a Pod named `test-nslookup` via leveraging the `run` flag of `kubectl` tool. Let's look up the Service and Pod names from within the cluster:
 
 ```bash
 $ kubectl run test-nslookup --image=busybox:1.28 --rm -it --restart=Never -- nslookup nginx-resolver-service
 $ kubectl run test-nslookup --image=busybox:1.28 --rm -it --restart=Never -- nslookup nginx-resolver-service > /root/CKA/nginx.svc
 ```
 
-Get the IP of the `nginx-resolver` Pod and replace the dots(.) with hyphon(-) which will be used below:
+Get the IP of the `nginx-resolver` Pod and replace the dots (.) with hyphens (-):
 
 ```bash
 $ kubectl get pod nginx-resolver -o wide
-$ kubectl run test-nslookup --image=busybox:1.28 --rm -it --restart=Never -- nslookup <P-O-D-I-P.default.pod> > /root/CKA/nginx.pod
+$ kubectl run test-nslookup --image=busybox:1.28 --rm -it --restart=Never -- nslookup 10-50-192-1.default.pod > /root/CKA/nginx.pod
 ```
 
 ### 8. Create a static Pod on `node01` called `nginx-critical` with image `nginx` and make sure that it is recreated/restarted automatically in case of a failure.
@@ -277,24 +277,22 @@ $ kubectl run test-nslookup --image=busybox:1.28 --rm -it --restart=Never -- nsl
 *Answer:* To create a static Pod called `nginx-critical` use below command:
 
 ```bash
-$ kubectl run nginx-critical --image=nginx --dry-run=client -o yaml > static-pod.yaml
+$ kubectl run nginx-critical --image=nginx --dry-run=client -o yaml > nginx-critical-pod.yaml
 ```
 
-Copy the contents of this file or use scp command to transfer this file from `controlplane` to `node01` node.
+Copy the contents of this file or use SCP command to transfer this file from `controlplane` to `node01` node:
 
 ```bash
-$ root@controlplane:~# scp static.yaml node01:/root/
+$ root@controlplane:~# scp nginx-critical-pod.yaml node01:/root/
 ```
 
 To know the IP Address of the `node01` node:
 
 ```bash
 root@controlplane:~# kubectl get nodes -o wide
-
-# Perform SSH
 root@controlplane:~# ssh node01
 OR
-root@controlplane:~# ssh <IP of node01>
+root@controlplane:~# ssh 10.62.171.3
 ```
 
 On `node01` node:
@@ -305,22 +303,21 @@ Check if static Pod directory is present which is `/etc/kubernetes/manifests`, i
 root@node01:~# mkdir -p /etc/kubernetes/manifests
 ```
 
-Add that complete path to the `staticPodPath` field in the `kubelet` `config.yaml` file.
+Add that complete path to the `staticPodPath` field in the `kubelet` `config.yaml` file:
 
 ```bash
 root@node01:~# vi /var/lib/kubelet/config.yaml
 ```
 
-now, move/copy the `static-pod.yaml` to path `/etc/kubernetes/manifests/`.
+Now, move the `nginx-critical-pod.yaml` to path `/etc/kubernetes/manifests/`:
 
 ```bash
-root@node01:~# cp /root/static.yaml /etc/kubernetes/manifests/
+root@node01:~# mv /root/nginx-critical-pod.yaml /etc/kubernetes/manifests/
 ```
 
 Go back to the `controlplane` node and check the status of static Pod:
 
 ```bash
 root@node01:~# exit
-logout
-root@controlplane:~# kubectl get pods 
+root@controlplane:~# kubectl get pods
 ```
