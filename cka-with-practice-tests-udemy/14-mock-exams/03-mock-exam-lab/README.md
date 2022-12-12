@@ -12,7 +12,8 @@
 
 *Hint:* Answer should be in the following format: 
 
-|`InternalIP` of `controlplane` <space> `InternalIP` of `node01` (in a single line)|
+- `InternalIP` of `controlplane` *<space>* `InternalIP` of `node01` (in a single line)
+
 
 *Answer:*
 
