@@ -75,12 +75,37 @@ $ kubectl get nodes -o wide -o=jsonpath='{.items[*].status.addresses[0].address}
 - Container 2:
   - `name: beta`
 
-*Hint:*
+*Answer:* We will build first a YAML definition file for this multi-container Pod as per follows:
 
-*Answer:*
+```yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: multi-pod
+spec:
+  containers:
+  - name: alpha
+    image: nginx
+    env:
+    - name: alpha
+  - name: beta
+    image: busybox
+    command: ['sleep', '4800']
+    env:
+    - name: beta
+```
+
+and then we will create that Pod by issuing:
 
 ```bash
+$ kubectl create -f multi-pod.yaml
+```
 
+Verification:
+
+```bash
+$ kubectl get pod multi-pod -o wide
+$ kubectl describe pod multi-pod
 ```
 
 ### 4. Create a Pod called `non-root-pod` with `redis:alpine` image
@@ -90,12 +115,33 @@ Specifications:
 - `runAsUser: 1000`
 - `fsGroup: 2000`
 
-*Hint:*
+*Answer:* We build first a YAML definition file for the Pod:
 
-*Answer:*
+```yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: non-root-pod 
+spec:
+  securityContext:
+    runAsUser: 1000
+    fsGroup: 2000
+  containers:
+  - name: non-root-pod
+    image: redis:alpine
+```
+
+and then we create the Pod by issuing:
 
 ```bash
+$ kubectl create -f non-root-pod.yaml
+```
 
+Verification:
+
+```bash
+$ kubectl get pod non-root-pod
+$ kubectl describe pod non-root-pod
 ```
 
 ### 5. We have deployed a new Pod called `np-test-1` and a Service called `np-test-service`. Incoming connections to this service are **NOT** working. Troubleshoot and fix it
