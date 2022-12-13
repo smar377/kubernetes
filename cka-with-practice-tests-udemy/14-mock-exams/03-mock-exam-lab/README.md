@@ -162,7 +162,16 @@ $ kubectl describe pod non-root-pod
 
 *Hint:* Create NetworkPolicy, by the name `ingress-to-nptest` that allows incoming connections to the Service over port 80.
 
-*Answer:* We first build the YAML definition file for the NetworkPolicy:
+*Answer:* Let's first do some testing. We will test with a simple `curl` command the access to `np-test-service`:
+
+```bash
+$ kubectl run test-curl-box --image=alpine/curl --rm --it -- sh
+/ # curl np-test-service
+```
+
+It doesn't look like it's responding.
+
+We will work now on building a YAML definition file for a NetworkPolicy for `np-test-service` so it can allow connections on `port 80`:
 
 ```yaml
 apiVersion: networking.k8s.io/v1
@@ -193,7 +202,11 @@ Verification and testing:
 ```bash
 $ kubectl get netpol ingress-to-nptest
 $ kubectl describe netpol ingress-to-nptest
+$ kubectl run test-curl-box --image=alpine/curl --rm --it -- sh
+/ # curl np-test-service
 ```
+
+This time while issuing the last command we will get a response!
 
 ### 6. Taint the worker node `node01` to be `Unschedulable`. Once done, create a Pod called `dev-redis` with image `redis:alpine` to ensure workloads are **NOT** scheduled to this worker node. Finally, create a new Pod called `prod-redis` with image `redis:alpine` with Toleration to be scheduled on `node01`
 
