@@ -7,7 +7,6 @@ spec:
   containers:
   - name: alpha
     image: nginx
-    command: ['sh', '-c', 'echo "Hello, Kubernetes!" && sleep 3600']
     restartPolicy: Never
     env:
     - name: alpha
