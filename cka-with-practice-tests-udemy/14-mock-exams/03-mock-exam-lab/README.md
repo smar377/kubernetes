@@ -54,7 +54,17 @@ $ kubectl auth can-i list persistentvolumes --as=pvviewer -n default
 *Answer:*
 
 ```bash
-$ kubectl get nodes -o wide -o=jsonpath='{.items[*].status.addresses[0].address}' > /root/CKA/node_ips
+# 1st WAY
+$ kubectl get nodes -o jsonpath='{.items[*].status.addresses[0].address}' > /root/CKA/node_ips
+
+# 2nd WAY
+$ kubectl get nodes -o jsonpath='{.items[*].status.addresses[?(@.type=="InternalIP")].address}' > /root/CKA/node_ips
+```
+
+*Attention:* We can filter and check the fields we want from the JSON output using the tool `jq` (is a jq is a program described as `sed` for JSON data):
+
+```bash
+$ kubectl get nodes -o json | jq -c 'paths' | grep type | grep -v "metadata" | grep address
 ```
 
 ### 3. Create a Pod called `multi-pod` with two containers
