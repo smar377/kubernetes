@@ -1,0 +1,10 @@
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pvviewer
+spec:
+  containers:
+  - image: redis
+    name: pvviewer
+  serviceAccountName: pvviewer
