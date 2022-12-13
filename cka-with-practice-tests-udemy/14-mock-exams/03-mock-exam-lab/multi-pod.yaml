@@ -7,12 +7,10 @@ spec:
   containers:
   - name: alpha
     image: nginx
-    restartPolicy: Never
     env:
     - name: alpha
   - name: beta
     image: busybox
     command: ['sleep', '4800']
-    restartPolicy: Never
     env:
     - name: beta
