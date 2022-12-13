@@ -87,12 +87,14 @@ spec:
   - name: alpha
     image: nginx
     env:
-    - name: alpha
+    - name: name
+      value: alpha
   - name: beta
     image: busybox
     command: ['sleep', '4800']
     env:
-    - name: beta
+    - name: name
+      value: beta
 ```
 
 and then we will create that Pod by issuing:
