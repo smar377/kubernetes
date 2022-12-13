@@ -269,10 +269,9 @@ $ kubectl describe pod hr-pod
 *Answer:* We noticed that the port configured for the Kube API server is wrongly set to `9999`. Let's fix this:
 
 ```bash
+# Change the port to 6443 (default) and save the file
 $ kubectl config view --kubeconfig /root/CKA/super.kubeconfig | grep server
 $ vi /root/CKA/super.kubeconfig
-
-# Change it to 6443 (default) and save
 ```
 
 ### 9. We have created a new Deployment called `nginx-deploy`. Scale the Deployment to **3** replicas. Has the replica number increased? Troubleshoot the issue and fix it
