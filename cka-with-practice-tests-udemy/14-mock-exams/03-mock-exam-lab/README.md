@@ -61,7 +61,7 @@ $ kubectl get nodes -o jsonpath='{.items[*].status.addresses[0].address}' > /roo
 $ kubectl get nodes -o jsonpath='{.items[*].status.addresses[?(@.type=="InternalIP")].address}' > /root/CKA/node_ips
 ```
 
-*Attention:* We can filter and check the fields we want from the JSON output using the tool `jq` (is a jq is a program described as `sed` for JSON data):
+*Attention:* We can filter and check the fields we want from the JSON output using the tool `jq` (a program described as `sed` for JSON data):
 
 ```bash
 $ kubectl get nodes -o json | jq -c 'paths' | grep type | grep -v "metadata" | grep address
