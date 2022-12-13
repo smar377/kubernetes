@@ -1,11 +1,48 @@
 ### 1. Create a new Service Account with the name `pvviewer`. Grant this Service Account access to `list` all PersistentVolumes in the cluster by creating an appropriate `ClusterRole` called `pvviewer-role` and `ClusterRoleBinding` called `pvviewer-role-binding`. Next, create a Pod called `pvviewer` with image `redis` and `serviceAccount pvviewer` in the default namespace.
 
-*Hint:*
-
-*Answer:*
+*Answer:* Let's first create the new Service Account named `pvviewer`:
 
 ```bash
+$ kubectl create serviceaccount pvviewer
+$ kubectl get sa -o wide
+```
 
+Let's now create an appropriate ClusterRole and ClusterRoleBinding in order to grant this ServiceAccount access to list all PersistentVolumes in the cluster:
+
+```bash
+# Create and verify ClusterRole
+$ kubectl create clusterrole pvviewer-role --verb=list --resource=persistentvolumes
+$ kubectl get clusterrole pvviewer-role
+$ kubectl describe clusterrole pvviewer-role
+
+# Create and verify ClusterRoleBinding
+$ kubectl create clusterrolebinding pvviewer-role-binding --clusterrole=pvviewer-role --user=pvviewer
+$ kubectl get clusterrolebindings pvviewer-role-binding
+$ kubectl describe clusterrolebindings pvviewer-role-binding
+```
+
+Create a Pod named `pvviewer` with image `redis` and serviceAccount `pvviewer` in the default namespace:
+
+```yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pvviewer
+spec:
+  containers:
+  - image: redis
+    name: pvviewer
+  serviceAccountName: pvviewer
+```
+
+```bash
+# Create the Pod
+$ kubectl create -f pvviewer-pod-sa.yaml
+
+# Verify
+$ kubectl get pod pvviewer
+$ kubectl describe pod pvviewer
+$ kubectl auth can-i list persistentvolumes --as=pvviewer -n default
 ```
 
 ### 2. List the `InternalIP` of all nodes of the cluster. Save the result to a file `/root/CKA/node_ips`
@@ -14,11 +51,10 @@
 
 - `InternalIP` of `controlplane` *__space__* `InternalIP` of `node01` (in a single line)
 
-
 *Answer:*
 
 ```bash
-
+$ kubectl get nodes -o wide -o=jsonpath='{.items[*].status.addresses[0].address}' > /root/CKA/node_ips
 ```
 
 ### 3. Create a Pod called `multi-pod` with two containers
