@@ -277,7 +277,7 @@ $ kubectl create ns hr
 Next we create the requested Pod using below imprerative command:
 
 ```bash
-$ kubectl run hr-pod --image=redis:alpine --namespace=hr --labels=environment=production,tier=frontend
+$ kubectl run hr-pod --image=redis:alpine --namespace=hr --labels="environment=production,tier=frontend"
 ```
 
 Verification:
@@ -289,7 +289,14 @@ $ kubectl describe pod hr-pod
 
 ### 8. A `kubeconfig` file called `super.kubeconfig` has been created under `/root/CKA`. There is something wrong with the configuration. Troubleshoot and fix it
 
-*Answer:* We noticed that the port configured for the Kube API server is wrongly set to `9999`. Let's fix this:
+*Answer:* We noticed that the port configured for the Kube API server is wrongly set to `9999`. We can quickly check the port the Kube API server is running on by simply issuing:
+
+```bash
+$ kubectl get nodes --kubeconfig /root/CKA/super.kubeconfig
+The connection to the server controlplane:9999 was refused - did you specify the right host or port?
+```
+
+Let's fix this:
 
 ```bash
 # Change the port to 6443 (default) and save the file
