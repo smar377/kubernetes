@@ -1,4 +1,4 @@
-### 1. Create a new Service Account with the name `pvviewer`. Grant this Service Account access to `list` all PersistentVolumes in the cluster by creating an appropriate `ClusterRole` called `pvviewer-role` and `ClusterRoleBinding` called `pvviewer-role-binding`. Next, create a Pod called `pvviewer` with image `redis` and `serviceAccount pvviewer` in the default namespace.
+### 1. Create a new Service Account with the name `pvviewer`. Grant this Service Account access to `list` all PersistentVolumes in the cluster by creating an appropriate `ClusterRole` called `pvviewer-role` and `ClusterRoleBinding` called `pvviewer-role-binding`. Next, create a Pod called `pvviewer` with image `redis` and Service Account `pvviewer` in the default namespace
 
 *Answer:* Let's first create the new Service Account named `pvviewer`:
 
